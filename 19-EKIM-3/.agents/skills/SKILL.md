@@ -1,5 +1,5 @@
 name:flutter-feture-scffold
-description:Flutter projelerindefeature bazlı kod yazmak için gerekli klasör yapısı oluşturur.ValueNotifier state mimarisini UI ayrımını ve birim test iskeletini standartlara uygun olarak üretir.
+description:Flutter projelerinde feature bazlı kod yazmak için gerekli klasör yapısı oluşturur.ValueNotifier state mimarisini UI ayrımını ve birim test iskeletini standartlara uygun olarak üretir.
 
 #Flutter feature scaffold (modüler ekran iskeleti)
 Bu yetenek, projede yeni bir ekran yada işlev modülü açarken Clean UI ve reaktif State kurallarına tam uyulmasını garanti altına alır.
