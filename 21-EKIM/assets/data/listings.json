@@ -1,0 +1,41 @@
+[
+  {
+    "id": "lst-001",
+    "providerId": "usr-p1",
+    "providerName": "Mehmet Usta (Hızlı Tesisat)",
+    "title": "Ev & Ofis Sıhhi Tesisat ve Kaçak Tespiti",
+    "sector": "Tesisat",
+    "district": "Kadıköy / Üsküdar",
+    "shopAddress": "Üsküdar Selimiye Mah. Usta Sok. No:5/A, İstanbul",
+    "locationType": "her_ikisi",
+    "basePrice": 450.0,
+    "timeSlots": ["09:00", "10:30", "12:00", "14:00", "15:30", "17:00"],
+    "availableDays": ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"]
+  },
+  {
+    "id": "lst-002",
+    "providerId": "usr-p2",
+    "providerName": "Elif Demir (Stil & Saç Tasarım)",
+    "title": "Profesyonel Saç Kesimi, Boya ve Bakım",
+    "sector": "Kuaför",
+    "district": "Kadıköy / Moda / Suadiye",
+    "shopAddress": "Kadıköy Bağdat Caddesi No:142 D:2, İstanbul",
+    "locationType": "ben_geleyim",
+    "basePrice": 350.0,
+    "timeSlots": ["10:00", "11:30", "13:30", "15:00", "16:30", "18:00"],
+    "availableDays": ["Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"]
+  },
+  {
+    "id": "lst-003",
+    "providerId": "usr-p3",
+    "providerName": "Can Hoca (Matematik & Fizik)",
+    "title": "Lise & Üniversite Birebir Matematik Dersi",
+    "sector": "Öğretmen",
+    "district": "Beşiktaş / Şişli / Kadıköy",
+    "shopAddress": "Beşiktaş Sinanpaşa Mah. Şair Nedim Cad. No:20, İstanbul",
+    "locationType": "sen_gel",
+    "basePrice": 600.0,
+    "timeSlots": ["14:00", "15:30", "17:00", "18:30"],
+    "availableDays": ["Pazartesi", "Çarşamba", "Cuma", "Pazar"]
+  }
+]

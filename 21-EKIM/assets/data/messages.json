@@ -1,0 +1,20 @@
+[
+  {
+    "id": "msg-001",
+    "appointmentId": "apt-101",
+    "senderId": "usr-c1",
+    "senderName": "Ahmet Yılmaz",
+    "message": "Merhaba Mehmet Usta, bataryayı siz mi temin ediyorsunuz yoksa ben mi alayım?",
+    "timestamp": "10:05",
+    "createdAt": "2026-10-21T10:05:00Z"
+  },
+  {
+    "id": "msg-002",
+    "appointmentId": "apt-101",
+    "senderId": "usr-p1",
+    "senderName": "Mehmet Usta",
+    "message": "Merhaba Ahmet Bey, dilerseniz ben kaliteli pirinç batarya getirebilirim veya siz alırsanız sadece montajını yaparım.",
+    "timestamp": "10:12",
+    "createdAt": "2026-10-21T10:12:00Z"
+  }
+]

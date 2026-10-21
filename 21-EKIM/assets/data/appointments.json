@@ -1,0 +1,38 @@
+[
+  {
+    "id": "apt-101",
+    "listingId": "lst-001",
+    "customerId": "usr-c1",
+    "customerName": "Ahmet Yılmaz (Müşteri)",
+    "providerId": "usr-p1",
+    "providerName": "Mehmet Usta (Hızlı Tesisat)",
+    "serviceTitle": "Mutfak Bataryası Değişimi & Su Kaçağı",
+    "description": "Evye altından su sızıyor, acil kontrol gerekiyor.",
+    "appointmentDate": "2026-10-22",
+    "appointmentTime": "10:30",
+    "offeredPrice": 450.0,
+    "locationType": "sen_gel",
+    "address": "Kadıköy Caferağa Mah. Moda Cad. No:18 D:3, İstanbul",
+    "status": "beklemede",
+    "lastOfferBy": "customer",
+    "createdAt": "2026-10-21T10:00:00Z"
+  },
+  {
+    "id": "apt-102",
+    "listingId": "lst-002",
+    "customerId": "usr-c1",
+    "customerName": "Ahmet Yılmaz (Müşteri)",
+    "providerId": "usr-p2",
+    "providerName": "Elif Demir (Stil & Saç Tasarım)",
+    "serviceTitle": "Erkek / Kadın Saç Kesimi ve Bakım",
+    "description": "Randevu saatinde salonda olacağım.",
+    "appointmentDate": "2026-10-23",
+    "appointmentTime": "15:00",
+    "offeredPrice": 350.0,
+    "locationType": "ben_geleyim",
+    "address": "Kadıköy Bağdat Caddesi No:142 D:2, İstanbul",
+    "status": "onaylandi",
+    "lastOfferBy": "provider",
+    "createdAt": "2026-10-20T14:30:00Z"
+  }
+]

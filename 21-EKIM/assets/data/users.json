@@ -1,0 +1,37 @@
+[
+  {
+    "id": "usr-c1",
+    "role": "customer",
+    "name": "Ahmet Yılmaz (Müşteri)",
+    "email": "ahmet.yilmaz@gmail.com",
+    "phone": "0555 123 45 67",
+    "savedAddress": "Kadıköy Caferağa Mah. Moda Cad. No:18 D:3, İstanbul"
+  },
+  {
+    "id": "usr-p1",
+    "role": "provider",
+    "name": "Mehmet Usta (Hızlı Tesisat)",
+    "email": "mehmet.usta@hizlitesisat.com",
+    "phone": "0532 987 65 43",
+    "shopAddress": "Üsküdar Selimiye Mah. Usta Sok. No:5/A, İstanbul",
+    "sector": "Tesisat"
+  },
+  {
+    "id": "usr-p2",
+    "role": "provider",
+    "name": "Elif Demir (Stil & Saç Tasarım)",
+    "email": "elif.kuafor@gmail.com",
+    "phone": "0544 333 22 11",
+    "shopAddress": "Kadıköy Bağdat Caddesi No:142 D:2, İstanbul",
+    "sector": "Kuaför"
+  },
+  {
+    "id": "usr-p3",
+    "role": "provider",
+    "name": "Can Hoca (Matematik & Fizik)",
+    "email": "can.hoca@egitim.com",
+    "phone": "0505 777 88 99",
+    "shopAddress": "Beşiktaş Sinanpaşa Mah. Şair Nedim Cad. No:20, İstanbul",
+    "sector": "Öğretmen"
+  }
+]
