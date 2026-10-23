@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../../core/theme/app_theme.dart';
 import '../models/habit_model.dart';
 import 'streak_badge.dart';
+import 'confirmation_dialog.dart';
 
 class HabitItemCard extends StatelessWidget {
   final HabitModel habit;
@@ -49,6 +50,47 @@ class HabitItemCard extends StatelessWidget {
     return Icons.star_rounded;
   }
 
+  Widget _buildStepperButton({
+    required IconData icon,
+    required VoidCallback? onTap,
+    required bool isDark,
+    bool isPrimary = false,
+    bool isDisabled = false,
+  }) {
+    return GestureDetector(
+      onTap: isDisabled ? null : () {
+        HapticFeedback.selectionClick();
+        onTap?.call();
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        width: 32,
+        height: 32,
+        decoration: BoxDecoration(
+          color: isDisabled
+              ? (isDark ? AppColors.surfaceContainerLowest : AppColors.surfaceVariantLight)
+              : (isPrimary
+                  ? AppColors.primary
+                  : (isDark ? AppColors.surfaceContainerHighest : AppColors.surfaceLight)),
+          borderRadius: BorderRadius.circular(AppSizes.radiusSm),
+          border: Border.all(
+            color: isPrimary
+                ? AppColors.primary
+                : (isDark ? AppColors.outlineVariant : AppColors.borderLight),
+            width: 1,
+          ),
+        ),
+        child: Icon(
+          icon,
+          size: 18,
+          color: isDisabled
+              ? (isDark ? AppColors.outline : AppColors.borderDark)
+              : (isPrimary ? AppColors.onPrimary : (isDark ? AppColors.onSurface : AppColors.textLight)),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -57,35 +99,23 @@ class HabitItemCard extends StatelessWidget {
       key: Key('habit_${habit.id}'),
       direction: DismissDirection.endToStart,
       confirmDismiss: (direction) async {
-        return await showDialog<bool>(
+        return await ConfirmationDialog.show(
           context: context,
-          builder: (ctx) => AlertDialog(
-            backgroundColor: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
-            title: const Text('Alışkanlığı Sil?'),
-            content: Text(
-              '"${habit.title}" alışkanlığını ve geçmiş serisini silmek istediğinize emin misiniz?',
-              style: TextStyle(color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(false),
-                child: const Text('Vazgeç'),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: AppColors.danger),
-                onPressed: () => Navigator.of(ctx).pop(true),
-                child: const Text('Sil', style: TextStyle(color: Colors.white)),
-              ),
-            ],
-          ),
+          title: 'Alışkanlığı Sil?',
+          message: '"${habit.title}" alışkanlığını ve geçmiş serisini kalıcı olarak silmek istediğinize emin misiniz?',
+          confirmText: 'Evet, Sil',
+          confirmColor: AppColors.danger,
+          icon: Icons.delete_forever_rounded,
+          iconColor: AppColors.danger,
+          isDestructive: true,
         );
       },
       onDismissed: (_) => onDelete(),
       background: Container(
-        margin: const EdgeInsets.only(bottom: 12),
+        margin: const EdgeInsets.only(bottom: AppSizes.spaceMd),
         decoration: BoxDecoration(
           color: AppColors.danger,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSizes.cardBorderRadius),
         ),
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
@@ -99,14 +129,14 @@ class HabitItemCard extends StatelessWidget {
         ),
       ),
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
+        margin: const EdgeInsets.only(bottom: AppSizes.spaceMd),
         child: Material(
           color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSizes.cardBorderRadius),
           child: Container(
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.all(AppSizes.cardPadding),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppSizes.cardBorderRadius),
               border: Border.all(
                 color: habit.isCompleted
                     ? AppColors.primary
@@ -116,27 +146,32 @@ class HabitItemCard extends StatelessWidget {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
+                // Üst Satır: İkon + Başlık/Detaylar (Geniş Alan) + Aksiyon
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // 38x38 Category Icon Box
+                    // 38x38 Kategori İkon Kutusu
                     Container(
-                      width: 38,
-                      height: 38,
+                      width: AppSizes.iconBoxMd,
+                      height: AppSizes.iconBoxMd,
                       decoration: BoxDecoration(
                         color: categoryColor.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppSizes.radiusMd),
                       ),
-                      child: Icon(_getIconData(habit.iconPath), color: categoryColor, size: 20),
+                      child: Icon(_getIconData(habit.iconPath), color: categoryColor, size: AppSizes.iconMd),
                     ),
-                    const SizedBox(width: 12),
-                    // Title & Time & Meta
+                    const SizedBox(width: AppSizes.spaceMd),
+                    // Başlık, Zaman ve Meta Bilgileri
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             habit.title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
@@ -151,12 +186,16 @@ class HabitItemCard extends StatelessWidget {
                             children: [
                               const Icon(Icons.schedule, size: 13, color: AppColors.tertiary),
                               const SizedBox(width: 4),
-                              Text(
-                                '${habit.startTime} - ${habit.endTime}',
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.tertiary,
+                              Flexible(
+                                child: Text(
+                                  '${habit.startTime} - ${habit.endTime}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.tertiary,
+                                  ),
                                 ),
                               ),
                               if (habit.hasReminder) ...[
@@ -168,11 +207,15 @@ class HabitItemCard extends StatelessWidget {
                           const SizedBox(height: 4),
                           Row(
                             children: [
-                              Text(
-                                categoryName,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary,
+                              Flexible(
+                                child: Text(
+                                  categoryName,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary,
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 8),
@@ -182,28 +225,9 @@ class HabitItemCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    // Counter or Checkmark Action
-                    if (habit.type == HabitType.counter) ...[
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.remove_circle_outline, size: 22),
-                            color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary,
-                            onPressed: onDecrement,
-                          ),
-                          Text(
-                            '${habit.currentProgress.toInt()} / ${habit.targetProgress.toInt()} ${habit.unit}',
-                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.add_circle, size: 22),
-                            color: AppColors.primary,
-                            onPressed: onIncrement,
-                          ),
-                        ],
-                      ),
-                    ] else ...[
+                    const SizedBox(width: AppSizes.spaceSm),
+                    // Onaylama Aksiyonu (Sadece Checkmark için üst satırda)
+                    if (habit.type == HabitType.checkmark)
                       GestureDetector(
                         onTap: () {
                           HapticFeedback.lightImpact();
@@ -211,8 +235,8 @@ class HabitItemCard extends StatelessWidget {
                         },
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
-                          width: 38,
-                          height: 38,
+                          width: AppSizes.iconBoxMd,
+                          height: AppSizes.iconBoxMd,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: habit.isCompleted ? AppColors.primary : Colors.transparent,
@@ -227,19 +251,86 @@ class HabitItemCard extends StatelessWidget {
                               ? const Icon(Icons.check, color: AppColors.onPrimary, size: 20)
                               : null,
                         ),
+                      )
+                    else if (habit.isCompleted)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(AppSizes.radiusPill),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.check_circle, size: 14, color: AppColors.primary),
+                            SizedBox(width: 3),
+                            Text(
+                              'Tamam',
+                              style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
                   ],
                 ),
+                // Sayaçlı Alışkanlıklar için Alt Kontrol ve İlerleme Barı
                 if (habit.type == HabitType.counter) ...[
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppSizes.spaceMd),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: isDark ? AppColors.surfaceContainerHigh : AppColors.surfaceVariantLight,
+                      borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                      border: Border.all(
+                        color: isDark ? AppColors.outlineVariant : AppColors.borderLight,
+                        width: 0.8,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            '${habit.currentProgress.toInt()} / ${habit.targetProgress.toInt()} ${habit.unit}',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              color: isDark ? AppColors.onSurface : AppColors.textLight,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _buildStepperButton(
+                              icon: Icons.remove,
+                              onTap: onDecrement,
+                              isDark: isDark,
+                              isDisabled: habit.currentProgress <= 0,
+                            ),
+                            const SizedBox(width: 8),
+                            _buildStepperButton(
+                              icon: Icons.add,
+                              onTap: onIncrement,
+                              isDark: isDark,
+                              isPrimary: true,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: AppSizes.spaceSm),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(AppSizes.progressBarRadius),
                     child: LinearProgressIndicator(
                       value: (habit.currentProgress / habit.targetProgress).clamp(0.0, 1.0),
-                      minHeight: 6,
+                      minHeight: AppSizes.progressBarHeight,
                       backgroundColor: isDark ? AppColors.surfaceContainerHigh : AppColors.borderLight,
-                      valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        habit.isCompleted ? AppColors.primaryContainer : AppColors.primary,
+                      ),
                     ),
                   ),
                 ],

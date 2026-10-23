@@ -27,6 +27,7 @@ class HabitController {
       NotificationService.scheduleHabitReminder(
         habitTitle: habit.title,
         timeString: habit.startTime,
+        habitId: habit.id,
       );
     }
   }

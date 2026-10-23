@@ -23,7 +23,6 @@ class DailyCalendarStrip extends StatelessWidget {
       valueListenable: selectedDateNotifier,
       builder: (context, selectedDate, _) {
         return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: weekDays.map((date) {
             final isSelected = date.year == selectedDate.year &&
                 date.month == selectedDate.month &&
@@ -35,75 +34,89 @@ class DailyCalendarStrip extends StatelessWidget {
             const trDays = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
             final dayName = trDays[date.weekday - 1];
 
-            return GestureDetector(
-              onTap: () => onDateSelected(date),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                width: 44,
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.primary
-                      : (isToday
-                          ? AppColors.primary.withValues(alpha: 0.12)
-                          : (isDark ? AppColors.surfaceContainer : Colors.transparent)),
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: isSelected
-                        ? AppColors.primary
-                        : (isToday
-                            ? AppColors.primary.withValues(alpha: 0.5)
-                            : (isDark ? AppColors.outlineVariant : AppColors.borderLight)),
-                    width: 1,
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      dayName,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: GestureDetector(
+                  onTap: () => onDateSelected(date),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    constraints: const BoxConstraints(
+                      minHeight: AppSizes.calendarItemMinHeight,
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? AppColors.primary
+                          : (isToday
+                              ? AppColors.primary.withValues(alpha: 0.12)
+                              : (isDark ? AppColors.surfaceContainer : Colors.transparent)),
+                      borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                      border: Border.all(
                         color: isSelected
-                            ? AppColors.onPrimary
+                            ? AppColors.primary
                             : (isToday
-                                ? AppColors.primary
-                                : (isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary)),
+                                ? AppColors.primary.withValues(alpha: 0.5)
+                                : (isDark ? AppColors.outlineVariant : AppColors.borderLight)),
+                        width: 1,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${date.day}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: isSelected
-                            ? AppColors.onPrimary
-                            : (isDark ? AppColors.onSurface : AppColors.textLight),
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            dayName,
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                              color: isSelected
+                                  ? AppColors.onPrimary
+                                  : (isToday
+                                      ? AppColors.primary
+                                      : (isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary)),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            '${date.day}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: isSelected
+                                  ? AppColors.onPrimary
+                                  : (isDark ? AppColors.onSurface : AppColors.textLight),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        if (isSelected)
+                          Container(
+                            width: 4,
+                            height: 4,
+                            decoration: const BoxDecoration(
+                              color: AppColors.onPrimary,
+                              shape: BoxShape.circle,
+                            ),
+                          )
+                        else if (isToday)
+                          Container(
+                            width: 4,
+                            height: 4,
+                            decoration: const BoxDecoration(
+                              color: AppColors.primary,
+                              shape: BoxShape.circle,
+                            ),
+                          )
+                        else
+                          const SizedBox(height: 4),
+                      ],
                     ),
-                    const SizedBox(height: 3),
-                    if (isSelected)
-                      Container(
-                        width: 4,
-                        height: 4,
-                        decoration: const BoxDecoration(
-                          color: AppColors.onPrimary,
-                          shape: BoxShape.circle,
-                        ),
-                      )
-                    else if (isToday)
-                      Container(
-                        width: 4,
-                        height: 4,
-                        decoration: const BoxDecoration(
-                          color: AppColors.primary,
-                          shape: BoxShape.circle,
-                        ),
-                      )
-                    else
-                      const SizedBox(height: 4),
-                  ],
+                  ),
                 ),
               ),
             );

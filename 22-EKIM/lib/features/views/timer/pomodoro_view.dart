@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-import '../controllers/pomodoro_controller.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../controllers/pomodoro_controller.dart';
 
 class PomodoroView extends StatefulWidget {
   const PomodoroView({super.key});

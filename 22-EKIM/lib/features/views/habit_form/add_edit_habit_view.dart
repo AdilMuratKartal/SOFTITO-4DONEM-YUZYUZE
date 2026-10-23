@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-import '../models/habit_model.dart';
-import '../models/category_model.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../models/habit_model.dart';
+import '../../models/category_model.dart';
+import '../../widgets/confirmation_dialog.dart';
 
 class AddEditHabitModal extends StatefulWidget {
   final HabitModel? existingHabit;
@@ -934,9 +935,21 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                   ),
-                  onPressed: () {
-                    widget.onDelete?.call();
-                    Navigator.of(context).pop();
+                  onPressed: () async {
+                    final confirmed = await ConfirmationDialog.show(
+                      context: context,
+                      title: 'Alışkanlığı Sil?',
+                      message: '"${widget.existingHabit!.title}" alışkanlığını verilerden kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz.',
+                      confirmText: 'Evet, Sil',
+                      confirmColor: AppColors.danger,
+                      icon: Icons.delete_forever_rounded,
+                      iconColor: AppColors.danger,
+                      isDestructive: true,
+                    );
+                    if (confirmed && context.mounted) {
+                      widget.onDelete?.call();
+                      Navigator.of(context).pop();
+                    }
                   },
                   icon: const Icon(Icons.delete_outline_rounded, size: 18),
                   label: const Text(

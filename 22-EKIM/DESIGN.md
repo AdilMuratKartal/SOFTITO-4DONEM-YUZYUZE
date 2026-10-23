@@ -466,3 +466,68 @@ class HabitCard extends StatelessWidget {
   - *Başlık:* "Henüz mikro-alışkanlık yok"
   - *Alt Başlık:* "Bugün için küçük bir hedef belirleyerek zincire başla."
   - *Buton:* `+ Yeni Mikro-Alışkanlık Ekle`
+
+---
+
+## 5. Responsive Düzen Mimarisi, S-M-L Standartları ve Taşma (Overflow) Önleme
+
+### 5.1. Kırılım Noktaları (Breakpoints) & Hedef Ekranlar
+```text
+[ Kompakt: < 360px ]        [ Normal: 360px - 600px ]        [ Geniş: > 600px ]
+Dar pencereler / Küçük cep      Standart Akıllı Telefonlar        Tablet / Masaüstü
+Tek satır ellipsis, mikro badge     Esnek akışkan bileşenler          Max 600px kolon ortalama
+```
+
+### 5.2. Önceden Belirlenmiş Boyut Matrisi (S-M-L Boyut Değerleri)
+Tüm bileşen genişlik ve yükseklikleri `AppSizes` tokenları üzerinden kontrol edilir:
+
+| Eleman | Küçük (S) | Orta (M) | Büyük (L) | Genişlik (Width) Kuralı | Yükseklik (Height) Kuralı |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Kategori İkon Kutusu** | `28x28 px` | `38x38 px` | `48x48 px` | Sabit `AppSizes.iconBoxMd` | Sabit `AppSizes.iconBoxMd` |
+| **Aksiyon / Stepper** | `32x32 px` | `38x38 px` | `44x44 px` | Sabit `32px` (Stepper) | Sabit `32px` (Stepper) |
+| **Tamamlama Çemberi** | `32x32 px` | `38x38 px` | `44x44 px` | Sabit `38px` | Sabit `38px` |
+| **Haftalık Takvim Günü** | Min `36 px`| Min `40 px`| Min `48 px`| **Akışkan `Expanded`** | Min `62 px` (`minHeight`) |
+| **Alışkanlık Kartı** | Responsive | Responsive | Responsive | `double.infinity` | **Dinamik (Sabit Değil!)** |
+| **İlerleme Çubuğu** | `4 px` | `6 px` | `8 px` | `double.infinity` | Sabit `6 px` |
+
+### 5.3. Taşma (Overflow) ve Metin Kırılma Nedenleri & Kesin Çözümler
+
+#### 1. Sayaçlı Kart Taşması (RenderFlex 74px Vertical Overflow & Tek Karakter Kırılması)
+- **Hatalı Desen:** Alışkanlık başlığı ile `[-] 1500 / 2000 ml [+]` sayaç kümesini aynı yatay `Row` içine koymak. Sayaç grubu ~200px yer kapladığında dar ekranda başlığa yalnızca 30px kalır. Başlık metni `Su / İç / (Mikr / o / ...)` şeklinde harf harf alt satırlara bölünerek karttan 74 piksel dikey taşar.
+- **Kesin Çözüm:** 
+  1. Başlık satırında yalnızca `Icon (38x38)` + `Expanded (Başlık, Süre, Kategori, Seri)` yer alır. Başlık alanı ekranın tüm genişliğini kullanır (`maxLines: 2`, `overflow: TextOverflow.ellipsis`).
+  2. Sayaç kontrolleri ve `LinearProgressIndicator` kartın **ALTINDA** ayrı ve tam genişlikli bir kontrol çubuğu olarak yerleştirilir.
+
+#### 2. Takvim Şeridi Taşması (RenderFlex Right Overflow)
+- **Hatalı Desen:** 7 gün öğesine sabit `width: 44px` vermek. 320px-340px genişlikte padding ile birlikte 308px'i aşarak sağdan sarı-siyah bant taşmasına yol açar.
+- **Kesin Çözüm:** Gün öğeleri sabit genişlik yerine `Expanded` içine alınır (`Expanded(child: Container(...))`). Her gün mevcut ekran genişliğini 7 eşit parçaya böler, hiçbir cihazda taşma yapmaz.
+
+#### 3. Üst Başlık (Header) Taşması
+- **Hatalı Desen:** "Bugün, 24 Ekim" ve "Harika Bir Gün!" başlığı ile `12 Gün`, `Lv.3` rozetlerini kısıtlamasız yan yana koymak.
+- **Kesin Çözüm:** Sol metin sütunu `Expanded` ile sarılır, metinlere `maxLines: 1` ve `overflow: TextOverflow.ellipsis` eklenir. Sağ rozetler `mainAxisSize: MainAxisSize.min` ile kompakt tutulur.
+
+### 5.4. Günlük Mood Check-In Akışı (Single-Prompt Daily Policy)
+1. Uygulama açılışında `StorageService.isMoodPromptShownToday(dateKey)` kontrol edilir.
+2. O gün için sorulmamışsa açılışta `DailyMoodDialog` Bottom Sheet açılır.
+3. Kullanıcı mod seçtiğinde veya "Daha Sonra" dediğinde o gün için flag kaydedilir; gün boyunca tekrar **ASLA** açılmaz.
+4. Ana ekranda mod seçimi yapıldıktan sonra büyük blok gizlenir; üst başlıkta interaktif `[🤩 Harika]` rozeti gösterilir.
+
+### 5.5. Aylık Aktivite Izgarası (Interactive Monthly Heatmap) Standartları
+1. **Görsel Düzen:**
+   - 7 kolonlu takvim şeması (Pzt, Sal, Çar, Per, Cum, Cmt, Paz).
+   - Hücreler `Expanded` ile sarılarak responsive esneklik sağlanır.
+   - 5 kademeli Zümrüt Yeşili dolgu:
+     - 0 Alışkanlık: `surfaceContainerHigh` / pasif zemin
+     - 1 Alışkanlık: `AppColors.primary` (%25 alpha)
+     - 2 Alışkanlık: `AppColors.primary` (%50 alpha)
+     - 3 Alışkanlık: `AppColors.primary` (%75 alpha)
+     - 4+ Alışkanlık: `AppColors.primary` (tam opak zümrüt)
+   - Bugün: `AppColors.secondary` ile 2px belirgin kontur vurgusu.
+2. **Hover / Üzerine Gelme Etkileşimi:**
+   - Her hücre masaüstü için `Tooltip` ve `MouseRegion` ile sarılmıştır.
+   - Hücrenin üzerine gelindiğinde (hover) hemen üstteki canlı bilgi çubuğunda: `"{Gün} {Ay}: {Sayı} alışkanlık tamamlandı (Detaylar için tıkla)"` metni belirir.
+3. **Tıklama (Tap) ile Gün Detay Modalı:**
+   - Hücreye tıklandığında haptik geri bildirim ile modern `showModalBottomSheet` açılır.
+   - *Başlık:* Tam tarih (Örn: "23 Ekim 2026, Cuma") ve tamamlama oranı rozeti (Örn: `3 / 4 (%75)`).
+   - *Duygu Durumu:* Varsa o günün kayıtlı mood'u (Örn: `🤩 Harika`).
+   - *Alışkanlık Listesi:* O gün icra edilen tüm alışkanlıklar kategori ikonu, başlık, kategori etiketi, zaman aralığı ve "Tamamlandı / Yapılmadı" durumu ile listelenir.

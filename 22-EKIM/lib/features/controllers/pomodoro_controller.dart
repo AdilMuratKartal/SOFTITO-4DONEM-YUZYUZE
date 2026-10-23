@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../../core/services/notification_service.dart';
 
 enum PomodoroMode { focus, shortBreak, longBreak }
 
@@ -48,6 +49,17 @@ class PomodoroController {
         isRunningNotifier.value = false;
         if (modeNotifier.value == PomodoroMode.focus) {
           completedCyclesNotifier.value++;
+          NotificationService.showInstantNotification(
+            title: '🎉 Odaklanma Seansı Tamamlandı!',
+            body: '25 dakikalık oturumu başarıyla bitirdin. Şimdi mola zamanı!',
+            id: 8888,
+          );
+        } else {
+          NotificationService.showInstantNotification(
+            title: '⏰ Mola Süresi Bitti!',
+            body: 'Molan sona erdi. Yeni bir seansa hazır mısın?',
+            id: 8889,
+          );
         }
       }
     });

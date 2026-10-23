@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+export 'app_sizes.dart';
 
 /// Mindful Emerald Rhythm - Modern Design System Tokens
 class AppColors {

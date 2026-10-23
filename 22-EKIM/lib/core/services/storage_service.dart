@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/models/habit_model.dart';
 import '../../features/models/category_model.dart';
+import '../../features/models/roadmap_model.dart';
 
 class StorageService {
   static const String _habitsKey = 'saved_habits_v1';
@@ -49,6 +50,8 @@ class StorageService {
     } catch (_) {}
   }
 
+  static const String _moodPromptShownPrefix = 'mood_prompt_shown_';
+
   static Future<String?> getTodayMood(String dateKey) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -62,6 +65,23 @@ class StorageService {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('$_moodKeyPrefix$dateKey', moodKey);
+      await prefs.setBool('$_moodPromptShownPrefix$dateKey', true);
+    } catch (_) {}
+  }
+
+  static Future<bool> isMoodPromptShownToday(String dateKey) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getBool('$_moodPromptShownPrefix$dateKey') ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  static Future<void> setMoodPromptShownToday(String dateKey, bool shown) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('$_moodPromptShownPrefix$dateKey', shown);
     } catch (_) {}
   }
 
@@ -137,4 +157,105 @@ class StorageService {
       ),
     ];
   }
+
+  static const String _roadmapsKey = 'saved_roadmaps_v1';
+
+  static Future<List<RoadmapModel>> loadRoadmaps() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final roadmapsJson = prefs.getStringList(_roadmapsKey);
+      if (roadmapsJson == null || roadmapsJson.isEmpty) {
+        return _getDefaultRoadmaps();
+      }
+      return roadmapsJson.map((str) => RoadmapModel.fromJsonString(str)).toList();
+    } catch (_) {
+      return _getDefaultRoadmaps();
+    }
+  }
+
+  static Future<void> saveRoadmaps(List<RoadmapModel> roadmaps) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final list = roadmaps.map((r) => r.toJsonString()).toList();
+      await prefs.setStringList(_roadmapsKey, list);
+    } catch (_) {}
+  }
+
+  static List<RoadmapModel> _getDefaultRoadmaps() {
+    return [
+      const RoadmapModel(
+        id: 'rm_1',
+        title: '30 Günde Demir İrade & Zindelik',
+        category: 'Kişisel Gelişim',
+        iconName: '🎯',
+        durationWeeks: '4 Hafta',
+        nextReward: 'Odak Nişanı',
+        isCompleted: false,
+        nodes: [
+          RoadmapNodeModel(
+            id: 'node_1_1',
+            stepNumber: 1,
+            title: 'Temel Rutin & Sabah Farkındalığı',
+            description: 'Her sabah 10 dk nefes egzersizi ve 500ml ılık su ile güne başla.',
+            targetDaysStreak: 7,
+            linkedHabitIds: ['2'],
+            isCompleted: true,
+            isLocked: false,
+          ),
+          RoadmapNodeModel(
+            id: 'node_1_2',
+            stepNumber: 2,
+            title: 'Fiziksel Kondisyon & 5K Koşu',
+            description: 'Haftada 3 gün aralıklı tempo koşusu ve bacak güçlendirme antrenmanı.',
+            targetDaysStreak: 14,
+            linkedHabitIds: ['1'],
+            isCompleted: false,
+            isLocked: false,
+          ),
+          RoadmapNodeModel(
+            id: 'node_1_3',
+            stepNumber: 3,
+            title: 'Zihinsel Derinleşme & Kitap Rutini',
+            description: 'Günde 20 sayfa kurgu dışı kitap okuma ve günlük özet çıkarma.',
+            targetDaysStreak: 21,
+            linkedHabitIds: ['3'],
+            isCompleted: false,
+            isLocked: true,
+          ),
+        ],
+      ),
+      const RoadmapModel(
+        id: 'rm_2',
+        title: 'Dijital Detoks & Uyku Kalitesi',
+        category: 'Sağlık',
+        iconName: '🌙',
+        durationWeeks: '2 Hafta',
+        nextReward: 'Derin Dinlenme Rozeti',
+        isCompleted: true,
+        nodes: [
+          RoadmapNodeModel(
+            id: 'node_2_1',
+            stepNumber: 1,
+            title: 'Akşam 22:00 Ekran Kapatma',
+            description: 'Yatmadan 1 saat önce tüm mavi ışık kaynaklarını ve bildirimleri kapat.',
+            targetDaysStreak: 7,
+            linkedHabitIds: [],
+            isCompleted: true,
+            isLocked: false,
+          ),
+          RoadmapNodeModel(
+            id: 'node_2_2',
+            stepNumber: 2,
+            title: 'Melatonin & Bitki Çayı Rutini',
+            description: 'Papatya çayı ve loş sarı ışık eşliğinde 15 dakika esneme.',
+            targetDaysStreak: 10,
+            linkedHabitIds: [],
+            isCompleted: true,
+            isLocked: false,
+          ),
+        ],
+      ),
+    ];
+  }
 }
+

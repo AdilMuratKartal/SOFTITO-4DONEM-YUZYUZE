@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/services/notification_service.dart';
 
 class ProfileView extends StatefulWidget {
   final ValueNotifier<ThemeMode> themeModeNotifier;
@@ -181,13 +182,74 @@ class _ProfileViewState extends State<ProfileView> {
                         'Günlük Hatırlatıcı Bildirimler',
                         style: TextStyle(
                           fontSize: 14,
+                          fontWeight: FontWeight.w600,
                           color: isDark ? AppColors.onSurface : AppColors.textLight,
+                        ),
+                      ),
+                      subtitle: Text(
+                        _notificationsEnabled ? 'Aktif (Saatinde hatırlatma yapar)' : 'Kapalı',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary,
                         ),
                       ),
                       value: _notificationsEnabled,
                       activeThumbColor: AppColors.primary,
-                      onChanged: (val) => setState(() => _notificationsEnabled = val),
+                      onChanged: (val) async {
+                        setState(() => _notificationsEnabled = val);
+                        if (val) {
+                          await NotificationService.requestPermissions();
+                        } else {
+                          await NotificationService.cancelAllNotifications();
+                        }
+                      },
                     ),
+                    if (_notificationsEnabled) ...[
+                      Divider(height: 1, color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
+                      ListTile(
+                        leading: const Icon(Icons.notifications_active_rounded, color: AppColors.primary, size: 22),
+                        title: Text(
+                          'Anlık Test Bildirimi Gönder',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: isDark ? AppColors.onSurface : AppColors.textLight,
+                          ),
+                        ),
+                        subtitle: Text(
+                          'Cihazınıza anlık test bildirimi gönderir',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary,
+                          ),
+                        ),
+                        trailing: const Icon(Icons.send_rounded, size: 18, color: AppColors.primary),
+                        onTap: () async {
+                          final success = await NotificationService.showInstantNotification(
+                            title: '🔔 Test Bildirimi: Alışkanlık Takibi',
+                            body: 'Harika! Bildirim sistemi başarıyla çalışıyor ve aktif.',
+                          );
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: success ? AppColors.primary : AppColors.danger,
+                                content: Text(
+                                  success
+                                      ? '✓ Test bildirimi cihaza gönderildi!'
+                                      : 'Bildirim gönderilemedi. Lütfen sistem izinlerini kontrol edin.',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: success ? AppColors.onPrimary : Colors.white,
+                                  ),
+                                ),
+                                behavior: SnackBarBehavior.floating,
+                                duration: const Duration(seconds: 3),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ],
                     Divider(height: 1, color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
                     ValueListenableBuilder<ThemeMode>(
                       valueListenable: widget.themeModeNotifier,

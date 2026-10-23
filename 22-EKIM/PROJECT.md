@@ -110,43 +110,53 @@ assets/
     └── ...
 lib/
 ├── core/
-│   ├── constants/
 │   ├── theme/
-│   ├── services/
-│   │   └── notification_service.dart # Hatırlatıcı bildirim servisi
-│   └── utils/
+│   │   ├── app_theme.dart            # Renkler, tipografi ve dark/light tema tanımları
+│   │   └── app_sizes.dart            # Responsive S-M-L boyut standartları & Breakpointler
+│   └── services/
+│       ├── storage_service.dart      # SharedPreferences kalıcılık & tek seferlik mood flag
+│       └── notification_service.dart
 ├── features/
 │   ├── controllers/
-│   │   ├── habit_controller.dart     # Ekleme, silme, tamamlama, filtreleme
+│   │   ├── habit_controller.dart     # Alışkanlık ekleme, silme, tamamlama, filtreleme
 │   │   ├── category_controller.dart  # 4 temel kategori + dinamik kategori ekleme
-│   │   ├── mood_controller.dart
-│   │   ├── pomodoro_controller.dart
-│   │   ├── roadmap_controller.dart
-│   │   └── profile_controller.dart
+│   │   ├── mood_controller.dart      # Günlük mood & ilk girişte tek seferlik sorma
+│   │   ├── pomodoro_controller.dart  # 25/5/15 dk odaklanma sayacı kontrolcüsü
+│   │   └── roadmap_controller.dart   # Hedef ağacı ve aşama kontrolcüsü
 │   ├── models/
-│   │   ├── habit_model.dart          # İsim, ikon, günler, saat aralığı, hatırlatıcı
+│   │   ├── habit_model.dart          # İsim, ikon, günler, saat aralığı, hatırlatıcı, sayaç
 │   │   ├── category_model.dart       # İsim, renk, ikon, isCustom
-│   │   ├── mood_model.dart
+│   │   ├── mood_model.dart           # 5 duygu durumu modeli ve renkleri
 │   │   ├── pomodoro_session_model.dart
-│   │   ├── roadmap_node_model.dart
-│   │   └── user_level_model.dart
-│   ├── views/
-│   │   ├── home_view.dart             # Sayfa 1
-│   │   ├── roadmap_view.dart          # Sayfa 2
-│   │   ├── pomodoro_view.dart         # Sayfa 3
-│   │   ├── analytics_view.dart        # Sayfa 4
-│   │   ├── profile_view.dart          # Sayfa 5
-│   │   └── add_edit_habit_view.dart   # Sayfa 6 (Alışkanlık Ekle/Düzenle/Sil Modalı)
+│   │   └── roadmap_model.dart        # Aşama düğümleri ve kilit durumları
+│   ├── views/                        # Her sayfa kendi açıklayıcı klasöründe (README.md ile)
+│   │   ├── home/                     # Ana Ekran kontrol paneli
+│   │   │   ├── home_view.dart
+│   │   │   └── README.md
+│   │   ├── roadmap/                  # Yol Haritası ve hedef ağacı
+│   │   │   ├── roadmap_view.dart
+│   │   │   └── README.md
+│   │   ├── timer/                    # Odaklanma & Pomodoro sayacı
+│   │   │   ├── pomodoro_view.dart
+│   │   │   └── README.md
+│   │   ├── analytics/                # İstatistikler ve veri analizi
+│   │   │   ├── analytics_view.dart
+│   │   │   └── README.md
+│   │   ├── profile/                  # Profil, Level/XP, Rozetler & Tema
+│   │   │   ├── profile_view.dart
+│   │   │   └── README.md
+│   │   ├── habit_form/               # Alışkanlık Ekle/Düzenle/Sil Modalı
+│   │   │   ├── add_edit_habit_view.dart
+│   │   │   └── README.md
+│   │   └── navigation/               # Alt Navigasyon İskeleti (NavigationBar)
+│   │       ├── main_navigation_view.dart
+│   │       └── README.md
 │   └── widgets/
-│       ├── habit_item_card.dart       # Zaman aralıklı, silinebilir kart
-│       ├── habit_icon_picker.dart     # assets/icons/ ikon seçici
-│       ├── week_day_selector.dart     # Haftalık gün seçim çipleri
-│       ├── time_range_picker.dart     # 09:45 - 15:36 saat aralığı seçici
-│       ├── category_chips_bar.dart    # Kategori filtreleri & + Ekle butonu
-│       ├── mood_picker_sheet.dart
-│       ├── pomodoro_timer_dial.dart
-│       ├── roadmap_tree_widget.dart
-│       └── streak_counter_badge.dart
+│       ├── daily_mood_dialog.dart    # Günde 1 kez açılan tek seferlik mood modalı
+│       ├── mood_selector_widget.dart # Responsive duygu durumu seçici
+│       ├── daily_calendar_strip.dart # 7 günlük taşmayan responsive takvim şeridi
+│       ├── habit_item_card.dart      # Geniş başlıklı, alt kontrollü sayaç kartı
+│       └── streak_badge.dart         # Alev serisi rozeti
 └── main.dart
 ```
 
@@ -154,27 +164,19 @@ lib/
 
 Projenin tüm detaylarını eksiksiz inşa etmek için sırasıyla oluşturacağımız dosyalar:
 
-PROJECT.md (Tamamlandı - Genel Vizyon, Özellikler ve Mimari)
-THEME.md (Renk paletleri, tipografi, karanlık/aydınlık mod, kategori renkleri)
-DESIGN.md (Kart tasarımları, Mood pop-up yapısı, grafik stilleri, ortak widget kuralları)
-SAYFA1.md - SAYFA5.md (Her sayfanın detaylı UI elemanları, state akışı ve etkileşim kuralları)
+- `PROJECT.md` (Tamamlandı - Genel Vizyon, Özellikler, Günlük Kayıtlar ve Mimari)
+- `THEME.md` (Tamamlandı - Renk paletleri, tipografi, karanlık/aydınlık mod, S-M-L standartları)
+- `DESIGN.md` (Tamamlandı - Kart tasarımları, Mood pop-up yapısı, grafik stilleri, taşma önleme kuralları)
+- `sayfalar/SAYFA1.md` - `SAYFA6.md` (Her sayfanın detaylı UI elemanları, state akışı ve etkileşim kuralları)
 
 ## 7. Geliştirme, Analiz ve Test Komutları
 
-Ajan yaptığı herhangi bir kod değişikliğinden sonra mutlakaq alttaki komutların çalıştığını doğrulamalıdır:
+Ajan yaptığı herhangi bir kod değişikliğinden sonra mutlaka alttaki komutların çalıştığını doğrulamalıdır:
 
 - **Statik kod analizi (0 uyarı ve 0 hata şart):**
-
   ```bash
-  flutter analyze
+  dart analyze lib
   ```
-
-- **Birim ve widget testleri:**
-
-  ```bash
-  flutter test
-  ```
-
 - **Projeyi çalıştırma:**
   ```bash
   flutter run
@@ -183,14 +185,103 @@ Ajan yaptığı herhangi bir kod değişikliğinden sonra mutlakaq alttaki komut
 ## 8. Ajanın Çıktı ve Yanıt Verme Standartları
 
 - **Açıklamalar:** Türkçe, teknik terimlerin özünü bozmadan, net ve doğrudan olacaktır.
-- **Değişiklik Sunumları:** 500 satırlık bir dosyada 3 satır değiştiyse tüm dosyayı baştan sona basma; yalnızca hedef satırları ve diff yapısını göster.
+- **Değişiklik Sunumları:** Yalnızca hedef satırları ve diff yapısını göster.
 - **Dosya Yolları:** Bahsedilen ve üretilen her dosya için mutlaka projeye göre tıklanabilir link ver.
-- **Doğrulama:** Kod yazdıktan sonra kullanıcıya _"Şimdi `flutter analyze` ile kontrol edebilirsin"_ şeklinde doğrulama yönergeleri ver.
+- **Doğrulama:** Kod yazdıktan sonra kullanıcıya doğrulama durumunu açıkça raporla.
 
 ## 9. Ajan Yetenekleri ve Yardımcı Araçlar
 
-Projede geliştirme yapacak ajanlar ve geliştiriciler, `THEME.md`, `DESING.md`, `sayfalar/SAYFA1.md` - `SAYFA5.md` ve `.agents/skills/` dizini altındaki standartları kullanmalıdır:
+Projede geliştirme yapacak ajanlar ve geliştiriciler, `THEME.md`, `DESIGN.md` ve `.agents/skills/` dizini altındaki standartları kullanmalıdır:
 
 - **Otomatik İskelet Betiği:** generate_feature.sh
 - **Durum Akış Referansı:** state_flow.md
 - **Altın Standart Referans Kod:** sample_screen.dart
+
+## 10. Proje Kayıt Dosyaları (Günlük Kayıt Defteri)
+
+### -- **Proje Kayıt Defteri : 1. Gün (23.10.2026)** --
+
+**Günün Başarıları ve Tamamlanan İş Listesi:**
+
+1. **Mimari ve Tasarım Sistemi Kurulumu:**
+   - Flutter Material 3 tabanlı, **Mindful Emerald Rhythm** (Zümrüt Yeşili `#4EDEA3` ve Koyu Arduvaz `#0B1326`) tema sistemi kuruldu.
+   - Aydınlık ve Karanlık mod dinamik desteği sağlandı.
+   - `AppSizes` mimarisiyle Breakpointler (<360px Compact, 360-600px Normal, >600px Large) ve S-M-L (Küçük, Orta, Büyük) bileşen standartları tanımlandı.
+
+2. **Ekranların (Views) İnşası ve Modüler Klasör Yapısı:**
+   - `views/` dizini her sayfanın amacını anlatan bağımsız klasörlere bölündü ve her birine `README.md` dokümantasyonu eklendi:
+     - `home/` (`home_view.dart` & `README.md`): Ana kontrol paneli, takvim şeridi, filtreleme, ilerleme kartı ve alışkanlık listesi.
+     - `roadmap/` (`roadmap_view.dart` & `README.md`): Aşama aşama hedef ağacı, hazır şablonlar (5K Koşu, 21 Gün Şekersiz).
+     - `timer/` (`pomodoro_view.dart` & `README.md`): 25/5/15 dk modlu entegre dairesel Pomodoro sayacı.
+     - `analytics/` (`analytics_view.dart` & `README.md`): FL Chart başarı çubuk grafikleri, kategori pasta grafiği ve mood trendi.
+     - `profile/` (`profile_view.dart` & `README.md`): Kullanıcı Level/XP kartı, rozetler vitrini, tema ve bildirim ayarları.
+     - `habit_form/` (`add_edit_habit_view.dart` & `README.md`): Alışkanlık ekleme/düzenleme/silme, gün ve zaman aralığı seçici.
+     - `navigation/` (`main_navigation_view.dart` & `README.md`): Alt navigasyon çubuğu ve günlük ilk giriş mood kontrolü.
+
+3. **Taşma (Overflow) ve Metin Bölünmesi Hatalarının Giderilmesi:**
+   - **Sayaç Kartı (74px Dikey Taşma ve Harf Harf Bölünme):** Sayaç kontrolleri `Row` içinden alınıp kartın alt satırına taşındı. Başlık tam genişliğe kavuştu (`maxLines: 2, overflow: TextOverflow.ellipsis`), dikey taşma ve kelimelerin tek tek alt alta kırılması tamamen önlendi.
+   - **Takvim Şeridi (Sağdan Taşma):** 7 gün kutusu sabit 44px yerine `Expanded` ile sarılarak tüm ekranlara esnek (responsive) oturtuldu.
+
+4. **Günlük Tek Seferlik Mood (Duygu Durumu) Mekanizması:**
+   - `DailyMoodDialog` Bottom Sheet bileşeni geliştirildi.
+   - Günün ilk açılışında `StorageService.isMoodPromptShownToday` ile kontrol edilerek kullanıcının modunu sorması sağlandı.
+   - Kullanıcı seçim yaptığında veya "Daha Sonra" dediğinde flag kaydedilir; aynı gün içinde **asla tekrar sormaz**.
+   - Seçilen mod ana sayfa başlığında şık `[🤩 Harika]` rozeti olarak gösterilerek kullanıcıya dilediğinde değiştirme imkanı sunuldu.
+
+5. **Dokümantasyon Güncellemeleri:**
+   - `THEME.md`, `DESIGN.md` ve `PROJECT.md` dokümanları responsive S-M-L matrisi, sayaç mimarisi ve 1. gün kayıtlarıyla güncellendi.
+   - `dart analyze lib` ile 0 uyarı ve 0 hata ile doğrulandı.
+
+6. **Aylık Aktivite Izgarası (Interactive Heatmap) Geliştirmesi:**
+   - 7 kolonlu takvim şeması ve 5 kademeli zümrüt yeşili yoğunluk renklendirmesi inşa edildi.
+   - Hücre üzerine gelindiğinde (Hover / Tooltip / MouseRegion) tarih ve tamamlanan alışkanlık sayısını gösteren canlı önizleme çubuğu ve masaüstü Tooltip eklendi.
+   - Güne tıklandığında (Tap) o günün detaylarını (tarih, başarı oranı, mood, tamamlanan/eksik alışkanlıklar, kategori rozetleri ve saatleri) listeleyen interaktif Bottom Sheet modalı geliştirildi.
+
+7. **Gerçek Yerel Bildirim Sistemi (Local Notifications):**
+   - `flutter_local_notifications` (v22+) ve `timezone` paketleri projeye entegre edildi.
+   - macOS, iOS ve Android platformları için dinamik bildirim izinleri bağlandı.
+   - Profil sayfasına "Anlık Test Bildirimi Gönder" butonu eklendi.
+   - Alışkanlıklar için belirlenen saatte (`09:45` vb.) günlük tekrarlanan yerel `zonedSchedule` hatırlatıcıları bağlandı.
+   - Pomodoro odaklanma ve mola seansları tamamlandığında otomatik bildirim tetikleyicisi eklendi.
+   - Tüm özelliklerin adım adım yapılış ve test yönergeleri `1.gün-23-ekim.md` dosyasında kaydedildi.
+
+8. **Alışkanlık Onaylama/Silme Teyit Sistemi ve Yapılanlar/Yapılmayanlar Alt Açılır Listesi:**
+   - Kazara silme ve onaylama işlemlerinin önüne geçmek için özel `ConfirmationDialog` bileşeni inşa edildi.
+   - **Silme Durumu:** Kart kaydırılarak (Dismissible) veya formdan silinmek istendiğinde teyit istenir; onaylandığında veritabanından kalıcı olarak silinir.
+   - **Onaylama Durumu:** Alışkanlık tamamlandığında (check veya sayaç hedefi) teyit istenir; onaylandığında verilerde saklanır ancak ana sayfadaki "Yapılacaklar" alanından "Tamamlananlar" alt açılır akordeon listesine taşınır.
+   - "Tamamlananlar" bölümü açılır-kapanır (collapsible) yapıda tasarlanarak ana ekranın temiz kalması sağlandı.
+
+9. **Gelişmiş Roadmap (Yol Haritası) Modülü ve Arka Plan Canlı Senkronizasyonu:**
+   - **Hiyerarşik Mimari (Liste -> Detay):** `RoadmapListView` (aktif öne çıkan rota kartı, dikey aşama basamakları ağacı ve tamamlananlar akordeon arşivi) ve `RoadmapDetailView`.
+   - **Dinamik Yol Haritası Oluşturma Sihirbazı (`CreateRoadmapSheet`):** `+` butonu ile kullanıcı dilediği kadar basamak ekleyebilir, hedef seri (streak) belirleyebilir ve mevcut alışkanlıklarından çoklu seçimle basamağa görev bağlayabilir.
+   - **Single Source of Truth & Canlı Senkronizasyon:** `RoadmapController`, `HabitController`'ı sürekli dinler. Kullanıcı ana sayfada bir alışkanlığa tik attığı anda Roadmap ekranına gitmesine gerek kalmadan basamak ilerlemesi ve kilit açılmaları arka planda anında güncellenir.
+   - **3 Kademeli Görsel Düğüm Ağacı (`RoadmapNodeTree`):** Kilitli (gri kilit, pasif hat), Aktif (parlayan rozet, aşama barı, bağlı günlük alışkanlık butonları) ve Tamamlanan (zümrüt zemin, onay tiki).
+   - Dokümantasyon (`sayfalar/SAYFA2.md` ve `1.gün-23-ekim.md`) güncellendi.
+
+---
+
+-- **Proje Kayıt Defteri : 2. Gün (24.10.2026)  **
+-- **Proje Kayıt Defteri : 3. Gün (25.10.2026)  **
+-- **Proje Kayıt Defteri : 4. Gün (26.10.2026)  **
+-- **Proje Kayıt Defteri : 5. Gün (27.10.2026)  **
+-- **Proje Kayıt Defteri : 6. Gün (28.10.2026)  **
+-- **Proje Kayıt Defteri : 7. Gün (29.10.2026)  **
+-- **Proje Kayıt Defteri : 8. Gün (30.10.2026)  **
+-- **Proje Kayıt Defteri : 9. Gün (31.10.2026)  **
+-- **Proje Kayıt Defteri : 10. Gün (01.11.2026) **
+
+## 11. Ajanın çıktı ve yanıt verme standartları
+
+**Açıklamalar** Türkçe teknik terimlerin özünü bozmadan ve doğrudan olacaktır.
+** Değişiklik Sunumları:** Örnek 500 satırlık bir dosyada 3 satır değiştiyse tüm dosyayı baştan sona basma; hedef satırları ve diff yapısını göster.
+**Dosya yolları** Bahsedilen ve üretilen her dosya için mutlaka projeye göre tıklanabilir link ver.
+**Doğrulama** Kod yazdıktan sonra kullanıcı "Şimdi flutter analiz ile kontrol edebilirsin" şeklinde doğrulama yönergeleri ver.
+
+## 12 Kırmızı çizgiler kod kalite standartları
+1 - **State Yönetim Standartları:**
+    Sayfa düzeyinde ağır `setState` KULLANILMAYACAKTIR.
+    Sadece yerel arayüz durumunu yöneten (örneğin buton animasyonları vb.) StatefulWidget kabul edilir.
+
+2 - **Yasaklı Paketler:**
+Projeye onay almadan harici ağır state paketleri EKLENMEYECEKTİR.
+Dart'ın ve Flutter'ın yerel çekirdek apilerini kullanmak esastır.

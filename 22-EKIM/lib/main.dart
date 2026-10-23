@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'core/theme/app_theme.dart';
-import 'features/views/main_navigation_view.dart';
+import 'core/services/notification_service.dart';
+import 'features/views/navigation/main_navigation_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('tr_TR', null);
+  await NotificationService.init();
   runApp(const HabitTrackerApp());
 }
 

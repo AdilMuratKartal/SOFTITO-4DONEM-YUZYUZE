@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-import '../controllers/habit_controller.dart';
-import '../controllers/mood_controller.dart';
-import 'home_view.dart';
-import 'roadmap_view.dart';
-import 'pomodoro_view.dart';
-import 'analytics_view.dart';
-import 'profile_view.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../controllers/habit_controller.dart';
+import '../../controllers/mood_controller.dart';
+import '../../controllers/roadmap_controller.dart';
+import '../../widgets/daily_mood_dialog.dart';
+import '../home/home_view.dart';
+import '../roadmap/roadmap_view.dart';
+import '../timer/pomodoro_view.dart';
+import '../analytics/analytics_view.dart';
+import '../profile/profile_view.dart';
 
 class MainNavigationView extends StatefulWidget {
   final ValueNotifier<ThemeMode> themeModeNotifier;
@@ -21,20 +23,36 @@ class _MainNavigationViewState extends State<MainNavigationView> {
   int _currentIndex = 0;
   late final HabitController _habitController;
   late final MoodController _moodController;
+  late final RoadmapController _roadmapController;
 
   @override
   void initState() {
     super.initState();
     _habitController = HabitController();
     _moodController = MoodController();
+    _roadmapController = RoadmapController(habitController: _habitController);
     _habitController.loadDailyHabits();
-    _moodController.loadTodayMood();
+    _moodController.loadTodayMood().then((_) {
+      if (mounted && _moodController.shouldPromptDailyMoodNotifier.value) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted && _moodController.shouldPromptDailyMoodNotifier.value) {
+            DailyMoodDialog.show(
+              context,
+              currentMood: _moodController.todayMoodNotifier.value,
+              onMoodSelected: _moodController.setTodayMood,
+              onDismiss: _moodController.dismissDailyPrompt,
+            );
+          }
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
     _habitController.dispose();
     _moodController.dispose();
+    _roadmapController.dispose();
     super.dispose();
   }
 
@@ -45,7 +63,10 @@ class _MainNavigationViewState extends State<MainNavigationView> {
         habitController: _habitController,
         moodController: _moodController,
       ),
-      const RoadmapView(),
+      RoadmapView(
+        roadmapController: _roadmapController,
+        habitController: _habitController,
+      ),
       const PomodoroView(),
       AnalyticsView(habitController: _habitController),
       ProfileView(themeModeNotifier: widget.themeModeNotifier),
