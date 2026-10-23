@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../core/theme/app_theme.dart';
-import '../controllers/habit_controller.dart';
 
 class AnalyticsView extends StatelessWidget {
-  final HabitController habitController;
+  final dynamic habitController;
 
-  const AnalyticsView({super.key, required this.habitController});
+  const AnalyticsView({super.key, this.habitController});
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('İstatistik ve Analiz'),
+        title: const Text('İstatistik & Analiz'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -25,25 +25,32 @@ class AnalyticsView extends StatelessWidget {
               // Metrik Özet Kartları
               Row(
                 children: [
-                  _buildMetricCard(context, '%84', 'Başarı Oranı', Icons.trending_up, AppColors.primary),
+                  _buildMetricCard(context, '%82', 'Haftalık Başarı', Icons.track_changes, AppColors.primary, isDark),
                   const SizedBox(width: 10),
-                  _buildMetricCard(context, '18 Gün', 'En Uzun Seri', Icons.local_fire_department, AppColors.secondary),
+                  _buildMetricCard(context, '18 Gün', 'En Uzun Seri', Icons.local_fire_department, AppColors.secondary, isDark),
                   const SizedBox(width: 10),
-                  _buildMetricCard(context, '6.5 Sa', 'Odaklanma', Icons.timer, AppColors.info),
+                  _buildMetricCard(context, '6.5 Sa', 'Odaklanma', Icons.timer, AppColors.tertiary, isDark),
                 ],
               ),
               const SizedBox(height: 20),
 
               // Haftalık Tamamlama Bar Grafiği
-              const Text('Haftalık Tamamlanma Grafiği', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              Text(
+                'Haftalık Tamamlanma Grafiği',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? AppColors.onSurface : AppColors.textLight,
+                ),
+              ),
               const SizedBox(height: 12),
               Container(
                 height: 180,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+                  color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.borderLight),
+                  border: Border.all(color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
                 ),
                 child: BarChart(
                   BarChartData(
@@ -61,7 +68,13 @@ class AnalyticsView extends StatelessWidget {
                             if (idx >= 0 && idx < days.length) {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 4),
-                                child: Text(days[idx], style: const TextStyle(fontSize: 10, color: AppColors.textSecondary)),
+                                child: Text(
+                                  days[idx],
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary,
+                                  ),
+                                ),
                               );
                             }
                             return const SizedBox.shrink();
@@ -75,125 +88,149 @@ class AnalyticsView extends StatelessWidget {
                     gridData: const FlGridData(show: false),
                     borderData: FlBorderData(show: false),
                     barGroups: [
-                      _makeBarGroup(0, 70),
-                      _makeBarGroup(1, 100),
-                      _makeBarGroup(2, 60),
-                      _makeBarGroup(3, 85),
-                      _makeBarGroup(4, 90),
-                      _makeBarGroup(5, 50),
-                      _makeBarGroup(6, 80),
+                      _makeBarGroup(0, 70, isDark),
+                      _makeBarGroup(1, 100, isDark),
+                      _makeBarGroup(2, 60, isDark),
+                      _makeBarGroup(3, 85, isDark),
+                      _makeBarGroup(4, 90, isDark),
+                      _makeBarGroup(5, 50, isDark),
+                      _makeBarGroup(6, 80, isDark),
                     ],
                   ),
                 ),
               ),
               const SizedBox(height: 20),
 
-              // Katkı Isı Haritası (Heatmap Grid)
-              const Text('Katkı Isı Haritası (GitHub Tarzı)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.borderLight),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Ekim 2026', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 5,
-                      runSpacing: 5,
-                      children: List.generate(28, (i) {
-                        final intensity = (i % 4);
-                        Color color = AppColors.borderLight;
-                        if (intensity == 1) color = AppColors.primary.withValues(alpha: 0.35);
-                        if (intensity == 2) color = AppColors.primary.withValues(alpha: 0.7);
-                        if (intensity == 3) color = AppColors.primary;
-
-                        return Container(
-                          width: 16,
-                          height: 16,
-                          decoration: BoxDecoration(
-                            color: color,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        );
-                      }),
-                    ),
-                  ],
+              // Kategori Dağılımı Donut Grafiği
+              Text(
+                'Kategori Dağılımı',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? AppColors.onSurface : AppColors.textLight,
                 ),
               ),
-              const SizedBox(height: 20),
-
-              // Mood & Alışkanlık Korelasyonu
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: AppColors.info.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.info.withValues(alpha: 0.3)),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.lightbulb_outline_rounded, color: AppColors.info, size: 26),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        '💡 İçgörü: Spor ve Zihin alışkanlıklarını tamamladığın günlerde duygu durumun %78 daha pozitif kaydedildi.',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Kategori Dağılım Grafiği (Donut Chart - 4 Temel Kategori + Özel)
-              const Text('Kategori Dağılımı', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+                  color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.borderLight),
+                  border: Border.all(color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
                 ),
-                child: Column(
+                child: Row(
                   children: [
                     SizedBox(
-                      height: 160,
+                      width: 120,
+                      height: 120,
                       child: PieChart(
                         PieChartData(
-                          sectionsSpace: 4,
-                          centerSpaceRadius: 40,
+                          sectionsSpace: 3,
+                          centerSpaceRadius: 36,
                           sections: [
-                            PieChartSectionData(value: 35, color: AppColors.categorySport, title: '%35', radius: 35, titleStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white)),
-                            PieChartSectionData(value: 30, color: AppColors.categoryHealth, title: '%30', radius: 35, titleStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white)),
-                            PieChartSectionData(value: 20, color: AppColors.categoryMind, title: '%20', radius: 35, titleStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white)),
-                            PieChartSectionData(value: 15, color: AppColors.categoryMusic, title: '%15', radius: 35, titleStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white)),
+                            PieChartSectionData(
+                              color: AppColors.categorySport,
+                              value: 35,
+                              showTitle: false,
+                              radius: 18,
+                            ),
+                            PieChartSectionData(
+                              color: AppColors.categoryHealth,
+                              value: 25,
+                              showTitle: false,
+                              radius: 18,
+                            ),
+                            PieChartSectionData(
+                              color: AppColors.categoryMind,
+                              value: 20,
+                              showTitle: false,
+                              radius: 18,
+                            ),
+                            PieChartSectionData(
+                              color: AppColors.categoryMusic,
+                              value: 12,
+                              showTitle: false,
+                              radius: 18,
+                            ),
+                            PieChartSectionData(
+                              color: AppColors.secondary,
+                              value: 8,
+                              showTitle: false,
+                              radius: 18,
+                            ),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    // Legend
-                    Wrap(
-                      spacing: 16,
-                      runSpacing: 8,
-                      alignment: WrapAlignment.center,
-                      children: [
-                        _buildLegendItem('Spor', AppColors.categorySport),
-                        _buildLegendItem('Sağlık', AppColors.categoryHealth),
-                        _buildLegendItem('Zihin', AppColors.categoryMind),
-                        _buildLegendItem('Müzik', AppColors.categoryMusic),
-                      ],
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildLegendRow('Spor (%35)', AppColors.categorySport, isDark),
+                          const SizedBox(height: 6),
+                          _buildLegendRow('Sağlık (%25)', AppColors.categoryHealth, isDark),
+                          const SizedBox(height: 6),
+                          _buildLegendRow('Zihin (%20)', AppColors.categoryMind, isDark),
+                          const SizedBox(height: 6),
+                          _buildLegendRow('Müzik (%12)', AppColors.categoryMusic, isDark),
+                          const SizedBox(height: 6),
+                          _buildLegendRow('Diğer (%8)', AppColors.secondary, isDark),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
+              const SizedBox(height: 20),
+
+              // Başarı / Seri Isı Haritası
+              Text(
+                'Aylık Aktivite Haritası',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? AppColors.onSurface : AppColors.textLight,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
+                ),
+                child: Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: List.generate(28, (i) {
+                    final density = (i * 7) % 5;
+                    Color cellColor;
+                    if (density == 0) {
+                      cellColor = isDark ? AppColors.surfaceContainerHigh : AppColors.borderLight;
+                    } else if (density == 1) {
+                      cellColor = AppColors.primary.withValues(alpha: 0.25);
+                    } else if (density == 2) {
+                      cellColor = AppColors.primary.withValues(alpha: 0.50);
+                    } else if (density == 3) {
+                      cellColor = AppColors.primary.withValues(alpha: 0.75);
+                    } else {
+                      cellColor = AppColors.primary;
+                    }
+
+                    return Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: cellColor,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -201,54 +238,77 @@ class AnalyticsView extends StatelessWidget {
     );
   }
 
-  Widget _buildMetricCard(BuildContext context, String value, String label, IconData icon, Color color) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+  Widget _buildMetricCard(BuildContext context, String value, String label, IconData icon, Color color, bool isDark) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.borderLight),
+          color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: color, size: 22),
-            const SizedBox(height: 6),
-            Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Icon(icon, color: color, size: 20),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: isDark ? AppColors.onSurface : AppColors.textLight,
+              ),
+            ),
             const SizedBox(height: 2),
-            Text(label, style: const TextStyle(fontSize: 10, color: AppColors.textSecondary), textAlign: TextAlign.center),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11,
+                color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary,
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  BarChartGroupData _makeBarGroup(int x, double y) {
+  BarChartGroupData _makeBarGroup(int x, double y, bool isDark) {
     return BarChartGroupData(
       x: x,
       barRods: [
         BarChartRodData(
           toY: y,
-          color: AppColors.primary,
+          color: y == 100 ? AppColors.secondary : AppColors.primary,
           width: 14,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
+          borderRadius: BorderRadius.circular(4),
+          backDrawRodData: BackgroundBarChartRodData(
+            show: true,
+            toY: 100,
+            color: isDark ? AppColors.surfaceContainerHigh : AppColors.borderLight.withValues(alpha: 0.5),
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildLegendItem(String name, Color color) {
+  Widget _buildLegendRow(String title, Color color, bool isDark) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           width: 10,
           height: 10,
-          decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
-        const SizedBox(width: 4),
-        Text(name, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+        const SizedBox(width: 8),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 11,
+            color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary,
+          ),
+        ),
       ],
     );
   }

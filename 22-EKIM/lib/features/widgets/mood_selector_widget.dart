@@ -19,10 +19,10 @@ class MoodSelectorWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+        color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isDark ? AppColors.borderDark : AppColors.borderLight,
+          color: isDark ? AppColors.outlineVariant : AppColors.borderLight,
         ),
       ),
       child: Column(
@@ -36,19 +36,23 @@ class MoodSelectorWidget extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
-                  color: isDark ? AppColors.textDark : AppColors.textLight,
+                  color: isDark ? AppColors.onSurface : AppColors.textLight,
                 ),
               ),
               if (selectedMood != null)
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.12),
+                    color: AppColors.primary.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Text(
                     'Kaydedildi ✓',
-                    style: TextStyle(fontSize: 10, color: AppColors.primary, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
             ],
@@ -66,7 +70,7 @@ class MoodSelectorWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: isSelected
                         ? mood.activeColor.withValues(alpha: 0.18)
-                        : Colors.transparent,
+                        : (isDark ? AppColors.surfaceContainerHigh : Colors.transparent),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: isSelected ? mood.activeColor : Colors.transparent,
@@ -85,7 +89,7 @@ class MoodSelectorWidget extends StatelessWidget {
                           color: isSelected
                               ? mood.activeColor
                               : (isDark
-                                  ? AppColors.textDark.withValues(alpha: 0.7)
+                                  ? AppColors.onSurfaceVariant
                                   : AppColors.textSecondary),
                         ),
                       ),

@@ -17,7 +17,7 @@ class HabitTrackerApp extends StatefulWidget {
 }
 
 class _HabitTrackerAppState extends State<HabitTrackerApp> {
-  final ValueNotifier<ThemeMode> _themeModeNotifier = ValueNotifier<ThemeMode>(ThemeMode.light);
+  final ValueNotifier<ThemeMode> _themeModeNotifier = ValueNotifier<ThemeMode>(ThemeMode.dark);
 
   @override
   void dispose() {

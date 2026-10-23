@@ -1,227 +1,98 @@
-# Tasarım Sistemi, Renk Paleti ve Tema Kuralları (THEME.md)
+# Mindful Emerald Rhythm Tasarım Sistemi & Tema Kuralları (THEME.md)
 
-Bu doküman; mikro-alışkanlık, duygu durumu (mood), Pomodoro odaklanma ve oyunlaştırma (gamification) mekanizmalarını barındıran uygulamanın renk standartlarını, tipografisini, durum/kategori renklerini ve Flutter `ThemeData` yapılandırmasını içerir.
+Bu doküman; `OTHER-DESIGN.md` dosyasındaki **Mindful Emerald Rhythm** tasarım spesifikasyonunu esas alan renk standartlarını, yüzey derinlik hiyerarşisini, tipografi ölçeklerini, bileşen kurallarını ve Flutter `ThemeData` yapılandırmasını içerir.
 
 ---
 
-## 1. Renk Paleti (Color Palette)
+## 1. Tasarım Felsefesi & Marka Kimliği
 
-Arayüz; kişisel gelişim ve odaklanmayı destekleyen **Sakinleştirici Zümrüt Yeşili (Emerald)** ana tonu, Pomodoro ve serileri tetikleyen **Alev Turuncusu (Streak/Pomodoro)** ile tamamlanmıştır.
+**Mindful Emerald Rhythm**, sıfır sürtünmeli alışkanlık takibini ve olumlu psikolojik pekiştirmeyi hedefler:
+- **Zümrüt Yeşili Odaklı Dinamizm:** Koyu arduvaz (`#0B1326`) arka plan üzerinde parlayan canlandırıcı zümrüt yeşili (`#4EDEA3`) başarma hissini tetikler.
+- **Keskin 1px Hairline Geometri:** Ağır bulanık gölgeler yerine modern, net 1px konturlar (`border-dark: #2D3449`, `outline-variant: #3C4A42`) ve hassas katman kontrastları kullanılır.
+- **Ergonomi ve Hızlı Etkileşim:** Başparmak erişiminde optimize edilmiş tek dokunuşlu aksiyonlar, 38px dairesel onay butonları, elastik dokunsal geri bildirim (Haptic Feedback) ve akıllı durum geçişleri.
 
-### 1.1. Temel Arayüz Renkleri (Light & Dark)
-| Rol | Light Mod Hex | Dark Mod Hex | Flutter Değeri (Light / Dark) | Kullanım Alanı |
+---
+
+## 2. Renk Paleti (Mindful Emerald Rhythm Color Tokens)
+
+### 2.1. Yüzey ve Tuval Mimarisi (Surface Hierarchy)
+| Rol | Token Adı | Hex Değeri | Flutter Değeri | Kullanım Alanı |
 | :--- | :--- | :--- | :--- | :--- |
-| **Primary (Ana Renk)** | `#10B981` | `#34D399` | `Color(0xFF10B981)` / `Color(0xFF34D399)` | Tamamlanan alışkanlıklar, butonlar, aktif sekmeler |
-| **Secondary (Vurgu/Ateş)** | `#F97316` | `#FB923C` | `Color(0xFFF97316)` / `Color(0xFFFB923C)` | Streak (Alev) ikonları, XP göstergesi, Pomodoro sayacı |
-| **Accent / Info (Mavi)** | `#0EA5E9` | `#38BDF8` | `Color(0xFF0EA5E9)` / `Color(0xFF38BDF8)` | Su takip kartları, soğuk duş, bilgi banner'ları |
-| **Background (Arka Plan)** | `#F8FAFC` | `#0F172A` | `Color(0xFFF8FAFC)` / `Color(0xFF0F172A)` | Ana Scaffold arka planı |
-| **Surface (Kart/Modal)** | `#FFFFFF` | `#1E293B` | `Color(0xFFFFFFFF)` / `Color(0xFF1E293B)` | Alışkanlık kartları, popup'lar, diyaloglar |
-| **Surface Variant** | `#F1F5F9` | `#334155` | `Color(0xFFF1F5F9)` / `Color(0xFF334155)` | İlerleme çubuğu zeminleri, inaktif çipler |
-| **Text Primary** | `#0F172A` | `#F8FAFC` | `Color(0xFF0F172A)` / `Color(0xFFF8FAFC)` | Başlıklar, sayaç değerleri, alışkanlık isimleri |
-| **Text Secondary** | `#64748B` | `#94A3B8` | `Color(0xFF64748B)` / `Color(0xFF94A3B8)` | Hedef detayları, tarih/hafta metinleri, alt yazılar |
-| **Border / Divider** | `#E2E8F0` | `#334155` | `Color(0xFFE2E8F0)` / `Color(0xFF334155)` | Kart sınırları, liste ayırıcıları |
+| **Scaffold Arka Planı** | `background / surface` | `#0B1326` | `Color(0xFF0B1326)` | Ana Scaffold ve SafeArea tabanı |
+| **Kart & Modül Zemini** | `surface-container` | `#171F33` | `Color(0xFF171F33)` | Alışkanlık kartları, form alanları, takvim şeridi |
+| **Yükseltilmiş Kontroller** | `surface-container-high`| `#222A3D` | `Color(0xFF222A3D)` | İnaktif ikon kutuları, açılır paneller, sayaç zeminleri |
+| **En Yüksek Yüzey** | `surface-container-highest` | `#2D3449`| `Color(0xFF2D3449)` | Kenarlıklar, derin yüzey ayırıcıları |
+| **Parlak Yüzey** | `surface-bright` | `#31394D` | `Color(0xFF31394D)` | Hover ve aktif buton vurguları |
+
+### 2.2. Tipografi ve Metin Kontrast Renkleri
+| Rol | Token Adı | Hex Değeri | Flutter Değeri | Açıklama |
+| :--- | :--- | :--- | :--- | :--- |
+| **Birincil Metin** | `on-surface` | `#DAE2FD` | `Color(0xFFDAE2FD)` | Yüksek kontrastlı başlıklar, kart metinleri |
+| **İkincil Metin** | `on-surface-variant` | `#BBCABF` | `Color(0xFFBBCABF)` | Hedef detayları, pasif etiketler, ipuçları |
+| **Dış Hat (Outline)** | `outline` | `#86948A` | `Color(0xFF86948A)` | İnaktif ikonlar ve ikincil buton çizgileri |
+| **Varyant Hat** | `outline-variant` | `#3C4A42` | `Color(0xFF3C4A42)` | Standart 1px kart sınır çizgileri |
+
+### 2.3. Vurgu ve Aksiyon Renkleri (Action Engine)
+| Rol | Token Adı | Hex Değeri | Flutter Değeri | Kullanım Alanı |
+| :--- | :--- | :--- | :--- | :--- |
+| **Primary (Ana Vurgu)**| `primary` | `#4EDEA3` | `Color(0xFF4EDEA3)` | Tamamlama tikleri, kaydet butonları, aktif çipler |
+| **On Primary (Yazı)** | `on-primary` | `#003824` | `Color(0xFF003824)` | Primary buton içi koyu kontrast metin ve ikonlar |
+| **Primary Container** | `primary-container`| `#10B981` | `Color(0xFF10B981)` | Başarı rozetleri, aktif gün zeminleri |
+| **Secondary (Kehribar)**| `secondary` | `#FFB95F` | `Color(0xFFFFB95F)` | Seri (Streak) alev ikonları, odaklanma sayacı |
+| **On Secondary** | `on-secondary` | `#472A00` | `Color(0xFF472A00)` | Kehribar zemin üzeri koyu kontrast metin |
+| **Tertiary (Buz Mavisi)**| `tertiary` | `#ADC6FF` | `Color(0xFFADC6FF)` | Zaman aralığı etiketleri (`09:45 - 15:36`), saat ikonları |
+| **Danger / Error** | `danger / error` | `#EF4444` | `Color(0xFFEF4444)` | Swipe-to-delete zeminleri, silme butonları |
 
 ---
 
-## 2. Özel Durum ve Fonksiyon Renkleri
+## 3. Alışkanlık Kategori Renkleri (4 Temel Kategori + Özel)
 
-### 2.1. Mood Tracker (Duygu Durumu) Renkleri
-Kullanıcı uygulamanın ilk açılışındaki 5 dereceli duygu seçimini yaptığında kartlar ve mini emojiler bu renk skalasını baz alır:
-- **Harika (Great - 🤩):** `#10B981` (Zümrüt Yeşili) — Arka Plan: `#D1FAE5`
-- **İyi (Good - 🙂):** `#06B6D4` (Camgöbeği) — Arka Plan: `#CFFAFE`
-- **Normal (Neutral - 😐):** `#F59E0B` (Amber / Sarı) — Arka Plan: `#FEF3C7`
-- **Kötü (Bad - 😕):** `#F97316` (Turuncu) — Arka Plan: `#FFEDD5`
-- **Berbat (Terrible - 😫):** `#EF4444` (Mercan Kırmızısı) — Arka Plan: `#FEE2E2`
+1. **Spor (Fitness, Egzersiz, Koşu):** `#4EDEA3` (Zümrüt Yeşili) — Yumuşak Zemin: `#4EDEA3` (%15 alpha)
+2. **Sağlık (Su, Beslenme, Uyku):** `#34D399` (Canlı Nane) — Yumuşak Zemin: `#34D399` (%15 alpha)
+3. **Zihin (Kitap, Meditasyon, Zihin):** `#ADC6FF` (Buz Mavisi) — Yumuşak Zemin: `#ADC6FF` (%15 alpha)
+4. **Müzik (Enstrüman, Sanat, Pratik):** `#FFB95F` (Sıcak Kehribar) — Yumuşak Zemin: `#FFB95F` (%15 alpha)
 
-### 2.2. Alışkanlık Kategori Renkleri (4 Temel Kategori + Özel Kategoriler)
-Kart ikonlarının arka planında, etiket çiplerinde ve analiz grafiklerinde kullanılır. Başlangıçta 4 temel kategori tanımlıdır; kullanıcı yeni kategori eklerken hazır renk paletinden seçim yapar:
-
-- **1. Spor (Fitness, Egzersiz, Koşu):** `#10B981` (Zümrüt Yeşili) — Yumuşak Zemin: `#D1FAE5`
-- **2. Sağlık (Su, Beslenme, Soğuk Duş, Uyku):** `#0EA5E9` (Gök Mavisi) — Yumuşak Zemin: `#E0F2FE`
-- **3. Zihin (Kitap Okuma, Meditasyon, Nefes):** `#8B5CF6` (Menekşe Moru) — Yumuşak Zemin: `#EDE9FE`
-- **4. Müzik (Enstrüman, Solfej, Pratik):** `#EC4899` (Canlı Pembe) — Yumuşak Zemin: `#FCE7F3`
-
-**Özel Kategori Renk Havuzu (Kullanıcı Tarafından Seçilebilir):**
-Kullanıcı yeni bir kategori eklediğinde aşağıdaki uyumlu pastel/vurgulu tonlardan birini seçebilir:
-- *Amber / Disiplin:* `#F59E0B` — Zemin: `#FEF3C7`
-- *İndigo / Çalışma:* `#6366F1` — Zemin: `#EEF2FF`
-- *Turkuaz / Doğa:* `#14B8A6` — Zemin: `#CCFBF1`
-- *Mercan / Detoks:* `#F43F5E` — Zemin: `#FFE4E6`
-- *Sıcak Turuncu:* `#F97316` — Zemin: `#FFEDD5`
-
-### 2.3. Pomodoro Durum Renkleri
-- **Odaklanma (Focus - 25 dk):** `#EF4444` (Kırmızı/Turuncu enerji modu)
-- **Kısa Mola (Short Break - 5 dk):** `#10B981` (Dinlendirici yeşil)
-- **Uzun Mola (Long Break - 15 dk):** `#0EA5E9` (Ferahlatıcı mavi)
-
-### 2.4. Form, Seçim ve Silme İşlem Renkleri
-- **Haftalık Gün Seçici (Aktif Gün):** `#10B981` (Dolu yeşil zemin, beyaz yazı)
-- **Haftalık Gün Seçici (Pasif Gün):** `#F1F5F9` (Dark: `#334155`, gri kenarlık)
-- **Zaman Aralığı Seçici (09:45 - 15:36):** `#0EA5E9` (Mavi zaman ikon ve metin vurgusu)
-- **Hatırlatıcı Switch (Açık):** `#10B981`
-- **Silme Aksiyonu (Delete / Swipe):** `#EF4444` (Mercan kırmızısı arka plan ve ikon)
+**Dinamik Kategori Paleti (Form Üzerinden Seçilebilir 5 Renk):**
+- Zümrüt: `#4EDEA3`
+- Kehribar: `#FFB95F`
+- Buz Mavisi: `#ADC6FF`
+- Nane Yeşili: `#34D399`
+- Sıcak Turuncu: `#FB923C`
 
 ---
 
-## 3. Tipografi ve Boyut Standartları
-
-Uygulamada standart olarak okunabilirliği yüksek olan **Inter** veya **Plus Jakarta Sans** (`google_fonts`) tercih edilir:
-
-- **Büyük Sayaçlar / XP Göstergesi:** `32px`, `FontWeight.w800` (Bold)
-- **Sayfa Başlıkları (AppBar / Section):** `20px`, `FontWeight.w700`
-- **Kart Başlıkları (Alışkanlık Adı):** `16px`, `FontWeight.w600`
-- **Gövde Metinleri (Açıklamalar):** `14px`, `FontWeight.w400`
-- **Mikro Etiketler (Streak, Rozet Adı, Chip):** `12px`, `FontWeight.w600`
-- **Tarih & Alt Bilgiler:** `11px`, `FontWeight.w500`
+## 4. Mood Tracker (Duygu Durumu) Skalası
+Tüm duygusal durumlar eşit doygunlukta kalibre edilmiştir:
+- **Harika (Great - 🤩):** `#10B981` (Zümrüt Yeşili) — Aktif Zemin: `#10B981` (%18 alpha)
+- **İyi (Good - 🙂):** `#34D399` (Açık Zümrüt) — Aktif Zemin: `#34D399` (%18 alpha)
+- **Normal (Neutral - 😐):** `#FBBF24` (Sarı / Amber) — Aktif Zemin: `#FBBF24` (%18 alpha)
+- **Kötü (Bad - 😕):** `#FB923C` (Turuncu) — Aktif Zemin: `#FB923C` (%18 alpha)
+- **Berbat (Terrible - 😫):** `#F87171` (Mercan Kırmızısı) — Aktif Zemin: `#F87171` (%18 alpha)
 
 ---
 
-## 4. Spacing (Boşluk) ve Border Radius Standartları
+## 5. Tipografi Mimarisi (Plus Jakarta Sans)
 
-- **Ekran Kenar Boşluğu (Screen Padding):** Yatay `16.0`, Dikey `12.0`
-- **Kart İçi Dolgu (Padding):** `14.0` - `16.0`
-- **Alışkanlık & Menü Kartları:** `BorderRadius.circular(16.0)`
-- **Aksiyon Butonları & Inputlar:** `BorderRadius.circular(12.0)`
-- **Mood ve Kategori Çipleri (Pill):** `BorderRadius.circular(24.0)`
-- **Dairesel İlerleme ve Rozet Zeminleri:** `BoxShape.circle`
+| Düzey | Boyut | Satır Yüksekliği | Kalınlık | Karakter Aralığı (Tracking) |
+| :--- | :--- | :--- | :--- | :--- |
+| `display-timer` | 36px - 42px | 44px | 700 / 800 | -0.02em |
+| `headline-section` | 18px | 24px | 700 | -0.01em |
+| `title-card` | 15px | 20px | 600 | 0 |
+| `body-default` | 14px | 20px | 400 | 0 |
+| `body-subdued` | 13px | 18px | 500 | 0 |
+| `label-badge` | 12px | 16px | 700 | +0.02em |
+| `label-meta` | 12px | 16px | 600 | +0.01em |
+| `label-caption` | 12px | 16px | 400 | 0 |
+| `label-micro-active` | 11px | 14px | 700 | 0 |
+| `label-micro-default`| 11px | 14px | 500 | 0 |
 
 ---
 
-## 5. Flutter Tema Kodu (`lib/core/theme/app_theme.dart`)
+## 6. Şekiller, Radius ve Boşluk Standartları
 
-```dart
-import 'package:flutter/material.dart';
-
-class AppColors {
-  // Temel Renkler
-  static const Color primary = Color(0xFF10B981);
-  static const Color primaryDark = Color(0xFF34D399);
-  static const Color secondary = Color(0xFFF97316);
-  static const Color info = Color(0xFF0EA5E9);
-  static const Color bgLight = Color(0xFFF8FAFC);
-  static const Color bgDark = Color(0xFF0F172A);
-  static const Color surfaceLight = Color(0xFFFFFFFF);
-  static const Color surfaceDark = Color(0xFF1E293B);
-  static const Color textLight = Color(0xFF0F172A);
-  static const Color textDark = Color(0xFFF8FAFC);
-  static const Color textSecondary = Color(0xFF64748B);
-  static const Color borderLight = Color(0xFFE2E8F0);
-  static const Color borderDark = Color(0xFF334155);
-
-  // Mood Tracker Renkleri
-  static const Color moodGreat = Color(0xFF10B981);
-  static const Color moodGood = Color(0xFF06B6D4);
-  static const Color moodNeutral = Color(0xFFF59E0B);
-  static const Color moodBad = Color(0xFFF97316);
-  static const Color moodTerrible = Color(0xFFEF4444);
-
-  // Pomodoro
-  static const Color pomodoroWork = Color(0xFFEF4444);
-  static const Color pomodoroShortBreak = Color(0xFF10B981);
-  static const Color pomodoroLongBreak = Color(0xFF0EA5E9);
-
-  // 4 Temel Kategori Renkleri
-  static const Color categorySport = Color(0xFF10B981);
-  static const Color categoryHealth = Color(0xFF0EA5E9);
-  static const Color categoryMind = Color(0xFF8B5CF6);
-  static const Color categoryMusic = Color(0xFFEC4899);
-
-  // Aksiyon ve Silme
-  static const Color danger = Color(0xFFEF4444);
-}
-
-class AppTheme {
-  // Işık Modu Teması
-  static ThemeData get lightTheme {
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.light,
-      scaffoldBackgroundColor: AppColors.bgLight,
-      colorScheme: const ColorScheme.light(
-        primary: AppColors.primary,
-        secondary: AppColors.secondary,
-        surface: AppColors.surfaceLight,
-        error: Color(0xFFDC2626),
-      ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.bgLight,
-        foregroundColor: AppColors.textLight,
-        elevation: 0,
-        centerTitle: false,
-        titleTextStyle: TextStyle(
-          color: AppColors.textLight,
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-      cardTheme: CardTheme(
-        color: AppColors.surfaceLight,
-        elevation: 0,
-        margin: const EdgeInsets.only(bottom: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.borderLight, width: 1),
-        ),
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-        ),
-      ),
-    );
-  }
-
-  // Karanlık Mod Teması
-  static ThemeData get darkTheme {
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.dark,
-      scaffoldBackgroundColor: AppColors.bgDark,
-      colorScheme: const ColorScheme.dark(
-        primary: AppColors.primaryDark,
-        secondary: AppColors.secondary,
-        surface: AppColors.surfaceDark,
-        error: Color(0xFFEF4444),
-      ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.bgDark,
-        foregroundColor: AppColors.textDark,
-        elevation: 0,
-        centerTitle: false,
-        titleTextStyle: TextStyle(
-          color: AppColors.textDark,
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-      cardTheme: CardTheme(
-        color: AppColors.surfaceDark,
-        elevation: 0,
-        margin: const EdgeInsets.only(bottom: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.borderDark, width: 1),
-        ),
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryDark,
-          foregroundColor: AppColors.bgDark,
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-        ),
-      ),
-    );
-  }
-}
+- **Kartlar & Modüller:** 16px radius (`0.75rem - 1rem`).
+- **İkon Kutuları & Küçük Kontroller:** 12px radius (`0.75rem`).
+- **Pill Rozetler (Streak/Hafta İçi):** 20px radius.
+- **Tamamlama Butonları:** 38px dairesel tam dokunma alanı.
+- **Sayfa Kenar Boşlukları:** 16px yatay (`1rem`), 12px dikey (`0.75rem`).
+- **Kartlar Arası Boşluk:** 12px dikey boşluk.

@@ -18,6 +18,7 @@ class _ProfileViewState extends State<ProfileView> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Profil & Başarılar'),
       ),
@@ -31,9 +32,9 @@ class _ProfileViewState extends State<ProfileView> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+                  color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.borderLight),
+                  border: Border.all(color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
                 ),
                 child: Row(
                   children: [
@@ -49,9 +50,13 @@ class _ProfileViewState extends State<ProfileView> {
                         children: [
                           Row(
                             children: [
-                              const Text(
+                              Text(
                                 'Kullanıcı',
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: isDark ? AppColors.onSurface : AppColors.textLight,
+                                ),
                               ),
                               const SizedBox(width: 8),
                               Container(
@@ -68,9 +73,12 @@ class _ProfileViewState extends State<ProfileView> {
                             ],
                           ),
                           const SizedBox(height: 4),
-                          const Text(
+                          Text(
                             'Seviye 4 • Toplam 1.420 XP',
-                            style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary,
+                            ),
                           ),
                         ],
                       ),
@@ -84,27 +92,37 @@ class _ProfileViewState extends State<ProfileView> {
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+                  color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.borderLight),
+                  border: Border.all(color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
                 ),
                 child: Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text('Seviye 4 (420 / 500 XP)', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-                        Text('Seviye 5\'e 80 XP Kaldı', style: TextStyle(fontSize: 11, color: AppColors.primary, fontWeight: FontWeight.bold)),
+                      children: [
+                        Text(
+                          'Seviye 4 (420 / 500 XP)',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: isDark ? AppColors.onSurface : AppColors.textLight,
+                          ),
+                        ),
+                        const Text(
+                          'Seviye 5\'e 80 XP Kaldı',
+                          style: TextStyle(fontSize: 11, color: AppColors.primary, fontWeight: FontWeight.bold),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(6),
-                      child: const LinearProgressIndicator(
+                      child: LinearProgressIndicator(
                         value: 0.84,
                         minHeight: 8,
-                        backgroundColor: AppColors.borderLight,
-                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                        backgroundColor: isDark ? AppColors.surfaceContainerHigh : AppColors.borderLight,
+                        valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
                       ),
                     ),
                   ],
@@ -113,7 +131,14 @@ class _ProfileViewState extends State<ProfileView> {
               const SizedBox(height: 20),
 
               // Rozetler Vitrini
-              const Text('Rozetler Vitrini', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              Text(
+                'Rozetler Vitrini',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? AppColors.onSurface : AppColors.textLight,
+                ),
+              ),
               const SizedBox(height: 10),
               GridView.count(
                 shrinkWrap: true,
@@ -123,51 +148,67 @@ class _ProfileViewState extends State<ProfileView> {
                 mainAxisSpacing: 10,
                 childAspectRatio: 0.85,
                 children: [
-                  _buildBadgeCard('💧 Su Savaşçısı', '7 Gün 2L/gün', true),
-                  _buildBadgeCard('📖 Kitap Kurdu', '30 Gün Kesintisiz', true),
-                  _buildBadgeCard('🧘 Zihin Ustası', '10 Nefes Seansı', true),
-                  _buildBadgeCard('🏃 Maratoncu', '10 Koşu Tamamla', true),
-                  _buildBadgeCard('🎯 Odak Ustası', '25 Pomodoro', false),
-                  _buildBadgeCard('❄️ Buz Adam', '14 Gün Soğuk Duş', false),
+                  _buildBadgeCard('💧 Su Savaşçısı', '7 Gün 2L/gün', true, isDark),
+                  _buildBadgeCard('📖 Kitap Kurdu', '30 Gün Kesintisiz', true, isDark),
+                  _buildBadgeCard('🧘 Zihin Ustası', '10 Nefes Seansı', true, isDark),
+                  _buildBadgeCard('🏃 Maratoncu', '10 Koşu Tamamla', true, isDark),
+                  _buildBadgeCard('🎯 Odak Ustası', '25 Pomodoro', false, isDark),
+                  _buildBadgeCard('❄️ Buz Adam', '14 Gün Soğuk Duş', false, isDark),
                 ],
               ),
               const SizedBox(height: 20),
 
-              // Ayarlar
-              const Text('Uygulama Ayarları', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              // Uygulama Ayarları
+              Text(
+                'Uygulama Ayarları',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? AppColors.onSurface : AppColors.textLight,
+                ),
+              ),
               const SizedBox(height: 10),
               Material(
-                color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
-                borderRadius: BorderRadius.circular(16),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.borderLight),
-                  ),
-                  child: Column(
-                    children: [
-                      SwitchListTile(
-                        title: const Text('Günlük Hatırlatıcı Bildirimler', style: TextStyle(fontSize: 14)),
-                        value: _notificationsEnabled,
-                        activeThumbColor: AppColors.primary,
-                        onChanged: (val) => setState(() => _notificationsEnabled = val),
+                color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
+                ),
+                child: Column(
+                  children: [
+                    SwitchListTile(
+                      title: Text(
+                        'Günlük Hatırlatıcı Bildirimler',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: isDark ? AppColors.onSurface : AppColors.textLight,
+                        ),
                       ),
-                      const Divider(height: 1),
-                      ValueListenableBuilder<ThemeMode>(
-                        valueListenable: widget.themeModeNotifier,
-                        builder: (context, mode, _) {
-                          return SwitchListTile(
-                            title: const Text('Karanlık Mod', style: TextStyle(fontSize: 14)),
-                            value: mode == ThemeMode.dark,
-                            activeThumbColor: AppColors.primary,
-                            onChanged: (val) {
-                              widget.themeModeNotifier.value = val ? ThemeMode.dark : ThemeMode.light;
-                            },
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                      value: _notificationsEnabled,
+                      activeThumbColor: AppColors.primary,
+                      onChanged: (val) => setState(() => _notificationsEnabled = val),
+                    ),
+                    Divider(height: 1, color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
+                    ValueListenableBuilder<ThemeMode>(
+                      valueListenable: widget.themeModeNotifier,
+                      builder: (context, mode, _) {
+                        return SwitchListTile(
+                          title: Text(
+                            'Karanlık Mod (Mindful Emerald)',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: isDark ? AppColors.onSurface : AppColors.textLight,
+                            ),
+                          ),
+                          value: mode == ThemeMode.dark,
+                          activeThumbColor: AppColors.primary,
+                          onChanged: (val) {
+                            widget.themeModeNotifier.value = val ? ThemeMode.dark : ThemeMode.light;
+                          },
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -177,16 +218,18 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  Widget _buildBadgeCard(String title, String subtitle, bool isUnlocked) {
+  Widget _buildBadgeCard(String title, String subtitle, bool isUnlocked, bool isDark) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: isUnlocked
-            ? AppColors.primary.withValues(alpha: 0.08)
-            : AppColors.borderLight.withValues(alpha: 0.3),
+            ? AppColors.primary.withValues(alpha: 0.12)
+            : (isDark ? AppColors.surfaceContainerHigh : AppColors.borderLight.withValues(alpha: 0.3)),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: isUnlocked ? AppColors.primary.withValues(alpha: 0.4) : AppColors.borderLight,
+          color: isUnlocked
+              ? AppColors.primary.withValues(alpha: 0.4)
+              : (isDark ? AppColors.outlineVariant : AppColors.borderLight),
         ),
       ),
       child: Column(
@@ -194,7 +237,7 @@ class _ProfileViewState extends State<ProfileView> {
         children: [
           Icon(
             isUnlocked ? Icons.verified : Icons.lock_outline,
-            color: isUnlocked ? AppColors.primary : AppColors.textSecondary,
+            color: isUnlocked ? AppColors.primary : AppColors.outline,
             size: 28,
           ),
           const SizedBox(height: 6),
@@ -203,14 +246,19 @@ class _ProfileViewState extends State<ProfileView> {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.bold,
-              color: isUnlocked ? null : AppColors.textSecondary,
+              color: isUnlocked
+                  ? (isDark ? AppColors.onSurface : AppColors.textLight)
+                  : (isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary),
             ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 2),
           Text(
             subtitle,
-            style: const TextStyle(fontSize: 9, color: AppColors.textSecondary),
+            style: TextStyle(
+              fontSize: 9,
+              color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary,
+            ),
             textAlign: TextAlign.center,
           ),
         ],

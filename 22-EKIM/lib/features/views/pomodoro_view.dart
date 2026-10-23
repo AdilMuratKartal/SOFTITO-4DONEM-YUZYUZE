@@ -35,6 +35,7 @@ class _PomodoroViewState extends State<PomodoroView> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Odaklanma & Pomodoro'),
       ),
@@ -50,55 +51,44 @@ class _PomodoroViewState extends State<PomodoroView> {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ChoiceChip(
-                        label: const Text('Odaklan (25dk)'),
-                        selected: mode == PomodoroMode.focus,
-                        selectedColor: AppColors.pomodoroWork.withValues(alpha: 0.2),
-                        onSelected: (_) => _controller.setMode(PomodoroMode.focus),
-                      ),
+                      _buildModeChip('Odaklan (25dk)', mode == PomodoroMode.focus, AppColors.primary, () => _controller.setMode(PomodoroMode.focus), isDark),
                       const SizedBox(width: 8),
-                      ChoiceChip(
-                        label: const Text('Kısa Mola (5dk)'),
-                        selected: mode == PomodoroMode.shortBreak,
-                        selectedColor: AppColors.pomodoroShortBreak.withValues(alpha: 0.2),
-                        onSelected: (_) => _controller.setMode(PomodoroMode.shortBreak),
-                      ),
+                      _buildModeChip('Kısa Mola (5dk)', mode == PomodoroMode.shortBreak, AppColors.moodGood, () => _controller.setMode(PomodoroMode.shortBreak), isDark),
                       const SizedBox(width: 8),
-                      ChoiceChip(
-                        label: const Text('Uzun (15dk)'),
-                        selected: mode == PomodoroMode.longBreak,
-                        selectedColor: AppColors.pomodoroLongBreak.withValues(alpha: 0.2),
-                        onSelected: (_) => _controller.setMode(PomodoroMode.longBreak),
-                      ),
+                      _buildModeChip('Uzun (15dk)', mode == PomodoroMode.longBreak, AppColors.tertiary, () => _controller.setMode(PomodoroMode.longBreak), isDark),
                     ],
                   );
                 },
               ),
               const SizedBox(height: 20),
 
-              // Bağlı Alışkanlık
+              // Bağlı Alışkanlık Kartı
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 decoration: BoxDecoration(
-                  color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+                  color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.borderLight),
+                  border: Border.all(color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.menu_book_rounded, size: 16, color: AppColors.primary),
-                    SizedBox(width: 8),
+                    const Icon(Icons.menu_book_rounded, size: 16, color: AppColors.primary),
+                    const SizedBox(width: 8),
                     Text(
                       'Bağlı: 5 Sayfa Kitap Oku',
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: isDark ? AppColors.onSurface : AppColors.textLight,
+                      ),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 36),
 
-              // Dairesel Sayaç Kadranı
+              // Dairesel Sayaç Kadranı (Display Timer)
               ValueListenableBuilder<int>(
                 valueListenable: _controller.remainingSecondsNotifier,
                 builder: (context, seconds, _) {
@@ -111,22 +101,22 @@ class _PomodoroViewState extends State<PomodoroView> {
                       final progress = total > 0 ? (seconds / total) : 0.0;
 
                       final color = mode == PomodoroMode.focus
-                          ? AppColors.pomodoroWork
+                          ? AppColors.primary
                           : (mode == PomodoroMode.shortBreak
-                              ? AppColors.pomodoroShortBreak
-                              : AppColors.pomodoroLongBreak);
+                              ? AppColors.moodGood
+                              : AppColors.tertiary);
 
                       return Center(
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
                             SizedBox(
-                              width: 220,
-                              height: 220,
+                              width: 230,
+                              height: 230,
                               child: CircularProgressIndicator(
                                 value: progress,
                                 strokeWidth: 10,
-                                backgroundColor: AppColors.borderLight,
+                                backgroundColor: isDark ? AppColors.surfaceContainerHigh : AppColors.borderLight,
                                 valueColor: AlwaysStoppedAnimation<Color>(color),
                               ),
                             ),
@@ -135,10 +125,11 @@ class _PomodoroViewState extends State<PomodoroView> {
                               children: [
                                 Text(
                                   _formatTime(seconds),
-                                  style: const TextStyle(
-                                    fontSize: 44,
+                                  style: TextStyle(
+                                    fontSize: 42,
                                     fontWeight: FontWeight.w800,
-                                    letterSpacing: 1.5,
+                                    letterSpacing: -0.02,
+                                    color: isDark ? AppColors.onSurface : AppColors.textLight,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
@@ -178,7 +169,9 @@ class _PomodoroViewState extends State<PomodoroView> {
                         height: 12,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: isDone ? AppColors.secondary : AppColors.borderLight,
+                          color: isDone
+                              ? AppColors.secondary
+                              : (isDark ? AppColors.surfaceContainerHigh : AppColors.borderLight),
                         ),
                       );
                     }),
@@ -195,37 +188,74 @@ class _PomodoroViewState extends State<PomodoroView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton.filledTonal(
+                        style: IconButton.styleFrom(
+                          backgroundColor: isDark ? AppColors.surfaceContainerHigh : null,
+                          foregroundColor: isDark ? AppColors.onSurface : null,
+                        ),
                         iconSize: 26,
                         icon: const Icon(Icons.refresh_rounded),
                         onPressed: () => _controller.reset(),
                       ),
-                      const SizedBox(width: 16),
-                      SizedBox(
-                        width: 140,
-                        height: 52,
-                        child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: isRunning ? AppColors.secondary : AppColors.primary,
-                          ),
-                          icon: Icon(isRunning ? Icons.pause_rounded : Icons.play_arrow_rounded, color: Colors.white),
-                          label: Text(
-                            isRunning ? 'DURDUR' : 'BAŞLAT',
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
-                          onPressed: () => _controller.toggleStartPause(),
+                      const SizedBox(width: 20),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: isRunning ? AppColors.secondary : AppColors.primary,
+                          foregroundColor: isRunning ? AppColors.onSecondary : AppColors.onPrimary,
+                          padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 16),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                      IconButton.filledTonal(
-                        iconSize: 26,
-                        icon: const Icon(Icons.skip_next_rounded),
-                        onPressed: () => _controller.setMode(PomodoroMode.shortBreak),
+                        onPressed: () {
+                          if (isRunning) {
+                            _controller.pause();
+                          } else {
+                            _controller.start();
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            Icon(isRunning ? Icons.pause_rounded : Icons.play_arrow_rounded, size: 26),
+                            const SizedBox(width: 8),
+                            Text(
+                              isRunning ? 'DURAKLAT' : 'BAŞLAT',
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   );
                 },
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildModeChip(String label, bool isSelected, Color activeColor, VoidCallback onTap, bool isDark) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? activeColor
+              : (isDark ? AppColors.surfaceContainer : AppColors.surfaceLight),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? activeColor : (isDark ? AppColors.outlineVariant : AppColors.borderLight),
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+            color: isSelected
+                ? AppColors.onPrimary
+                : (isDark ? AppColors.onSurface : AppColors.textLight),
           ),
         ),
       ),

@@ -14,6 +14,7 @@ class DailyCalendarStrip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     // Haftanın başlangıcı (Pazartesi)
     final monday = now.subtract(Duration(days: now.weekday - 1));
     final weekDays = List.generate(7, (i) => monday.add(Duration(days: i)));
@@ -45,27 +46,29 @@ class DailyCalendarStrip extends StatelessWidget {
                       ? AppColors.primary
                       : (isToday
                           ? AppColors.primary.withValues(alpha: 0.12)
-                          : Colors.transparent),
+                          : (isDark ? AppColors.surfaceContainer : Colors.transparent)),
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
                     color: isSelected
                         ? AppColors.primary
                         : (isToday
                             ? AppColors.primary.withValues(alpha: 0.5)
-                            : AppColors.borderLight),
+                            : (isDark ? AppColors.outlineVariant : AppColors.borderLight)),
                     width: 1,
                   ),
                 ),
                 child: Column(
                   children: [
                     Text(
-                      dayName.length > 3 ? dayName.substring(0, 3) : dayName,
+                      dayName,
                       style: TextStyle(
                         fontSize: 11,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                         color: isSelected
-                            ? Colors.white
-                            : (isToday ? AppColors.primary : AppColors.textSecondary),
+                            ? AppColors.onPrimary
+                            : (isToday
+                                ? AppColors.primary
+                                : (isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary)),
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -74,9 +77,32 @@ class DailyCalendarStrip extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: isSelected ? Colors.white : AppColors.textLight,
+                        color: isSelected
+                            ? AppColors.onPrimary
+                            : (isDark ? AppColors.onSurface : AppColors.textLight),
                       ),
                     ),
+                    const SizedBox(height: 3),
+                    if (isSelected)
+                      Container(
+                        width: 4,
+                        height: 4,
+                        decoration: const BoxDecoration(
+                          color: AppColors.onPrimary,
+                          shape: BoxShape.circle,
+                        ),
+                      )
+                    else if (isToday)
+                      Container(
+                        width: 4,
+                        height: 4,
+                        decoration: const BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                        ),
+                      )
+                    else
+                      const SizedBox(height: 4),
                   ],
                 ),
               ),

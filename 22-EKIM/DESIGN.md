@@ -64,31 +64,47 @@ Uygulama ilk açıldığında ana ekranın en üstünde veya hafif bir alt tabak
 - **Aktif Aşama:** Zümrüt yeşili dış halka atımı (pulse efekti), açık detay paneli ve "Devam Et" butonu.
 - **Kilitli Aşama:** Nötr gri daire, kilit ikonu (`Icons.lock_outline`) ve kesik çizgili gri hat.
 
-### 2.5. Alışkanlık Ekleme / Düzenleme Modalı (Add & Edit Habit Sheet)
-Kullanıcı ana ekrandaki floating action button'a (`+`) bastığında ekranın altından yumuşakça yükselen (DraggableBottomSheet) form yapısı:
+### 2.5. Alışkanlık Ekleme / Düzenleme Modalı (Mindful Emerald Rhythm Layout)
+Kullanıcı ana ekrandaki floating action button'a (`+`) bastığında veya bir kartı düzenlemek istediğinde açılan modalın `OTHER-DESIGN.md` ile birebir eşleşen mimarisi:
 
 ```text
 +-----------------------------------------------------------------------+
-|  Yeni Alışkanlık Ekle                                             (X) |
+|  (X)  Yeni Alışkanlık                                     [ ✓ Kaydet ]|
 +-----------------------------------------------------------------------+
-|  Alışkanlık Adı: [ Sabah Egzersizi ve Koşu                          ] |
+|  ⚡ KÜÇÜK ADIMLAR                                         +---------+ |
+|  Rutinini inşa et, zinciri asla kırma.                    | ⏳ 3D   | |
+|  Günde 15 dakika bile 1 yılda devasa bir dönüşüm sağlar.  | Glow    | |
+|                                                           +---------+ |
 +-----------------------------------------------------------------------+
-|  İkon Seçimi (icons/):                                                |
-|  [ 🏃 ]  [ 💧 ]  [ 📖 ]  [ 🎸 ]  [ 🧘 ]  [ 🍏 ]  [ 🚴 ]  [ 🎨 ]       |
+|  Alışkanlık Adı *                                                     |
+|  [ 📝  Örn: Sabah Koşusu ve Egzersiz                                ] |
 +-----------------------------------------------------------------------+
-|  Kategori Seçimi:                                                     |
-|  (●) Spor    (○) Sağlık    (○) Zihin    (○) Müzik    [ + Kategori ]   |
+|  İkon Seçimi                                               ✨ 10 Öneri |
+|  [🏃 Koşu]  [💧 Su]   [📖 Kitap]  [🎵 Müzik]  [🧘 Zihin]             |
+|  [🥗 Besin] [🚲 Bisiklet] [🎨 Sanat] [💻 Kod]   [🌙 Uyku]             |
 +-----------------------------------------------------------------------+
-|  Haftalık Günler:                                                     |
-|  [Pzt ✓]  [Sal  ]  [Çar ✓]  [Per  ]  [Cum ✓]  [Cmt  ]  [Paz  ]        |
+|  Kategori                                            (+) Yeni Kategori|
+|  +---------------------------+   +---------------------------+        |
+|  | (●) 🏃 Spor               |   | (○) 🥗 Sağlık             |        |
+|  +---------------------------+   +---------------------------+        |
+|  | (○) 🧠 Zihin              |   | (○) 🎵 Müzik              |        |
+|  +---------------------------+   +---------------------------+        |
+|  [ Açılır Yeni Kategori Çekmecesi: İsim + 5 Renk Paleti + Ekle Butonu]|
 +-----------------------------------------------------------------------+
-|  Zaman Aralığı:                                                       |
-|  Başlangıç: [ 09:45 ]           Bitiş: [ 15:36 ]                      |
+|  Tekrar Günleri                          [ Hafta İçi ]    [ Her Gün ] |
+|  [Pzt ✓]  [Sal •]  [Çar ✓]  [Per •]  [Cum ✓]  [Cmt •]  [Paz •]        |
 +-----------------------------------------------------------------------+
-|  Hatırlatıcı Bildirim:                                [ (ON) Switch ] |
+|  Zaman Aralığı                                                        |
+|  +---------------------------+   +---------------------------+        |
+|  | Başlangıç Saati           |   | Bitiş Saati               |        |
+|  | ⏰ 09:45               (v)|   | 🔄 15:36               (v)|        |
+|  +---------------------------+   +---------------------------+        |
 +-----------------------------------------------------------------------+
-|  [ Vazgeç ]                                     [ Alışkanlığı Kaydet ]|
-|  (Düzenlemede: [ 🗑️ Bu Alışkanlığı Sil ])                              |
+|  [ 🔔 ]  Hatırlatıcı Bildirim Gönder                 [ (✓) Switch ]   |
+|          Aralık başlangıcında ve 15 dk önce uyar                      |
++-----------------------------------------------------------------------+
+|  [ 🔥 Alışkanlığı Kaydet (Zinciri Başlat)                            ]|
+|  [ 🗑️ Bu Alışkanlığı Sil (Düzenleme Modunda)                        ]|
 +-----------------------------------------------------------------------+
 ```
 

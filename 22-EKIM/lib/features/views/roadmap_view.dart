@@ -30,6 +30,7 @@ class _RoadmapViewState extends State<RoadmapView> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Yol Haritası (Roadmap)'),
       ),
@@ -43,9 +44,9 @@ class _RoadmapViewState extends State<RoadmapView> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+                  color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.borderLight),
+                  border: Border.all(color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,9 +54,13 @@ class _RoadmapViewState extends State<RoadmapView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           '🎯 0\'dan 5K Koşuya (30 Gün)',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? AppColors.onSurface : AppColors.textLight,
+                          ),
                         ),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -71,9 +76,12 @@ class _RoadmapViewState extends State<RoadmapView> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    Text(
                       'İlerleme: 2 / 5 Aşama Tamamlandı (%40)',
-                      style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     ClipRRect(
@@ -89,9 +97,13 @@ class _RoadmapViewState extends State<RoadmapView> {
                 ),
               ),
               const SizedBox(height: 24),
-              const Text(
+              Text(
                 'Aşama Ağacı',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? AppColors.onSurface : AppColors.textLight,
+                ),
               ),
               const SizedBox(height: 16),
               ValueListenableBuilder<List<RoadmapNodeModel>>(
@@ -120,27 +132,29 @@ class _RoadmapViewState extends State<RoadmapView> {
                                       ? AppColors.primary
                                       : (node.isActive
                                           ? AppColors.primary.withValues(alpha: 0.2)
-                                          : (isDark ? AppColors.surfaceVariantDark : AppColors.surfaceVariantLight)),
+                                          : (isDark ? AppColors.surfaceContainerHigh : AppColors.surfaceVariantLight)),
                                   border: Border.all(
                                     color: node.isCompleted || node.isActive
                                         ? AppColors.primary
-                                        : AppColors.borderLight,
+                                        : (isDark ? AppColors.outlineVariant : AppColors.borderLight),
                                     width: 2,
                                   ),
                                 ),
                                 child: Center(
                                   child: node.isCompleted
-                                      ? const Icon(Icons.check, size: 18, color: Colors.white)
+                                      ? const Icon(Icons.check, size: 18, color: AppColors.onPrimary)
                                       : (node.isActive
                                           ? const Icon(Icons.bolt, size: 20, color: AppColors.primary)
-                                          : const Icon(Icons.lock_outline, size: 16, color: AppColors.textSecondary)),
+                                          : const Icon(Icons.lock_outline, size: 16, color: AppColors.outline)),
                                 ),
                               ),
                               if (!isLast)
                                 Container(
                                   width: 2,
                                   height: node.isActive ? 110 : 50,
-                                  color: node.isCompleted ? AppColors.primary : AppColors.borderLight,
+                                  color: node.isCompleted
+                                      ? AppColors.primary
+                                      : (isDark ? AppColors.outlineVariant : AppColors.borderLight),
                                 ),
                             ],
                           ),
@@ -154,10 +168,12 @@ class _RoadmapViewState extends State<RoadmapView> {
                                 decoration: BoxDecoration(
                                   color: node.isActive
                                       ? AppColors.primary.withValues(alpha: 0.08)
-                                      : (isDark ? AppColors.surfaceDark : AppColors.surfaceLight),
+                                      : (isDark ? AppColors.surfaceContainer : AppColors.surfaceLight),
                                   borderRadius: BorderRadius.circular(14),
                                   border: Border.all(
-                                    color: node.isActive ? AppColors.primary : AppColors.borderLight,
+                                    color: node.isActive
+                                        ? AppColors.primary
+                                        : (isDark ? AppColors.outlineVariant : AppColors.borderLight),
                                   ),
                                 ),
                                 child: Column(
@@ -168,23 +184,29 @@ class _RoadmapViewState extends State<RoadmapView> {
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
-                                        color: node.isLocked ? AppColors.textSecondary : null,
+                                        color: node.isLocked
+                                            ? (isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary)
+                                            : (isDark ? AppColors.onSurface : AppColors.textLight),
                                       ),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
                                       node.description,
-                                      style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary,
+                                      ),
                                     ),
                                     if (node.isActive) ...[
                                       const SizedBox(height: 10),
                                       ElevatedButton.icon(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: AppColors.primary,
+                                          foregroundColor: AppColors.onPrimary,
                                           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                                         ),
-                                        icon: const Icon(Icons.check_circle_outline, size: 16, color: Colors.white),
-                                        label: const Text('Aşamayı Tamamla', style: TextStyle(color: Colors.white, fontSize: 12)),
+                                        icon: const Icon(Icons.check_circle_outline, size: 16),
+                                        label: const Text('Aşamayı Tamamla', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
                                         onPressed: () => _controller.completeActiveStage(),
                                       ),
                                     ],

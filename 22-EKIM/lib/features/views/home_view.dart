@@ -54,15 +54,26 @@ class _HomeViewState extends State<HomeView> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Yeni Kategori Ekle'),
+        backgroundColor: AppColors.surfaceContainer,
+        title: const Text('Yeni Kategori Ekle', style: TextStyle(color: AppColors.onSurface)),
         content: TextField(
           controller: catController,
-          decoration: const InputDecoration(hintText: 'Kategori Adı (Örn: Sanat, Dil...)'),
+          style: const TextStyle(color: AppColors.onSurface),
+          decoration: const InputDecoration(
+            hintText: 'Kategori Adı (Örn: Sanat, Dil...)',
+            hintStyle: TextStyle(color: AppColors.onSurfaceVariant),
+          ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Vazgeç')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Vazgeç', style: TextStyle(color: AppColors.onSurfaceVariant)),
+          ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: AppColors.onPrimary,
+            ),
             onPressed: () {
               final name = catController.text.trim();
               if (name.isNotEmpty) {
@@ -70,14 +81,14 @@ class _HomeViewState extends State<HomeView> {
                   id: DateTime.now().millisecondsSinceEpoch.toString(),
                   name: name,
                   iconPath: 'assets/icons/custom.svg',
-                  colorHex: 0xFFF59E0B,
+                  colorHex: 0xFF4EDEA3,
                   isCustom: true,
                 );
                 _habitController.addCategory(newCat);
                 Navigator.pop(ctx);
               }
             },
-            child: const Text('Ekle', style: TextStyle(color: Colors.white)),
+            child: const Text('Ekle', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -86,6 +97,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
@@ -95,7 +108,7 @@ class _HomeViewState extends State<HomeView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildTopHeader(),
+              _buildTopHeader(isDark),
               const SizedBox(height: 16),
               ValueListenableBuilder<String?>(
                 valueListenable: _moodController.todayMoodNotifier,
@@ -112,9 +125,9 @@ class _HomeViewState extends State<HomeView> {
                 onDateSelected: _habitController.changeSelectedDate,
               ),
               const SizedBox(height: 16),
-              _buildCategoryFilterBar(),
+              _buildCategoryFilterBar(isDark),
               const SizedBox(height: 16),
-              _buildProgressOverview(),
+              _buildProgressOverview(isDark),
               const SizedBox(height: 16),
               _buildHabitsSection(),
             ],
@@ -124,26 +137,35 @@ class _HomeViewState extends State<HomeView> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
         onPressed: () => _openAddHabitModal(),
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add, color: AppColors.onPrimary, size: 28),
       ),
     );
   }
 
-  Widget _buildTopHeader() {
+  Widget _buildTopHeader(bool isDark) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
               'Bugün, 24 Ekim',
-              style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+              style: TextStyle(
+                fontSize: 13,
+                color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Text(
               'Harika Bir Gün!',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: isDark ? AppColors.onSurface : AppColors.textLight,
+                letterSpacing: -0.01,
+              ),
             ),
           ],
         ),
@@ -152,8 +174,9 @@ class _HomeViewState extends State<HomeView> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                color: AppColors.secondary.withValues(alpha: 0.12),
+                color: AppColors.secondary.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.secondary.withValues(alpha: 0.3)),
               ),
               child: const Row(
                 children: [
@@ -170,8 +193,9 @@ class _HomeViewState extends State<HomeView> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.12),
+                color: AppColors.primary.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
               ),
               child: const Row(
                 children: [
@@ -190,7 +214,7 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _buildCategoryFilterBar() {
+  Widget _buildCategoryFilterBar(bool isDark) {
     return ValueListenableBuilder<List<CategoryModel>>(
       valueListenable: _habitController.categoriesNotifier,
       builder: (context, categories, _) {
@@ -202,28 +226,51 @@ class _HomeViewState extends State<HomeView> {
               physics: const BouncingScrollPhysics(),
               child: Row(
                 children: [
-                  ChoiceChip(
-                    label: const Text('Tümü'),
-                    selected: selectedId == 'all',
-                    onSelected: (_) => _habitController.filterByCategory('all'),
+                  _buildCustomChip(
+                    label: 'Tümü',
+                    isSelected: selectedId == 'all',
+                    activeColor: AppColors.primary,
+                    onTap: () => _habitController.filterByCategory('all'),
+                    isDark: isDark,
                   ),
                   const SizedBox(width: 8),
                   ...categories.map((cat) {
                     final isSelected = selectedId == cat.id;
                     return Padding(
                       padding: const EdgeInsets.only(right: 8.0),
-                      child: ChoiceChip(
-                        label: Text(cat.name),
-                        selected: isSelected,
-                        selectedColor: Color(cat.colorHex).withValues(alpha: 0.2),
-                        onSelected: (_) => _habitController.filterByCategory(cat.id),
+                      child: _buildCustomChip(
+                        label: cat.name,
+                        isSelected: isSelected,
+                        activeColor: Color(cat.colorHex),
+                        onTap: () => _habitController.filterByCategory(cat.id),
+                        isDark: isDark,
                       ),
                     );
                   }),
-                  ActionChip(
-                    avatar: const Icon(Icons.add, size: 16),
-                    label: const Text('Kategori'),
-                    onPressed: _showAddCategoryDialog,
+                  GestureDetector(
+                    onTap: _showAddCategoryDialog,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                      decoration: BoxDecoration(
+                        color: isDark ? AppColors.surfaceContainerHigh : AppColors.surfaceVariantLight,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.add, size: 16, color: isDark ? AppColors.onSurface : AppColors.textLight),
+                          const SizedBox(width: 4),
+                          Text(
+                            'Kategori',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: isDark ? AppColors.onSurface : AppColors.textLight,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -234,7 +281,44 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _buildProgressOverview() {
+  Widget _buildCustomChip({
+    required String label,
+    required bool isSelected,
+    required Color activeColor,
+    required VoidCallback onTap,
+    required bool isDark,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? activeColor
+              : (isDark ? AppColors.surfaceContainer : AppColors.surfaceLight),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected
+                ? activeColor
+                : (isDark ? AppColors.outlineVariant : AppColors.borderLight),
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+            color: isSelected
+                ? AppColors.onPrimary
+                : (isDark ? AppColors.onSurface : AppColors.textLight),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProgressOverview(bool isDark) {
     return ValueListenableBuilder<List<HabitModel>>(
       valueListenable: _habitController.habitsNotifier,
       builder: (context, habits, _) {
@@ -245,9 +329,9 @@ class _HomeViewState extends State<HomeView> {
         return Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: Theme.of(context).cardTheme.color,
+            color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.borderLight),
+            border: Border.all(color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
           ),
           child: Column(
             children: [
@@ -256,7 +340,11 @@ class _HomeViewState extends State<HomeView> {
                 children: [
                   Text(
                     'Günün İlerlemesi: $completed / ${habits.length}',
-                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: isDark ? AppColors.onSurface : AppColors.textLight,
+                    ),
                   ),
                   Text(
                     '%${(ratio * 100).toInt()}',
@@ -270,7 +358,7 @@ class _HomeViewState extends State<HomeView> {
                 child: LinearProgressIndicator(
                   value: ratio,
                   minHeight: 8,
-                  backgroundColor: AppColors.borderLight,
+                  backgroundColor: isDark ? AppColors.surfaceContainerHigh : AppColors.borderLight,
                   valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
                 ),
               ),
@@ -336,7 +424,7 @@ class _HomeViewState extends State<HomeView> {
                         id: 'unknown',
                         name: 'Genel',
                         iconPath: '',
-                        colorHex: 0xFF10B981,
+                        colorHex: 0xFF4EDEA3,
                       ),
                     );
 
