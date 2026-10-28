@@ -9,7 +9,7 @@ class MockUrunServisi implements IUrunServisi{
             baslik:"Macbook M5 Pro Laptop",
             aciklama:"Apple'ın en güçlü işlemcisine sahip yeni nesil Macbook Pro",
             fiyat:179999.99,
-            resimUrl:"https://picsum.photos/400/400",
+            resimUrl:"https://picsum.photos/200/200",
             kategori:Kategori.elektronik,
             stokAdedi:5,
         ),
