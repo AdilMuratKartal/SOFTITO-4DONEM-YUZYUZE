@@ -142,7 +142,6 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani>{
                         child:Row(
                             children:Kategori.values.map((kategori){
                                 final seciliMi = _seciliKategori == kategori;
-                                final newUrl = "https://picsum.photos/400/400";
                                 return Padding(
                                     padding: const EdgeInsets.symmetric(horizontal:4.0),
                                     child:ChoiceChip(
@@ -181,7 +180,7 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani>{
                             itemBuilder:(context,index){
                                 final urun = _filtrelenmisUrunler[index];
                                 return UrunKarti(
-                                    urun:urun,
+                                    urun:urun.copyWith(resimUrl: "https://picsum.photos/400/400?random=${urun.id}"),//resimlerin ön belleğe alınmasını engellemek için picsumda olan random parametresini kullanıcaz
                                     onFavoriTiklandi:()=>_favoriyiDegistir(urun),
                                     onDetayTiklandi:()=>{
                                         ScaffoldMessenger.of(context).showSnackBar(
