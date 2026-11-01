@@ -4,7 +4,12 @@ A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+BU PROJE DERS İÇİ ÖĞRENME AMAÇLI BAŞLATILAN PROJEDİR. E ticaret temel tasarımlarını ve flutter mantıgını ögretmek amacıyla yapılmıştır.
+
+Uygulama Özellikleri:
+
+- Ürün Listesi Sayfası: Ürünlerin listelendiği sayfa.
+- Ürün Detay Sayfası: Ürünlerin detaylarının görüntülendiği sayfa.
 
 A few resources to get you started if this is your first Flutter project:
 
