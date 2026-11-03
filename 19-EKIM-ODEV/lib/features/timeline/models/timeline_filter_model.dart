@@ -1,18 +1,18 @@
 import 'package:flutter/foundation.dart';
 
 @immutable
-class TimelineFilterModel {
-  final String searchQuery;
-  final String? selectedMood;
-  final String? selectedTag;
+class TimelineFilterModel { // TimelineFilterModel sınıfının açılışı, uygulamada kullanılacak verinin model şemasıdır
+  final String searchQuery; // String türünden searchQuery adlı değişkenimiz
+  final String? selectedMood; // String? türünden selectedMood adlı değişkenimiz
+  final String? selectedTag; // String? türünden selectedTag adlı değişkenimiz
 
-  const TimelineFilterModel({
-    this.searchQuery = '',
-    this.selectedMood,
-    this.selectedTag,
+  const TimelineFilterModel({ // Genel, sabit sınıf constructor'ı
+    this.searchQuery = '', // searchQuery alanına değer aktarıyoruz
+    this.selectedMood, // selectedMood alanına değer aktarıyoruz
+    this.selectedTag, // selectedTag alanına değer aktarıyoruz
   });
 
-  TimelineFilterModel copyWith({
+  TimelineFilterModel copyWith({ // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
     String? searchQuery,
     String? selectedMood,
     String? selectedTag,
@@ -20,9 +20,9 @@ class TimelineFilterModel {
     bool clearTag = false,
   }) {
     return TimelineFilterModel(
-      searchQuery: searchQuery ?? this.searchQuery,
-      selectedMood: clearMood ? null : (selectedMood ?? this.selectedMood),
-      selectedTag: clearTag ? null : (selectedTag ?? this.selectedTag),
+      searchQuery: searchQuery ?? this.searchQuery, // searchQuery alanına değer aktarıyoruz
+      selectedMood: clearMood ? null : (selectedMood ?? this.selectedMood), // selectedMood alanına değer aktarıyoruz
+      selectedTag: clearTag ? null : (selectedTag ?? this.selectedTag), // selectedTag alanına değer aktarıyoruz
     );
   }
 }

@@ -1,26 +1,26 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 import '../../core/theme/app_theme.dart';
-import '../models/roadmap_model.dart';
-import '../controllers/roadmap_controller.dart';
-import '../controllers/habit_controller.dart';
-import '../widgets/roadmap_node_tree.dart';
-import '../widgets/confirmation_dialog.dart';
+import '../models/roadmap_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../controllers/roadmap_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
+import '../controllers/habit_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
+import '../widgets/roadmap_node_tree.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
+import '../widgets/confirmation_dialog.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
 
 /// Yol Haritası Detay Ekranı (Düğüm Ağacı ve Görevler)
-class RoadmapDetailView extends StatelessWidget {
-  final RoadmapModel roadmap;
-  final RoadmapController roadmapController;
-  final HabitController habitController;
+class RoadmapDetailView extends StatelessWidget { // RoadmapDetailView sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
+  final RoadmapModel roadmap; // RoadmapModel türünden roadmap adlı değişkenimiz
+  final RoadmapController roadmapController; // RoadmapController türünden roadmapController adlı değişkenimiz
+  final HabitController habitController; // HabitController türünden habitController adlı değişkenimiz
 
-  const RoadmapDetailView({
+  const RoadmapDetailView({ // Genel, sabit sınıf constructor'ı
     super.key,
-    required this.roadmap,
-    required this.roadmapController,
-    required this.habitController,
+    required this.roadmap, // roadmap parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.roadmapController, // roadmapController parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.habitController, // habitController parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return ValueListenableBuilder<List<RoadmapModel>>(
@@ -31,12 +31,12 @@ class RoadmapDetailView extends StatelessWidget {
           orElse: () => roadmap,
         );
 
-        return Scaffold(
+        return Scaffold( // Sayfa iskeletini (appBar, body, floatingActionButton) oluşturan ana Scaffold widget'ımız
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          appBar: AppBar(
-            title: Text(currentRoadmap.title),
+          appBar: AppBar( // Sayfanın üst kısmındaki başlık ve aksiyon barı (AppBar)
+            title: Text(currentRoadmap.title), // Sayfa başlığını ekrana yazdırıyoruz
             actions: [
-              IconButton(
+              IconButton( // Sadece simgeden oluşan tıklanabilir ikon butonu
                 icon: const Icon(Icons.delete_outline_rounded, color: AppColors.danger),
                 tooltip: 'Yol Haritasını Sil',
                 onPressed: () async {
@@ -50,48 +50,48 @@ class RoadmapDetailView extends StatelessWidget {
                   );
                   if (confirmed && context.mounted) {
                     roadmapController.deleteRoadmap(currentRoadmap.id);
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(); // Açık olan sayfayı veya diyaloğu kapatıp bir önceki ekrana dönüyoruz
                   }
                 },
               ),
             ],
           ),
-          body: SafeArea(
-            child: SingleChildScrollView(
+          body: SafeArea( // Çentik ve sistem çubuklarıyla arayüzün çakışmasını önleyen güvenli alan
+            child: SingleChildScrollView( // Küçük ekranlarda taşma (overflow) hatası vermesin, ekran rahatça kaydırılsın diye sarmalıyoruz
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                 children: [
                   // Detay Başlık Özeti
-                  Container(
+                  Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                     padding: const EdgeInsets.all(AppSizes.spaceLg),
-                    decoration: BoxDecoration(
+                    decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                       color: isDark ? AppColors.surfaceContainerLow : AppColors.surfaceLight,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                       border: Border.all(
                         color: isDark ? AppColors.outlineVariant.withValues(alpha: 0.5) : AppColors.borderLight,
                       ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                      crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                       children: [
-                        Row(
+                        Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                           children: [
-                            Container(
+                            Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                               width: 44,
                               height: 44,
-                              decoration: BoxDecoration(
+                              decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                                 color: AppColors.primary.withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                               ),
-                              child: Center(
+                              child: Center( // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
                                 child: Text(currentRoadmap.iconName, style: const TextStyle(fontSize: 22)),
                               ),
                             ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                            const SizedBox(width: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                            Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                              child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                                crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                                 children: [
                                   Text(
                                     currentRoadmap.title,
@@ -101,7 +101,7 @@ class RoadmapDetailView extends StatelessWidget {
                                       color: isDark ? AppColors.onSurface : AppColors.textLight,
                                     ),
                                   ),
-                                  const SizedBox(height: 2),
+                                  const SizedBox(height: 2), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                                   Text(
                                     '${currentRoadmap.category} • ${currentRoadmap.durationWeeks}',
                                     style: TextStyle(
@@ -115,11 +115,11 @@ class RoadmapDetailView extends StatelessWidget {
                           ],
                         ),
 
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                         // İlerleme Barı
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                           children: [
                             Text(
                               '${currentRoadmap.completedNodesCount} / ${currentRoadmap.nodes.length} Aşama Tamamlandı',
@@ -139,9 +139,9 @@ class RoadmapDetailView extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.circular(6), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                           child: LinearProgressIndicator(
                             value: currentRoadmap.progressRatio,
                             minHeight: 8,
@@ -153,7 +153,7 @@ class RoadmapDetailView extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                   // Düğüm Ağacı
                   RoadmapNodeTree(
@@ -179,33 +179,33 @@ class RoadmapDetailView extends StatelessWidget {
     RoadmapNodeModel node,
     bool isDark,
   ) {
-    showModalBottomSheet(
+    showModalBottomSheet( // Ekranın altından yukarı doğru açılan modal form penceresi
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (ctx) => Container(
+      builder: (ctx) => Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
         padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
+        decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
           color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         ),
-        child: Column(
+        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
               children: [
                 Text(
                   'Basamak ${node.stepNumber}: ${node.title}',
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                IconButton(
+                IconButton( // Sadece simgeden oluşan tıklanabilir ikon butonu
                   icon: const Icon(Icons.close),
                   onPressed: () => Navigator.of(ctx).pop(),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             Text(
               node.description,
               style: TextStyle(
@@ -213,12 +213,12 @@ class RoadmapDetailView extends StatelessWidget {
                 color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             Text(
               'Gereken Seri Hedefi: ${node.targetDaysStreak} Gün',
               style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             if (!node.isCompleted && !node.isLocked)
               SizedBox(
                 width: double.infinity,

@@ -1,9 +1,9 @@
 // Zamanlayıcı (Timer) işlemleri için dart:async kütüphanesini içe aktarıyoruz
-import 'dart:async';
+import 'dart:async'; // Asenkron işlemler, Timer ve Stream (veri akışı) yapıları için içeri aktarıyoruz
 // Flutter foundation kütüphanesi: ValueNotifier ve reaktif temel sınıfları barındırır
 import 'package:flutter/foundation.dart';
 // Asistan mesaj veri modelini içe aktarıyoruz
-import '../models/assistant_message_model.dart';
+import '../models/assistant_message_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
 /// TakeGO Akıllı Dijital Anahtar ve Yol Asistanı Denetleyicisi (SmartKeyController)
 ///
@@ -222,7 +222,7 @@ class SmartKeyController {
   // ---------------------------------------------------------------------------
 
   /// Bellek sızıntılarını önlemek için tüm bildirim ve zamanlayıcı kaynaklarını serbest bırakır
-  void dispose() {
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     // Zamanlayıcıyı iptal et
     _driveTimer?.cancel();
     // Kilit durum dinleyicisini serbest bırak

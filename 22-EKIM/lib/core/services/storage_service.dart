@@ -1,7 +1,7 @@
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../features/models/habit_model.dart';
-import '../../features/models/category_model.dart';
-import '../../features/models/roadmap_model.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Cihaz hafızasında basit anahtar-değer verilerini saklamak için SharedPreferences paketini ekliyoruz
+import '../../features/models/habit_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../../features/models/category_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../../features/models/roadmap_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
 class StorageService {
   static const String _habitsKey = 'saved_habits_v1';
@@ -9,80 +9,80 @@ class StorageService {
   static const String _moodKeyPrefix = 'saved_mood_';
 
   static Future<List<HabitModel>> loadHabits() async {
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       final prefs = await SharedPreferences.getInstance();
       final habitsJson = prefs.getStringList(_habitsKey);
       if (habitsJson == null || habitsJson.isEmpty) {
         return _getDefaultHabits();
       }
       return habitsJson.map((str) => HabitModel.fromJson(str)).toList();
-    } catch (_) {
+    } catch (_) { // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
       return _getDefaultHabits();
     }
   }
 
   static Future<void> saveHabits(List<HabitModel> habits) async {
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       final prefs = await SharedPreferences.getInstance();
       final list = habits.map((h) => h.toJson()).toList();
       await prefs.setStringList(_habitsKey, list);
-    } catch (_) {}
+    } catch (_) {} // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
   }
 
   static Future<List<CategoryModel>> loadCategories() async {
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       final prefs = await SharedPreferences.getInstance();
       final catJson = prefs.getStringList(_categoriesKey);
       if (catJson == null || catJson.isEmpty) {
         return List.from(CategoryModel.defaultCategories);
       }
       return catJson.map((str) => CategoryModel.fromJson(str)).toList();
-    } catch (_) {
+    } catch (_) { // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
       return List.from(CategoryModel.defaultCategories);
     }
   }
 
   static Future<void> saveCategories(List<CategoryModel> categories) async {
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       final prefs = await SharedPreferences.getInstance();
       final list = categories.map((c) => c.toJson()).toList();
       await prefs.setStringList(_categoriesKey, list);
-    } catch (_) {}
+    } catch (_) {} // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
   }
 
   static const String _moodPromptShownPrefix = 'mood_prompt_shown_';
 
   static Future<String?> getTodayMood(String dateKey) async {
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       final prefs = await SharedPreferences.getInstance();
       return prefs.getString('$_moodKeyPrefix$dateKey');
-    } catch (_) {
+    } catch (_) { // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
       return null;
     }
   }
 
   static Future<void> setTodayMood(String dateKey, String moodKey) async {
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('$_moodKeyPrefix$dateKey', moodKey);
       await prefs.setBool('$_moodPromptShownPrefix$dateKey', true);
-    } catch (_) {}
+    } catch (_) {} // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
   }
 
   static Future<bool> isMoodPromptShownToday(String dateKey) async {
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       final prefs = await SharedPreferences.getInstance();
       return prefs.getBool('$_moodPromptShownPrefix$dateKey') ?? false;
-    } catch (_) {
+    } catch (_) { // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
       return false;
     }
   }
 
   static Future<void> setMoodPromptShownToday(String dateKey, bool shown) async {
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('$_moodPromptShownPrefix$dateKey', shown);
-    } catch (_) {}
+    } catch (_) {} // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
   }
 
   static List<HabitModel> _getDefaultHabits() {
@@ -161,24 +161,24 @@ class StorageService {
   static const String _roadmapsKey = 'saved_roadmaps_v1';
 
   static Future<List<RoadmapModel>> loadRoadmaps() async {
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       final prefs = await SharedPreferences.getInstance();
       final roadmapsJson = prefs.getStringList(_roadmapsKey);
       if (roadmapsJson == null || roadmapsJson.isEmpty) {
         return _getDefaultRoadmaps();
       }
       return roadmapsJson.map((str) => RoadmapModel.fromJsonString(str)).toList();
-    } catch (_) {
+    } catch (_) { // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
       return _getDefaultRoadmaps();
     }
   }
 
   static Future<void> saveRoadmaps(List<RoadmapModel> roadmaps) async {
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       final prefs = await SharedPreferences.getInstance();
       final list = roadmaps.map((r) => r.toJsonString()).toList();
       await prefs.setStringList(_roadmapsKey, list);
-    } catch (_) {}
+    } catch (_) {} // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
   }
 
   static List<RoadmapModel> _getDefaultRoadmaps() {

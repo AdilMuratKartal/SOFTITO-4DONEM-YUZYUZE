@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import '../models/appointment_model.dart';
-import '../core/services/json_data_service.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import '../models/appointment_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../core/services/json_data_service.dart'; // Veri çekme ve API haberleşmesini yapan servis katmanımızı dahil ediyoruz
 
-class AppointmentProvider extends ChangeNotifier {
-  final JsonDataService dataService;
+class AppointmentProvider extends ChangeNotifier { // AppointmentProvider sınıfı, dinleyicilere değişiklik haberini yayan ChangeNotifier yapımızdır
+  final JsonDataService dataService; // JsonDataService türünden dataService adlı değişkenimiz
   List<AppointmentModel> _appointments = [];
-  bool _isLoading = false;
+  bool _isLoading = false; // Durum kontrolü için tuttuğumuz bool bayrağımız (_isLoading)
 
-  AppointmentProvider({required this.dataService});
+  AppointmentProvider({required this.dataService}); // dataService parametresinin verilmesinin zorunlu olduğunu söylüyoruz
 
   List<AppointmentModel> get appointments => List.unmodifiable(_appointments);
   bool get isLoading => _isLoading;
@@ -26,8 +26,8 @@ class AppointmentProvider extends ChangeNotifier {
   }
 
   /// Hizmet verene gelen randevu ve talepleri listele
-  List<AppointmentModel> getByProvider(String providerId) {
-    return _appointments.where((a) => a.providerId == providerId).toList();
+  List<AppointmentModel> getByProvider(String providerId) { // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
+    return _appointments.where((a) => a.providerId == providerId).toList(); // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
   }
 
   /// Belirli bir ilanda ve tarihte belirli bir saat dilimi dolu mu kontrol et
@@ -54,7 +54,7 @@ class AppointmentProvider extends ChangeNotifier {
   }) {
     _appointments = _appointments.map((item) {
       if (item.id == appointmentId) {
-        return item.copyWith(
+        return item.copyWith( // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
           offeredPrice: newPrice,
           appointmentTime: newTime,
           status: 'beklemede',
@@ -70,7 +70,7 @@ class AppointmentProvider extends ChangeNotifier {
   void updateStatus(String appointmentId, String newStatus) {
     _appointments = _appointments.map((item) {
       if (item.id == appointmentId) {
-        return item.copyWith(status: newStatus);
+        return item.copyWith(status: newStatus); // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
       }
       return item;
     }).toList();

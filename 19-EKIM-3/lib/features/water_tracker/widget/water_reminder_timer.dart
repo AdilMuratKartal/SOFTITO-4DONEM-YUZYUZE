@@ -1,37 +1,37 @@
-import 'package:flutter/material.dart';
-import '../controller/water_reminder_controller.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import '../controller/water_reminder_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
 
 /// Su Hatırlatıcı Zamanlayıcı Kartı Bileşeni
-class WaterReminderTimer extends StatelessWidget {
-  final WaterReminderController reminderController;
+class WaterReminderTimer extends StatelessWidget { // WaterReminderTimer sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
+  final WaterReminderController reminderController; // WaterReminderController türünden reminderController adlı değişkenimiz
 
-  const WaterReminderTimer({
+  const WaterReminderTimer({ // Genel, sabit sınıf constructor'ı
     super.key,
-    required this.reminderController,
+    required this.reminderController, // reminderController parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     final theme = Theme.of(context);
     final cardBg = theme.cardTheme.color ?? theme.colorScheme.surface;
     final isDark = theme.brightness == Brightness.dark;
     final borderColor = isDark ? const Color(0xFF30363D) : const Color(0xFFD0D7DE);
 
-    return Container(
+    return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
       width: double.infinity,
       padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
+      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
         color: cardBg,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
         border: Border.all(color: borderColor, width: 1),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+        crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
         children: [
           _buildHeader(theme),
-          const SizedBox(height: 14),
+          const SizedBox(height: 14), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
           _buildTimerDisplay(context, theme),
-          const SizedBox(height: 14),
+          const SizedBox(height: 14), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
           _buildControls(context, theme),
         ],
       ),
@@ -39,20 +39,20 @@ class WaterReminderTimer extends StatelessWidget {
   }
 
   Widget _buildHeader(ThemeData theme) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
       children: [
-        Row(
+        Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
           children: [
             Icon(
               Icons.timer_outlined,
               color: theme.colorScheme.tertiary,
               size: 22,
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             Text(
               'Su Hatırlatıcı Zamanlayıcı',
-              style: theme.textTheme.titleMedium?.copyWith(
+              style: theme.textTheme.titleMedium?.copyWith( // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -61,12 +61,12 @@ class WaterReminderTimer extends StatelessWidget {
         ValueListenableBuilder<bool>(
           valueListenable: reminderController.isRunningNotifier,
           builder: (context, isRunning, _) {
-            return Container(
+            return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-              decoration: BoxDecoration(
+              decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                 color: (isRunning ? theme.colorScheme.secondary : Colors.grey)
                     .withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
               ),
               child: Text(
                 isRunning ? 'Aktif' : 'Durduruldu',
@@ -90,19 +90,19 @@ class WaterReminderTimer extends StatelessWidget {
         final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
         final remainingSec = (seconds % 60).toString().padLeft(2, '0');
 
-        return Center(
-          child: Container(
+        return Center( // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
+          child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-            decoration: BoxDecoration(
+            decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
               color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
               border: Border.all(
                 color: theme.colorScheme.tertiary.withValues(alpha: 0.3),
               ),
             ),
             child: Text(
               '$minutes:$remainingSec',
-              style: theme.textTheme.headlineLarge?.copyWith(
+              style: theme.textTheme.headlineLarge?.copyWith( // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
                 fontWeight: FontWeight.w800,
                 letterSpacing: 2,
                 color: theme.colorScheme.tertiary,
@@ -115,12 +115,12 @@ class WaterReminderTimer extends StatelessWidget {
   }
 
   Widget _buildControls(BuildContext context, ThemeData theme) {
-    return Row(
+    return Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
       children: [
         _buildDurationPickerButton(context, theme),
-        const SizedBox(width: 10),
-        Expanded(child: _buildStartPauseButton(context, theme)),
-        const SizedBox(width: 10),
+        const SizedBox(width: 10), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+        Expanded(child: _buildStartPauseButton(context, theme)), // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+        const SizedBox(width: 10), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
         IconButton.outlined(
           icon: const Icon(Icons.refresh_rounded, size: 20),
           onPressed: () => reminderController.resetTimer(),
@@ -179,19 +179,19 @@ class WaterReminderTimer extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) {
-        return SafeArea(
-          child: Padding(
+        return SafeArea( // Çentik ve sistem çubuklarıyla arayüzün çakışmasını önleyen güvenli alan
+          child: Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
             padding: const EdgeInsets.all(20.0),
-            child: Column(
+            child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
               children: [
                 const Text(
                   'Hatırlatıcı Süresini Belirleyin',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 16),
-                Wrap(
+                const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                Wrap( // Ekrana sığmayan butonlar ve etiketler alt satıra geçsin, taşma yapmasın diye Wrap kullanıyoruz
                   spacing: 10,
                   runSpacing: 10,
                   children: [
@@ -215,7 +215,7 @@ class WaterReminderTimer extends StatelessWidget {
       label: Text(label),
       onPressed: () {
         reminderController.setDuration(seconds);
-        Navigator.pop(context);
+        Navigator.pop(context); // Açık olan sayfayı veya diyaloğu kapatıp bir önceki ekrana dönüyoruz
       },
     );
   }
@@ -225,13 +225,13 @@ class WaterReminderTimer extends StatelessWidget {
       context: context,
       barrierDismissible: false,
       builder: (ctx) {
-        return AlertDialog(
+        return AlertDialog( // Kullanıcıya uyarı veya onay penceresi göstermek için AlertDialog açıyoruz
           icon: const Icon(
             Icons.notifications_active_rounded,
             color: Color(0xFF00F0FF),
             size: 48,
           ),
-          title: const Text(
+          title: const Text( // Sayfa başlığını ekrana yazdırıyoruz
             '💧 Su İçme Vakti!',
             textAlign: TextAlign.center,
             style: TextStyle(fontWeight: FontWeight.bold),
@@ -242,10 +242,10 @@ class WaterReminderTimer extends StatelessWidget {
           ),
           actionsAlignment: MainAxisAlignment.center,
           actions: [
-            ElevatedButton(
+            ElevatedButton( // Kullanıcının tıklayabileceği aksiyon butonu bileşenimiz
               onPressed: () {
                 reminderController.acknowledgeCompletion();
-                Navigator.pop(ctx);
+                Navigator.pop(ctx); // Açık olan sayfayı veya diyaloğu kapatıp bir önceki ekrana dönüyoruz
               },
               child: const Text('Tamam, İçtim!'),
             ),

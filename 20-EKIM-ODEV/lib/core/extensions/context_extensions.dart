@@ -1,5 +1,5 @@
 // Flutter materyal arayüz kütüphanesini içe aktarıyoruz
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 
 /// BuildContext için TakeGO Pratik Erişim Uzantıları (ContextExtensions)
 ///
@@ -60,7 +60,7 @@ extension ContextExtensions on BuildContext {
         behavior: SnackBarBehavior.floating,
         // 12 piksel yuvarlatılmış köşeler
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
         ),
         // Ekranda kalış süresi
         duration: duration,

@@ -1,20 +1,20 @@
-import 'dart:convert';
+import 'dart:convert'; // JSON çözümleme (jsonDecode) ve dönüştürme işlemleri için bu paketi ekliyoruz
 import 'package:flutter/foundation.dart';
 
 @immutable
-class CategoryModel {
-  final String id;
-  final String name;
-  final String iconPath;
-  final int colorHex;
-  final bool isCustom;
+class CategoryModel { // CategoryModel sınıfının açılışı, uygulamada kullanılacak verinin model şemasıdır
+  final String id; // String türünden id adlı değişkenimiz
+  final String name; // String türünden name adlı değişkenimiz
+  final String iconPath; // String türünden iconPath adlı değişkenimiz
+  final int colorHex; // int türünden colorHex adlı değişkenimiz
+  final bool isCustom; // bool türünden isCustom adlı değişkenimiz
 
-  const CategoryModel({
-    required this.id,
-    required this.name,
-    required this.iconPath,
-    required this.colorHex,
-    this.isCustom = false,
+  const CategoryModel({ // Genel, sabit sınıf constructor'ı
+    required this.id, // id parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.name, // name parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.iconPath, // iconPath parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.colorHex, // colorHex parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    this.isCustom = false, // isCustom alanına değer aktarıyoruz
   });
 
   // 4 Temel Başlangıç Kategorisi
@@ -71,6 +71,6 @@ class CategoryModel {
 
   String toJson() => json.encode(toMap());
 
-  factory CategoryModel.fromJson(String source) =>
+  factory CategoryModel.fromJson(String source) => // Gelen JSON haritasını (Map) nesneye dönüştüren factory kurucumuz
       CategoryModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

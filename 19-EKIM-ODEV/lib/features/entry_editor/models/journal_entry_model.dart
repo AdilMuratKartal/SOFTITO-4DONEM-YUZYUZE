@@ -2,24 +2,24 @@ import 'package:flutter/foundation.dart';
 
 /// Değişmez (Immutable) Günlük Kaydı Veri Modeli.
 @immutable
-class JournalEntry {
-  final String id;
-  final String title;
-  final String content;
-  final DateTime createdAt;
-  final String? mood;
-  final List<String> tags;
+class JournalEntry { // JournalEntry sınıfının açılışı, uygulamada kullanılacak verinin model şemasıdır
+  final String id; // String türünden id adlı değişkenimiz
+  final String title; // String türünden title adlı değişkenimiz
+  final String content; // String türünden content adlı değişkenimiz
+  final DateTime createdAt; // DateTime türünden createdAt adlı değişkenimiz
+  final String? mood; // String? türünden mood adlı değişkenimiz
+  final List<String> tags; // List<String> türünden tags adlı değişkenimiz
 
-  const JournalEntry({
-    required this.id,
-    required this.title,
-    required this.content,
-    required this.createdAt,
-    this.mood,
-    this.tags = const [],
+  const JournalEntry({ // Genel, sabit sınıf constructor'ı
+    required this.id, // id parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.title, // title parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.content, // content parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.createdAt, // createdAt parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    this.mood, // mood alanına değer aktarıyoruz
+    this.tags = const [], // tags alanına değer aktarıyoruz
   });
 
-  JournalEntry copyWith({
+  JournalEntry copyWith({ // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
     String? id,
     String? title,
     String? content,
@@ -28,16 +28,16 @@ class JournalEntry {
     List<String>? tags,
   }) {
     return JournalEntry(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      content: content ?? this.content,
-      createdAt: createdAt ?? this.createdAt,
-      mood: mood ?? this.mood,
-      tags: tags ?? this.tags,
+      id: id ?? this.id, // id alanına değer aktarıyoruz
+      title: title ?? this.title, // title alanına değer aktarıyoruz
+      content: content ?? this.content, // content alanına değer aktarıyoruz
+      createdAt: createdAt ?? this.createdAt, // createdAt alanına değer aktarıyoruz
+      mood: mood ?? this.mood, // mood alanına değer aktarıyoruz
+      tags: tags ?? this.tags, // tags alanına değer aktarıyoruz
     );
   }
 
-  factory JournalEntry.fromJson(Map<String, dynamic> json) {
+  factory JournalEntry.fromJson(Map<String, dynamic> json) { // Gelen JSON haritasını (Map) nesneye dönüştüren factory kurucumuz
     return JournalEntry(
       id: json['id'] as String? ?? '',
       title: json['title'] as String? ?? '',
@@ -53,7 +53,7 @@ class JournalEntry {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson() { // Nesneyi sunucuya veya veritabanına göndermek için Map/JSON formatına çeviren metod
     return {
       'id': id,
       'title': title,
@@ -64,7 +64,7 @@ class JournalEntry {
     };
   }
 
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is JournalEntry &&
@@ -76,7 +76,7 @@ class JournalEntry {
           mood == other.mood &&
           listEquals(tags, other.tags);
 
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   int get hashCode =>
       id.hashCode ^
       title.hashCode ^

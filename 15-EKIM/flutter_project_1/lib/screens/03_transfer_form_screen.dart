@@ -1,21 +1,21 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 
-import '../models/transaction_model.dart';
+import '../models/transaction_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
-class TransferFormScreen extends StatefulWidget {
-  const TransferFormScreen({super.key});
+class TransferFormScreen extends StatefulWidget { // TransferFormScreen sınıfı, zamanla durumu (state) değişebilen dinamik ekranımız için StatefulWidget yapısıdır
+  const TransferFormScreen({super.key}); // Sabit constructor, üst sınıfa key parametresini gönderir
 
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   State<TransferFormScreen> createState() => _TransferFormScreenState();
 }
 
-class _TransferFormScreenState extends State<TransferFormScreen> {
-  double _balance = 148950.00;
+class _TransferFormScreenState extends State<TransferFormScreen> { // Ekranın durumunu (state), mantığını ve değişkenlerini tuttuğumuz State sınıfımız
+  double _balance = 148950.00; // double türünden _balance değişkenimiz
   final List<TransactionItem> _history = [];
 
-  @override
-  void initState() {
-    super.initState();
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  void initState() { // State ağaca ilk eklendiğinde çalışan metod, sayfa açılırkenki ilk hazırlıklar burda yapılır
+    super.initState(); // Üst sınıfın initState metodunu tetikleyip başlatıyoruz
     final now = DateTime.now();
     _history.addAll([
       TransactionItem(
@@ -49,67 +49,67 @@ class _TransferFormScreenState extends State<TransferFormScreen> {
 
     if (!mounted || transaction == null) return;
 
-    setState(() {
+    setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
       _balance = ((_balance - transaction.amount) * 100).round() / 100;
       _history.add(transaction);
       _history.sort((a, b) => b.date.compareTo(a.date));
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar( // Ekranın altında kullanıcıya bilgi veren kısa SnackBar mesajı gösteriyoruz
       const SnackBar(content: Text('Örnek transfer geçmişe eklendi.')),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
+    return SingleChildScrollView( // Küçük ekranlarda taşma (overflow) hatası vermesin, ekran rahatça kaydırılsın diye sarmalıyoruz
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+        crossAxisAlignment: CrossAxisAlignment.stretch, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
         children: [
           Text('Para Transferi',
               style: Theme.of(context).textTheme.headlineSmall),
-          const SizedBox(height: 16),
-          Card(
+          const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+          Card( // Kartın arkasına gölge verip derinlik katıyoruz (elevation - z koordinatı)
             margin: EdgeInsets.zero,
-            child: Padding(
+            child: Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
               padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                 children: [
                   const Text('Kullanılabilir Bakiye'),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                   Text(
                     '₺${_balance.toStringAsFixed(2)}',
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                   const Text('Örnek veridir; gerçek para transferi yapılmaz.'),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
           FilledButton.icon(
             onPressed: _openTransferModal,
             icon: const Icon(Icons.send_rounded),
             label: const Text('Yeni Transfer'),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 24), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
           Text('Transfer Geçmişi',
               style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 12),
+          const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
           for (final transaction in _history) ...[
-            Padding(
+            Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
               padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                 children: [
                   CircleAvatar(child: Icon(transaction.icon)),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  const SizedBox(width: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                  Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                    child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                      crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                       children: [
                         Text(
                           transaction.title,
@@ -117,7 +117,7 @@ class _TransferFormScreenState extends State<TransferFormScreen> {
                         ),
                         Text(transaction.category),
                         Text(_formatDate(transaction.date)),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                         Text(
                           '-₺${transaction.amount.toStringAsFixed(2)}',
                           style: TextStyle(color: Colors.red.shade700),
@@ -128,7 +128,7 @@ class _TransferFormScreenState extends State<TransferFormScreen> {
                 ],
               ),
             ),
-            const Divider(height: 1),
+            const Divider(height: 1), // Bölümler arasına ince bir ayırıcı çizgi çekmek için
           ],
         ],
       ),
@@ -140,7 +140,7 @@ class _TransferFormScreenState extends State<TransferFormScreen> {
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = DateTime(now.year, now.month, now.day - 1);
     final day = DateTime(date.year, date.month, date.day);
-    final String label;
+    final String label; // String türünden label adlı değişkenimiz
     if (day == today) {
       label = 'Bugün';
     } else if (day == yesterday) {
@@ -154,25 +154,25 @@ class _TransferFormScreenState extends State<TransferFormScreen> {
   }
 }
 
-class _TransferForm extends StatefulWidget {
-  const _TransferForm({required this.balance});
+class _TransferForm extends StatefulWidget { // _TransferForm sınıfı, zamanla durumu (state) değişebilen dinamik ekranımız için StatefulWidget yapısıdır
+  const _TransferForm({required this.balance}); // Genel, sabit sınıf constructor'ı
 
-  final double balance;
+  final double balance; // double türünden balance adlı değişkenimiz
 
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   State<_TransferForm> createState() => _TransferFormState();
 }
 
-class _TransferFormState extends State<_TransferForm> {
+class _TransferFormState extends State<_TransferForm> { // Ekranın durumunu (state), mantığını ve değişkenlerini tuttuğumuz State sınıfımız
   final _formKey = GlobalKey<FormState>();
-  final _recipientController = TextEditingController();
-  final _amountController = TextEditingController();
+  final _recipientController = TextEditingController(); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
+  final _amountController = TextEditingController(); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
 
-  @override
-  void dispose() {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     _recipientController.dispose();
     _amountController.dispose();
-    super.dispose();
+    super.dispose(); // Üst sınıfın dispose metodunu çağırıp temizliği tamamlıyoruz
   }
 
   double? _parseAmount(String value) {
@@ -183,7 +183,7 @@ class _TransferFormState extends State<_TransferForm> {
     if (!_formKey.currentState!.validate()) return;
 
     final now = DateTime.now();
-    Navigator.of(context).pop(
+    Navigator.of(context).pop( // Açık olan sayfayı veya diyaloğu kapatıp bir önceki ekrana dönüyoruz
       TransactionItem(
         id: 'tx_${now.microsecondsSinceEpoch}',
         title: _recipientController.text.trim(),
@@ -196,29 +196,29 @@ class _TransferFormState extends State<_TransferForm> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
+    return Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
-      child: SafeArea(
+      child: SafeArea( // Çentik ve sistem çubuklarıyla arayüzün çakışmasını önleyen güvenli alan
         top: false,
-        child: SingleChildScrollView(
+        child: SingleChildScrollView( // Küçük ekranlarda taşma (overflow) hatası vermesin, ekran rahatça kaydırılsın diye sarmalıyoruz
           padding: const EdgeInsets.all(24),
           child: Form(
             key: _formKey,
-            child: Column(
+            child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.stretch, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
               children: [
                 Text('Yeni Transfer',
                     style: Theme.of(context).textTheme.titleLarge),
-                const SizedBox(height: 8),
+                const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                 Text(
                     'Kullanılabilir bakiye: ₺${widget.balance.toStringAsFixed(2)}'),
-                const SizedBox(height: 20),
-                TextFormField(
+                const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                TextFormField( // Kullanıcıdan metin girdisi almak için form alanı
                   controller: _recipientController,
                   textCapitalization: TextCapitalization.words,
                   textInputAction: TextInputAction.next,
@@ -233,8 +233,8 @@ class _TransferFormState extends State<_TransferForm> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
-                TextFormField(
+                const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                TextFormField( // Kullanıcıdan metin girdisi almak için form alanı
                   controller: _amountController,
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
@@ -262,14 +262,14 @@ class _TransferFormState extends State<_TransferForm> {
                   },
                   onFieldSubmitted: (_) => _submit(),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 24), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                 FilledButton.icon(
                   onPressed: _submit,
                   icon: const Icon(Icons.send_rounded),
                   label: const Text('Örnek Transferi Onayla'),
                 ),
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                TextButton( // Kullanıcının tıklayabileceği aksiyon butonu bileşenimiz
+                  onPressed: () => Navigator.of(context).pop(), // Açık olan sayfayı veya diyaloğu kapatıp bir önceki ekrana dönüyoruz
                   child: const Text('Vazgeç'),
                 ),
               ],

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 import '../../core/theme/app_theme.dart';
 
 /// Kullanıcıdan silme, onaylama veya geri alma işlemlerinde teyit alan modern diyalog penceresi.
@@ -8,7 +8,7 @@ class ConfirmationDialog {
     required String title,
     required String message,
     required String confirmText,
-    String cancelText = 'Vazgeç',
+    String cancelText = 'Vazgeç', // String türünden cancelText değişkenimiz
     Color confirmColor = AppColors.primary,
     IconData? icon,
     Color? iconColor,
@@ -19,10 +19,10 @@ class ConfirmationDialog {
     final result = await showDialog<bool>(
       context: context,
       barrierDismissible: true,
-      builder: (ctx) => AlertDialog(
+      builder: (ctx) => AlertDialog( // Kullanıcıya uyarı veya onay penceresi göstermek için AlertDialog açıyoruz
         backgroundColor: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           side: BorderSide(
             color: isDark ? AppColors.outlineVariant : AppColors.borderLight,
             width: 1,
@@ -31,20 +31,20 @@ class ConfirmationDialog {
         titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         actionsPadding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-        title: Row(
+        title: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
           children: [
             if (icon != null) ...[
-              Container(
+              Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                 padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
+                decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                   color: (iconColor ?? confirmColor).withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, color: iconColor ?? confirmColor, size: 22),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             ],
-            Expanded(
+            Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
               child: Text(
                 title,
                 style: TextStyle(
@@ -65,11 +65,11 @@ class ConfirmationDialog {
           ),
         ),
         actions: [
-          TextButton(
+          TextButton( // Kullanıcının tıklayabileceği aksiyon butonu bileşenimiz
             onPressed: () => Navigator.of(ctx).pop(false),
             style: TextButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
             ),
             child: Text(
               cancelText,
@@ -94,9 +94,9 @@ class ConfirmationDialog {
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: confirmColor,
-              elevation: 0,
+              elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
             ),
           ),
         ],

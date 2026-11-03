@@ -2,7 +2,7 @@
 ///
 /// Kullanıcının filtreleme ve fiyatlandırma ekranlarında
 /// Günlük, Haftalık veya Aylık seçenekleri arasında geçiş yapmasını sağlar.
-enum RentalPeriodType {
+enum RentalPeriodType { // RentalPeriodType enum yapısı, belirli sabit seçenekleri tip güvenli şekilde listelememizi sağlar
   /// 1. Günlük kiralama seçeneği (Tek günlük kiralama ve fiyatlandırma)
   daily,
 

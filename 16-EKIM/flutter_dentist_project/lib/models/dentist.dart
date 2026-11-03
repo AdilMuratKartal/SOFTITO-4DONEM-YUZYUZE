@@ -1,20 +1,20 @@
-class Dentist {
-  final String id;
-  final String name;
-  final String specialty;
-  final double rating;
-  final int experienceYears;
-  final String imageUrl;
-  final bool isAvailable;
+class Dentist { // Dentist sınıfının açılışı, uygulamada kullanılacak verinin model şemasıdır
+  final String id; // String türünden id adlı değişkenimiz
+  final String name; // String türünden name adlı değişkenimiz
+  final String specialty; // String türünden specialty adlı değişkenimiz
+  final double rating; // double türünden rating adlı değişkenimiz
+  final int experienceYears; // int türünden experienceYears adlı değişkenimiz
+  final String imageUrl; // String türünden imageUrl adlı değişkenimiz
+  final bool isAvailable; // bool türünden isAvailable adlı değişkenimiz
 
-  const Dentist({
-    required this.id,
-    required this.name,
-    required this.specialty,
-    required this.rating,
-    required this.experienceYears,
-    required this.imageUrl,
-    required this.isAvailable,
+  const Dentist({ // Genel, sabit sınıf constructor'ı
+    required this.id, // id parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.name, // name parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.specialty, // specialty parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.rating, // rating parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.experienceYears, // experienceYears parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.imageUrl, // imageUrl parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.isAvailable, // isAvailable parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 }
 

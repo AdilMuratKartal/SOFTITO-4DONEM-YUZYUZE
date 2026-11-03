@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import '../../core/services/storage_service.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import '../../core/services/storage_service.dart'; // Veri çekme ve API haberleşmesini yapan servis katmanımızı dahil ediyoruz
 
 class MoodController {
   final ValueNotifier<String?> todayMoodNotifier = ValueNotifier<String?>(null);
@@ -31,7 +31,7 @@ class MoodController {
     StorageService.setMoodPromptShownToday(dateKey, true);
   }
 
-  void dispose() {
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     todayMoodNotifier.dispose();
     shouldPromptDailyMoodNotifier.dispose();
   }

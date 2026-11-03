@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
-import '../models/user_model.dart';
-import '../core/services/json_data_service.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import '../models/user_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../core/services/json_data_service.dart'; // Veri çekme ve API haberleşmesini yapan servis katmanımızı dahil ediyoruz
 
-class AuthProvider extends ChangeNotifier {
-  final JsonDataService dataService;
+class AuthProvider extends ChangeNotifier { // AuthProvider sınıfı, dinleyicilere değişiklik haberini yayan ChangeNotifier yapımızdır
+  final JsonDataService dataService; // JsonDataService türünden dataService adlı değişkenimiz
   List<UserModel> _users = [];
   UserModel? _currentUser;
-  bool _isLoading = false;
+  bool _isLoading = false; // Durum kontrolü için tuttuğumuz bool bayrağımız (_isLoading)
 
-  AuthProvider({required this.dataService});
+  AuthProvider({required this.dataService}); // dataService parametresinin verilmesinin zorunlu olduğunu söylüyoruz
 
   List<UserModel> get users => List.unmodifiable(_users);
   UserModel? get currentUser => _currentUser;
@@ -44,7 +44,7 @@ class AuthProvider extends ChangeNotifier {
   /// Müşteri profil adresini güncelle
   void updateSavedAddress(String newAddress) {
     if (_currentUser == null) return;
-    _currentUser = _currentUser!.copyWith(savedAddress: newAddress);
+    _currentUser = _currentUser!.copyWith(savedAddress: newAddress); // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
     _users = _users.map((u) => u.id == _currentUser!.id ? _currentUser! : u).toList();
     notifyListeners();
   }
@@ -52,7 +52,7 @@ class AuthProvider extends ChangeNotifier {
   /// Hizmet veren dükkan adresini güncelle
   void updateShopAddress(String newShopAddress) {
     if (_currentUser == null) return;
-    _currentUser = _currentUser!.copyWith(shopAddress: newShopAddress);
+    _currentUser = _currentUser!.copyWith(shopAddress: newShopAddress); // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
     _users = _users.map((u) => u.id == _currentUser!.id ? _currentUser! : u).toList();
     notifyListeners();
   }

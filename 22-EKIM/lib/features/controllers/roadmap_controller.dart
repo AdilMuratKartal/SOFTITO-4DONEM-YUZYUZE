@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
-import '../models/roadmap_model.dart';
-import '../models/habit_model.dart';
-import 'habit_controller.dart';
-import '../../core/services/storage_service.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import '../models/roadmap_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../models/habit_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import 'habit_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
+import '../../core/services/storage_service.dart'; // Veri çekme ve API haberleşmesini yapan servis katmanımızı dahil ediyoruz
 
 /// Yol Haritası (Roadmap) Modülü State Controller'ı
 /// Single Source of Truth prensibiyle HabitController'ı sürekli dinler
 /// ve arka planda basamak ilerlemelerini ve kilit açılmalarını anında senkronize eder.
 class RoadmapController {
-  final HabitController habitController;
+  final HabitController habitController; // HabitController türünden habitController adlı değişkenimiz
 
   final ValueNotifier<List<RoadmapModel>> roadmapsNotifier =
       ValueNotifier<List<RoadmapModel>>([]);
@@ -19,7 +19,7 @@ class RoadmapController {
   final ValueNotifier<bool> isCompletedExpandedNotifier =
       ValueNotifier<bool>(false);
 
-  RoadmapController({required this.habitController}) {
+  RoadmapController({required this.habitController}) { // habitController parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // 4. Arka Plan Canlı Senkronizasyonu: HabitController'ı dinle
     habitController.habitsNotifier.addListener(_onHabitsChanged);
     loadRoadmaps();
@@ -52,12 +52,12 @@ class RoadmapController {
     final currentHabits = habitController.habitsNotifier.value;
     final habitMap = {for (var h in currentHabits) h.id: h};
 
-    bool hasAnyChange = false;
+    bool hasAnyChange = false; // Durum kontrolü için tuttuğumuz bool bayrağımız (hasAnyChange)
 
     final updatedRoadmaps = roadmapsNotifier.value.map((roadmap) {
       if (roadmap.isCompleted) return roadmap;
 
-      bool roadmapModified = false;
+      bool roadmapModified = false; // Durum kontrolü için tuttuğumuz bool bayrağımız (roadmapModified)
       List<RoadmapNodeModel> updatedNodes = List.from(roadmap.nodes);
 
       for (int i = 0; i < updatedNodes.length; i++) {
@@ -85,14 +85,14 @@ class RoadmapController {
                   (node.targetDaysStreak <= 1 && allCompletedToday);
 
               if (isTargetMet) {
-                updatedNodes[i] = node.copyWith(isCompleted: true);
+                updatedNodes[i] = node.copyWith(isCompleted: true); // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
                 roadmapModified = true;
                 hasAnyChange = true;
 
                 // Bir sonraki basamağın kilidini aç
                 if (i + 1 < updatedNodes.length) {
                   updatedNodes[i + 1] =
-                      updatedNodes[i + 1].copyWith(isLocked: false);
+                      updatedNodes[i + 1].copyWith(isLocked: false); // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
                 }
               }
             }
@@ -106,7 +106,7 @@ class RoadmapController {
 
       if (roadmapModified || allNodesCompleted != roadmap.isCompleted) {
         hasAnyChange = true;
-        return roadmap.copyWith(
+        return roadmap.copyWith( // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
           nodes: updatedNodes,
           isCompleted: allNodesCompleted,
         );
@@ -173,15 +173,15 @@ class RoadmapController {
     if (nIndex == -1) return;
 
     // Düğümü tamamla
-    nodes[nIndex] = nodes[nIndex].copyWith(isCompleted: true);
+    nodes[nIndex] = nodes[nIndex].copyWith(isCompleted: true); // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
 
     // Sonraki düğümün kilidini aç
     if (nIndex + 1 < nodes.length) {
-      nodes[nIndex + 1] = nodes[nIndex + 1].copyWith(isLocked: false);
+      nodes[nIndex + 1] = nodes[nIndex + 1].copyWith(isLocked: false); // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
     }
 
     final allDone = nodes.every((n) => n.isCompleted);
-    final updatedRoadmap = roadmap.copyWith(
+    final updatedRoadmap = roadmap.copyWith( // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
       nodes: nodes,
       isCompleted: allDone,
     );
@@ -204,7 +204,7 @@ class RoadmapController {
     isCompletedExpandedNotifier.value = !isCompletedExpandedNotifier.value;
   }
 
-  void dispose() {
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     habitController.habitsNotifier.removeListener(_onHabitsChanged);
     roadmapsNotifier.dispose();
     selectedRoadmapNotifier.dispose();

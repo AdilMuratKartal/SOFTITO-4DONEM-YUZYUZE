@@ -1,39 +1,39 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 import '../../../core/extensions/context_extensions.dart';
 
 /// Takvim gün hücresi bileşeni (ThemeExtension stillerine ve etkinlik duygu emojisine duyarlı).
-class DayCellWidget extends StatelessWidget {
-  final DateTime date;
-  final bool isSelected;
-  final bool isCurrentMonth;
-  final bool hasEntries;
-  final String? mood;
-  final VoidCallback onTap;
+class DayCellWidget extends StatelessWidget { // DayCellWidget sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
+  final DateTime date; // DateTime türünden date adlı değişkenimiz
+  final bool isSelected; // bool türünden isSelected adlı değişkenimiz
+  final bool isCurrentMonth; // bool türünden isCurrentMonth adlı değişkenimiz
+  final bool hasEntries; // bool türünden hasEntries adlı değişkenimiz
+  final String? mood; // String? türünden mood adlı değişkenimiz
+  final VoidCallback onTap; // VoidCallback türünden onTap adlı değişkenimiz
 
-  const DayCellWidget({
+  const DayCellWidget({ // Genel, sabit sınıf constructor'ı
     super.key,
-    required this.date,
-    required this.isSelected,
-    required this.isCurrentMonth,
-    required this.hasEntries,
-    this.mood,
-    required this.onTap,
+    required this.date, // date parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.isSelected, // isSelected parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.isCurrentMonth, // isCurrentMonth parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.hasEntries, // hasEntries parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    this.mood, // mood alanına değer aktarıyoruz
+    required this.onTap, // onTap parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     final style = context.journalStyle;
 
-    return GestureDetector(
+    return GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
       onTap: onTap,
-      child: AnimatedContainer(
+      child: AnimatedContainer( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
         duration: const Duration(milliseconds: 150),
         margin: const EdgeInsets.all(3),
-        decoration: BoxDecoration(
+        decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
           color: isSelected
               ? context.colors.primary
               : (isCurrentMonth ? context.colors.surface : Colors.transparent),
-          borderRadius: BorderRadius.circular(style.borderRadius / 2),
+          borderRadius: BorderRadius.circular(style.borderRadius / 2), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           border: Border.all(
             color: isSelected
                 ? context.colors.primary
@@ -44,8 +44,8 @@ class DayCellWidget extends StatelessWidget {
           ),
           boxShadow: isSelected ? style.cardShadow : const [],
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+          mainAxisAlignment: MainAxisAlignment.center, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
           children: [
             Text(
               '${date.day}',
@@ -65,11 +65,11 @@ class DayCellWidget extends StatelessWidget {
                 style: const TextStyle(fontSize: 10.0),
               )
             else if (hasEntries)
-              Container(
+              Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                 margin: const EdgeInsets.only(top: 2),
                 width: 5,
                 height: 5,
-                decoration: BoxDecoration(
+                decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                   shape: BoxShape.circle,
                   color: isSelected
                       ? context.colors.onPrimary
@@ -77,7 +77,7 @@ class DayCellWidget extends StatelessWidget {
                 ),
               )
             else
-              const SizedBox(height: 5),
+              const SizedBox(height: 5), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
           ],
         ),
       ),

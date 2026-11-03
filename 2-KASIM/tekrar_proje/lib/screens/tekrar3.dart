@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 import 'package:go_router/go_router.dart';
 import 'profil_ekrani.dart';
-import 'vitrin_view.dart';
-import '../controllers/sepet_controller.dart';
+import 'vitrin_view.dart'; // Sayfa ve ekran tasarım dosyalarımızı bu dosyaya import ediyoruz
+import '../controllers/sepet_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
 
 final GoRouter uygulamaRotalari = GoRouter(
     initialLocation:'/anasayfa',
@@ -31,13 +31,13 @@ final GoRouter uygulamaRotalari = GoRouter(
 );
 
 //widget'i tamamen boyamadan sadece bir kısmı bir veriyi değiştirmek için stateful gerekmez. Widget'in tamamen değişmez sadece içindeki veriler değişebiliyor(sayfalarda genellikle olur sayfa değişir widget değişmez gibi. yada ağaç değişmez meyvesi değişir gibi).
-class AnaKasaEkrani extends StatelessWidget{
-    final Widget ekranGovdesi;
-    const AnaKasaEkrani({super.key,required this.ekranGovdesi});
+class AnaKasaEkrani extends StatelessWidget{ // AnaKasaEkrani sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
+    final Widget ekranGovdesi; // Widget türünden ekranGovdesi adlı değişkenimiz
+    const AnaKasaEkrani({super.key,required this.ekranGovdesi}); // Sabit constructor, üst sınıfa key parametresini gönderir
 
-    @override 
-    Widget build(BuildContext context){
-        return Scaffold(
+    @override  // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+    Widget build(BuildContext context){ // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
+        return Scaffold( // Sayfa iskeletini (appBar, body, floatingActionButton) oluşturan ana Scaffold widget'ımız
             body:ekranGovdesi,
             bottomNavigationBar: NavigationBar(
                 selectedIndex: _aktifIndexiBul(context),

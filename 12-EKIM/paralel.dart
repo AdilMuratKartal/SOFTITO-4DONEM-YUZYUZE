@@ -20,25 +20,27 @@ Future<void> fetchDashboardData() async{
 
 import 'dart:async';
 
-void main(){
+void main() {
+  //dart CLI başlatması için ana fonksiyon
   //controller oluşturma
   final controller = StreamController<int>();
-  
+
   // dinleyici(listener) bağlama
   final subscription = controller.stream.listen(
-    (data) => print("Yeni Veri: $data"),
-    onError: (err) => print("Hata oluştu: $err"),
-    onDone: () => print("Yayın Tamamlandı"),//Veri akışı sağlanmadığı sıra çalışır.
+    (data) => print("Yeni Veri: $data"),//veri geldiğinde terminalde bu veriyi yazdırma
+    onError: (err) => print("Hata oluştu: $err"),//dinleme durumunda hata olursa bunu yazdırıyoruz
+    onDone: () =>
+        print("Yayın Tamamlandı"), //Veri akışı sağlanmadığı sıra çalışır. yada bitirildiğinde
   );
 
-  controller.sink.add(10);
-  controller.sink.add(20);
-  controller.sink.add(30);
+  //sadece veri girişine izin vermek için .controller .sink yapıyoruz
+  controller.sink.add(10);//10 int verisi add liyoruz
+  controller.sink.add(20);//20 int verisi add liyoruz
+  controller.sink.add(30);//30 int verisi add liyoruz
 
-  final broadcastStream = controller.stream.asBroadcastStream();//asBroadcastStream çoklu listener kullanabilmemizi sağlar şuan hata veriyor çünkü controller da iki ayrı listener var biri tekli olan biri çoklu olan tekli olan diyorki birden fazla listener var.
-  broadcastStream.listen((d)=> print("UI Ekranı: $d"));
-  broadcastStream.listen((d)=> print("Analitik Servisi Ekranı: $d"));
+  final broadcastStream = controller.stream.asBroadcastStream(); //asBroadcastStream çoklu listener kullanabilmemizi sağlar şuan hata veriyor çünkü controller da iki ayrı listener var biri tekli olan biri çoklu olan tekli olan diyorki birden fazla listener var.
+  broadcastStream.listen((d) => print("UI Ekranı: $d"));
+  broadcastStream.listen((d) => print("Analitik Servisi Ekranı: $d"));
 
   controller.close();
-
 }

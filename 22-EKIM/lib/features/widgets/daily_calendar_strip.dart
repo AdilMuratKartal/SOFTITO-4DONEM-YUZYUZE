@@ -1,18 +1,18 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 import '../../core/theme/app_theme.dart';
 
-class DailyCalendarStrip extends StatelessWidget {
-  final ValueNotifier<DateTime> selectedDateNotifier;
-  final ValueChanged<DateTime> onDateSelected;
+class DailyCalendarStrip extends StatelessWidget { // DailyCalendarStrip sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
+  final ValueNotifier<DateTime> selectedDateNotifier; // ValueNotifier<DateTime> türünden selectedDateNotifier adlı değişkenimiz
+  final ValueChanged<DateTime> onDateSelected; // ValueChanged<DateTime> türünden onDateSelected adlı değişkenimiz
 
-  const DailyCalendarStrip({
+  const DailyCalendarStrip({ // Genel, sabit sınıf constructor'ı
     super.key,
-    required this.selectedDateNotifier,
-    required this.onDateSelected,
+    required this.selectedDateNotifier, // selectedDateNotifier parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.onDateSelected, // onDateSelected parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     final now = DateTime.now();
     final isDark = Theme.of(context).brightness == Brightness.dark;
     // Haftanın başlangıcı (Pazartesi)
@@ -22,7 +22,7 @@ class DailyCalendarStrip extends StatelessWidget {
     return ValueListenableBuilder<DateTime>(
       valueListenable: selectedDateNotifier,
       builder: (context, selectedDate, _) {
-        return Row(
+        return Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
           children: weekDays.map((date) {
             final isSelected = date.year == selectedDate.year &&
                 date.month == selectedDate.month &&
@@ -34,24 +34,24 @@ class DailyCalendarStrip extends StatelessWidget {
             const trDays = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
             final dayName = trDays[date.weekday - 1];
 
-            return Expanded(
-              child: Padding(
+            return Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+              child: Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
                 padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                child: GestureDetector(
+                child: GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
                   onTap: () => onDateSelected(date),
-                  child: AnimatedContainer(
+                  child: AnimatedContainer( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                     duration: const Duration(milliseconds: 200),
                     constraints: const BoxConstraints(
                       minHeight: AppSizes.calendarItemMinHeight,
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
+                    decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                       color: isSelected
                           ? AppColors.primary
                           : (isToday
                               ? AppColors.primary.withValues(alpha: 0.12)
                               : (isDark ? AppColors.surfaceContainer : Colors.transparent)),
-                      borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                      borderRadius: BorderRadius.circular(AppSizes.radiusMd), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                       border: Border.all(
                         color: isSelected
                             ? AppColors.primary
@@ -61,8 +61,8 @@ class DailyCalendarStrip extends StatelessWidget {
                         width: 1,
                       ),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                      mainAxisAlignment: MainAxisAlignment.center, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                       children: [
                         FittedBox(
                           fit: BoxFit.scaleDown,
@@ -79,7 +79,7 @@ class DailyCalendarStrip extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 3),
+                        const SizedBox(height: 3), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                         FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Text(
@@ -93,27 +93,27 @@ class DailyCalendarStrip extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 3),
+                        const SizedBox(height: 3), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                         if (isSelected)
-                          Container(
+                          Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                             width: 4,
                             height: 4,
-                            decoration: const BoxDecoration(
+                            decoration: const BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                               color: AppColors.onPrimary,
                               shape: BoxShape.circle,
                             ),
                           )
                         else if (isToday)
-                          Container(
+                          Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                             width: 4,
                             height: 4,
-                            decoration: const BoxDecoration(
+                            decoration: const BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                               color: AppColors.primary,
                               shape: BoxShape.circle,
                             ),
                           )
                         else
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                       ],
                     ),
                   ),

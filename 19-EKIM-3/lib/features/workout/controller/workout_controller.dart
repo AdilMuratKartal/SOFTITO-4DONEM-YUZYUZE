@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import '../models/workout_model.dart';
+import '../models/workout_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
 /// Egzersiz ve Kalori Durumunu Yöneten Reaktif Kontrolcü
 class WorkoutController {
@@ -52,9 +52,9 @@ class WorkoutController {
   }
 
   void _recalculateTotals() {
-    int calories = 0;
-    int minutes = 0;
-    int extraWater = 0;
+    int calories = 0; // int türünden calories değişkenimiz
+    int minutes = 0; // int türünden minutes değişkenimiz
+    int extraWater = 0; // int türünden extraWater değişkenimiz
 
     for (final w in workoutsNotifier.value) {
       calories += w.caloriesBurned;
@@ -67,7 +67,7 @@ class WorkoutController {
     recommendedWaterNotifier.value = extraWater;
   }
 
-  void dispose() {
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     workoutsNotifier.dispose();
     totalCaloriesNotifier.dispose();
     totalMinutesNotifier.dispose();

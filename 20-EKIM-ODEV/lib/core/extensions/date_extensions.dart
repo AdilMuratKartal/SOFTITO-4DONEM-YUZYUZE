@@ -1,5 +1,5 @@
 // Flutter materyal kütüphanesini (DateTimeRange için) içe aktarıyoruz
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 
 /// DateTime Nesneleri için TakeGO Tarih Format Uzantıları (DateExtensions)
 ///

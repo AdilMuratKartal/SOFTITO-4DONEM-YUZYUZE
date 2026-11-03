@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 export 'app_sizes.dart';
 
 /// Mindful Emerald Rhythm - Modern Design System Tokens
@@ -107,7 +107,7 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.background,
         foregroundColor: AppColors.onSurface,
-        elevation: 0,
+        elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
         centerTitle: false,
         titleTextStyle: TextStyle(
           color: AppColors.onSurface,
@@ -118,10 +118,10 @@ class AppTheme {
       ),
       cardTheme: CardThemeData(
         color: AppColors.surfaceContainer,
-        elevation: 0,
+        elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
         margin: const EdgeInsets.only(bottom: 12),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           side: const BorderSide(color: AppColors.outlineVariant, width: 1),
         ),
       ),
@@ -129,10 +129,10 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.onPrimary,
-          elevation: 0,
+          elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           ),
           textStyle: const TextStyle(
             fontSize: 15,
@@ -146,7 +146,7 @@ class AppTheme {
           foregroundColor: AppColors.onSurface,
           side: const BorderSide(color: AppColors.outlineVariant),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           ),
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           textStyle: const TextStyle(
@@ -160,15 +160,15 @@ class AppTheme {
         fillColor: AppColors.surfaceContainer,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           borderSide: const BorderSide(color: AppColors.outlineVariant),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           borderSide: const BorderSide(color: AppColors.outlineVariant),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
         ),
         hintStyle: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 14),
@@ -200,7 +200,7 @@ class AppTheme {
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.onPrimary,
-        elevation: 2,
+        elevation: 2, // Kartın arkasına gölge veriyoruz (z koordinatı)
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
@@ -222,7 +222,7 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.bgLight,
         foregroundColor: AppColors.textLight,
-        elevation: 0,
+        elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
         centerTitle: false,
         titleTextStyle: TextStyle(
           color: AppColors.textLight,
@@ -232,10 +232,10 @@ class AppTheme {
       ),
       cardTheme: CardThemeData(
         color: AppColors.surfaceLight,
-        elevation: 0,
+        elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
         margin: const EdgeInsets.only(bottom: 12),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           side: const BorderSide(color: AppColors.borderLight, width: 1),
         ),
       ),
@@ -243,10 +243,10 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primaryContainer,
           foregroundColor: Colors.white,
-          elevation: 0,
+          elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           ),
           textStyle: const TextStyle(
             fontSize: 15,

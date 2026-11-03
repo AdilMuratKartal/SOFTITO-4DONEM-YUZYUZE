@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 import '../../core/theme/app_theme.dart';
 
-class MoodItem {
-  final String keyName;
-  final String label;
-  final String emoji;
-  final Color activeColor;
+class MoodItem { // MoodItem sınıfının açılışı, uygulamada kullanılacak verinin model şemasıdır
+  final String keyName; // String türünden keyName adlı değişkenimiz
+  final String label; // String türünden label adlı değişkenimiz
+  final String emoji; // String türünden emoji adlı değişkenimiz
+  final Color activeColor; // Color türünden activeColor adlı değişkenimiz
 
-  const MoodItem({
-    required this.keyName,
-    required this.label,
-    required this.emoji,
-    required this.activeColor,
+  const MoodItem({ // Genel, sabit sınıf constructor'ı
+    required this.keyName, // keyName parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.label, // label parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.emoji, // emoji parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.activeColor, // activeColor parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 
   static const List<MoodItem> allMoods = [

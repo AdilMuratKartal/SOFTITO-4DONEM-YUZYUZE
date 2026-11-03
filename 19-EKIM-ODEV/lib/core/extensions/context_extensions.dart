@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 import '../theme/extensions/journal_theme_extension.dart';
 
 extension ThemeContextExtension on BuildContext {

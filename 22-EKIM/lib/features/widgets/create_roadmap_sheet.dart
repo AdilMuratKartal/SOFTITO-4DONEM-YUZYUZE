@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 import '../../core/theme/app_theme.dart';
-import '../models/roadmap_model.dart';
-import '../models/habit_model.dart';
+import '../models/roadmap_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../models/habit_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
 /// Dinamik Yol Haritası Oluşturma Sihirbazı Modalı
-class CreateRoadmapSheet extends StatefulWidget {
-  final List<HabitModel> availableHabits;
-  final ValueChanged<RoadmapModel> onSave;
+class CreateRoadmapSheet extends StatefulWidget { // CreateRoadmapSheet sınıfı, zamanla durumu (state) değişebilen dinamik ekranımız için StatefulWidget yapısıdır
+  final List<HabitModel> availableHabits; // List<HabitModel> türünden availableHabits adlı değişkenimiz
+  final ValueChanged<RoadmapModel> onSave; // ValueChanged<RoadmapModel> türünden onSave adlı değişkenimiz
 
-  const CreateRoadmapSheet({
+  const CreateRoadmapSheet({ // Genel, sabit sınıf constructor'ı
     super.key,
-    required this.availableHabits,
-    required this.onSave,
+    required this.availableHabits, // availableHabits parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.onSave, // onSave parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 
   static Future<void> show({
@@ -19,7 +19,7 @@ class CreateRoadmapSheet extends StatefulWidget {
     required List<HabitModel> availableHabits,
     required ValueChanged<RoadmapModel> onSave,
   }) {
-    return showModalBottomSheet(
+    return showModalBottomSheet( // Ekranın altından yukarı doğru açılan modal form penceresi
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -30,17 +30,17 @@ class CreateRoadmapSheet extends StatefulWidget {
     );
   }
 
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   State<CreateRoadmapSheet> createState() => _CreateRoadmapSheetState();
 }
 
-class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
-  final _titleController = TextEditingController();
-  final _durationController = TextEditingController(text: '4 Hafta');
-  final _rewardController = TextEditingController(text: 'Başarı Rozeti');
+class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> { // Ekranın durumunu (state), mantığını ve değişkenlerini tuttuğumuz State sınıfımız
+  final _titleController = TextEditingController(); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
+  final _durationController = TextEditingController(text: '4 Hafta'); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
+  final _rewardController = TextEditingController(text: 'Başarı Rozeti'); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
 
-  String _selectedCategory = 'Kişisel Gelişim';
-  String _selectedIcon = '🎯';
+  String _selectedCategory = 'Kişisel Gelişim'; // String türünden _selectedCategory değişkenimiz
+  String _selectedIcon = '🎯'; // String türünden _selectedIcon değişkenimiz
 
   final List<Map<String, dynamic>> _nodesData = [];
 
@@ -55,16 +55,16 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
 
   final List<String> _emojis = ['🎯', '🏃', '💧', '📚', '🎸', '🧘', '🌙', '⚡', '💻'];
 
-  @override
-  void initState() {
-    super.initState();
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  void initState() { // State ağaca ilk eklendiğinde çalışan metod, sayfa açılırkenki ilk hazırlıklar burda yapılır
+    super.initState(); // Üst sınıfın initState metodunu tetikleyip başlatıyoruz
     // Başlangıçta 2 adet hazır basamak ekle
     _addNode(title: 'Temel Adaptasyon & Giriş', streak: 7);
     _addNode(title: 'Derinleşme & Sürdürülebilirlik', streak: 14);
   }
 
   void _addNode({String title = '', int streak = 7}) {
-    setState(() {
+    setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
       _nodesData.add({
         'titleController': TextEditingController(text: title),
         'descController': TextEditingController(text: 'Bu aşamadaki hedefleri düzenli sürdürün.'),
@@ -76,13 +76,13 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
 
   void _removeNode(int index) {
     if (_nodesData.length <= 1) return;
-    setState(() {
+    setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
       _nodesData.removeAt(index);
     });
   }
 
-  @override
-  void dispose() {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     _titleController.dispose();
     _durationController.dispose();
     _rewardController.dispose();
@@ -90,13 +90,13 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
       (n['titleController'] as TextEditingController).dispose();
       (n['descController'] as TextEditingController).dispose();
     }
-    super.dispose();
+    super.dispose(); // Üst sınıfın dispose metodunu çağırıp temizliği tamamlıyoruz
   }
 
   void _submit() {
     final title = _titleController.text.trim();
     if (title.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar( // Ekranın altında kullanıcıya bilgi veren kısa SnackBar mesajı gösteriyoruz
         const SnackBar(content: Text('Lütfen yol haritası için bir başlık girin.')),
       );
       return;
@@ -107,8 +107,8 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
     final nodes = <RoadmapNodeModel>[];
     for (int i = 0; i < _nodesData.length; i++) {
       final data = _nodesData[i];
-      final nodeTitle = (data['titleController'] as TextEditingController).text.trim();
-      final nodeDesc = (data['descController'] as TextEditingController).text.trim();
+      final nodeTitle = (data['titleController'] as TextEditingController).text.trim(); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
+      final nodeDesc = (data['descController'] as TextEditingController).text.trim(); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
       final streak = data['targetDaysStreak'] as int? ?? 7;
       final linkedIds = List<String>.from(data['linkedHabitIds'] as List);
 
@@ -138,47 +138,47 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
     );
 
     widget.onSave(newRoadmap);
-    Navigator.of(context).pop();
+    Navigator.of(context).pop(); // Açık olan sayfayı veya diyaloğu kapatıp bir önceki ekrana dönüyoruz
   }
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final mediaQuery = MediaQuery.of(context);
 
-    return Container(
+    return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
       constraints: BoxConstraints(
         maxHeight: mediaQuery.size.height * 0.9,
       ),
-      decoration: BoxDecoration(
+      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
         color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      child: Column(
+      child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
         children: [
           // Drag Handle
-          Center(
-            child: Container(
+          Center( // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
+            child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
               margin: const EdgeInsets.only(top: 10, bottom: 6),
               width: 36,
               height: 4,
-              decoration: BoxDecoration(
+              decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                 color: isDark ? AppColors.outlineVariant : AppColors.borderLight,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(2), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
               ),
             ),
           ),
 
           // Header
-          Padding(
+          Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
               children: [
-                Row(
+                Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                   children: [
                     const Icon(Icons.add_road_rounded, color: AppColors.primary, size: 24),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 10), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                     Text(
                       'Yeni Yol Haritası',
                       style: TextStyle(
@@ -189,22 +189,22 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                     ),
                   ],
                 ),
-                IconButton(
+                IconButton( // Sadece simgeden oluşan tıklanabilir ikon butonu
                   icon: const Icon(Icons.close_rounded),
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => Navigator.of(context).pop(), // Açık olan sayfayı veya diyaloğu kapatıp bir önceki ekrana dönüyoruz
                 ),
               ],
             ),
           ),
 
-          const Divider(height: 1),
+          const Divider(height: 1), // Bölümler arasına ince bir ayırıcı çizgi çekmek için
 
           // Form İçeriği
-          Expanded(
-            child: SingleChildScrollView(
+          Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+            child: SingleChildScrollView( // Küçük ekranlarda taşma (overflow) hatası vermesin, ekran rahatça kaydırılsın diye sarmalıyoruz
               padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                 children: [
                   // Başlık Alanı
                   Text(
@@ -215,29 +215,29 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                       color: isDark ? AppColors.onSurface : AppColors.textLight,
                     ),
                   ),
-                  const SizedBox(height: 6),
-                  TextField(
+                  const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                  TextField( // Kullanıcıdan metin girdisi almak için form alanı
                     controller: _titleController,
                     decoration: InputDecoration(
                       hintText: 'Örn: 30 Günde 5K Koşu veya Gitar Eğitimi',
                       filled: true,
                       fillColor: isDark ? AppColors.surfaceContainerLow : AppColors.surfaceVariantLight,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                         borderSide: BorderSide.none,
                       ),
                     ),
                   ),
 
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                   // Kategori & İkon Seçimi
-                  Row(
+                  Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                     children: [
                       // Kategori
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                          crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                           children: [
                             Text(
                               'Kategori',
@@ -247,12 +247,12 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                                 color: isDark ? AppColors.onSurface : AppColors.textLight,
                               ),
                             ),
-                            const SizedBox(height: 6),
-                            Container(
+                            const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                            Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                               padding: const EdgeInsets.symmetric(horizontal: 12),
-                              decoration: BoxDecoration(
+                              decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                                 color: isDark ? AppColors.surfaceContainerLow : AppColors.surfaceVariantLight,
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
@@ -262,7 +262,7 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                                     return DropdownMenuItem(value: c, child: Text(c, style: const TextStyle(fontSize: 13)));
                                   }).toList(),
                                   onChanged: (val) {
-                                    if (val != null) setState(() => _selectedCategory = val);
+                                    if (val != null) setState(() => _selectedCategory = val); // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
                                   },
                                 ),
                               ),
@@ -270,10 +270,10 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                           ],
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                       // İkon Seçimi
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                        crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                         children: [
                           Text(
                             'İkon',
@@ -283,12 +283,12 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                               color: isDark ? AppColors.onSurface : AppColors.textLight,
                             ),
                           ),
-                          const SizedBox(height: 6),
-                          Container(
+                          const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                          Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                             padding: const EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
+                            decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                               color: isDark ? AppColors.surfaceContainerLow : AppColors.surfaceVariantLight,
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
@@ -297,7 +297,7 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                                   return DropdownMenuItem(value: e, child: Text(e, style: const TextStyle(fontSize: 18)));
                                 }).toList(),
                                 onChanged: (val) {
-                                  if (val != null) setState(() => _selectedIcon = val);
+                                  if (val != null) setState(() => _selectedIcon = val); // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
                                 },
                               ),
                             ),
@@ -307,14 +307,14 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                     ],
                   ),
 
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                   // Süre ve Ödül
-                  Row(
+                  Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                     children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                          crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                           children: [
                             Text(
                               'Tahmini Süre',
@@ -324,15 +324,15 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                                 color: isDark ? AppColors.onSurface : AppColors.textLight,
                               ),
                             ),
-                            const SizedBox(height: 6),
-                            TextField(
+                            const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                            TextField( // Kullanıcıdan metin girdisi almak için form alanı
                               controller: _durationController,
                               decoration: InputDecoration(
                                 hintText: '4 Hafta',
                                 filled: true,
                                 fillColor: isDark ? AppColors.surfaceContainerLow : AppColors.surfaceVariantLight,
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                                   borderSide: BorderSide.none,
                                 ),
                               ),
@@ -340,10 +340,10 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                           ],
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      const SizedBox(width: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                      Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                          crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                           children: [
                             Text(
                               'Tamamlama Ödülü',
@@ -353,15 +353,15 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                                 color: isDark ? AppColors.onSurface : AppColors.textLight,
                               ),
                             ),
-                            const SizedBox(height: 6),
-                            TextField(
+                            const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                            TextField( // Kullanıcıdan metin girdisi almak için form alanı
                               controller: _rewardController,
                               decoration: InputDecoration(
                                 hintText: 'Odak Nişanı',
                                 filled: true,
                                 fillColor: isDark ? AppColors.surfaceContainerLow : AppColors.surfaceVariantLight,
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                                   borderSide: BorderSide.none,
                                 ),
                               ),
@@ -372,11 +372,11 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                     ],
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 24), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                   // DİNAMİK BASAMAKLAR BÖLÜMÜ
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                     children: [
                       Text(
                         'Aşama Basamakları (${_nodesData.length})',
@@ -394,36 +394,36 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                     ],
                   ),
 
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                   ...List.generate(_nodesData.length, (index) {
                     final nodeData = _nodesData[index];
-                    final titleCtrl = nodeData['titleController'] as TextEditingController;
-                    final descCtrl = nodeData['descController'] as TextEditingController;
+                    final titleCtrl = nodeData['titleController'] as TextEditingController; // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
+                    final descCtrl = nodeData['descController'] as TextEditingController; // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
                     final streak = nodeData['targetDaysStreak'] as int;
                     final linkedIds = nodeData['linkedHabitIds'] as List<String>;
 
-                    return Container(
+                    return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                       margin: const EdgeInsets.only(bottom: 14),
                       padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
+                      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                         color: isDark ? AppColors.surfaceContainerLow : AppColors.surfaceVariantLight,
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(14), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                         border: Border.all(
                           color: isDark ? AppColors.outlineVariant : AppColors.borderLight,
                         ),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                        crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                             children: [
-                              Container(
+                              Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                decoration: BoxDecoration(
+                                decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                                   color: AppColors.primary.withValues(alpha: 0.15),
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(8), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                                 ),
                                 child: Text(
                                   'Basamak ${index + 1}',
@@ -435,7 +435,7 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                                 ),
                               ),
                               if (_nodesData.length > 1)
-                                IconButton(
+                                IconButton( // Sadece simgeden oluşan tıklanabilir ikon butonu
                                   icon: const Icon(Icons.delete_outline, size: 18, color: AppColors.danger),
                                   onPressed: () => _removeNode(index),
                                   padding: EdgeInsets.zero,
@@ -443,25 +443,25 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                                 ),
                             ],
                           ),
-                          const SizedBox(height: 8),
-                          TextField(
+                          const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                          TextField( // Kullanıcıdan metin girdisi almak için form alanı
                             controller: titleCtrl,
                             decoration: const InputDecoration(
                               labelText: 'Basamak Başlığı',
                               isDense: true,
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          TextField(
+                          const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                          TextField( // Kullanıcıdan metin girdisi almak için form alanı
                             controller: descCtrl,
                             decoration: const InputDecoration(
                               labelText: 'Aşama Açıklaması',
                               isDense: true,
                             ),
                           ),
-                          const SizedBox(height: 12),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                          Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                             children: [
                               const Text('Gereken Seri (Streak):', style: TextStyle(fontSize: 12)),
                               DropdownButton<int>(
@@ -471,16 +471,16 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                                 }).toList(),
                                 onChanged: (val) {
                                   if (val != null) {
-                                    setState(() => nodeData['targetDaysStreak'] = val);
+                                    setState(() => nodeData['targetDaysStreak'] = val); // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
                                   }
                                 },
                               ),
                             ],
                           ),
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                           const Text('Bağlı Mikro-Alışkanlıklar:', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-                          const SizedBox(height: 6),
-                          Wrap(
+                          const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                          Wrap( // Ekrana sığmayan butonlar ve etiketler alt satıra geçsin, taşma yapmasın diye Wrap kullanıyoruz
                             spacing: 6,
                             runSpacing: 4,
                             children: widget.availableHabits.map((habit) {
@@ -489,7 +489,7 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                                 label: Text(habit.title, style: const TextStyle(fontSize: 11)),
                                 selected: isSelected,
                                 onSelected: (sel) {
-                                  setState(() {
+                                  setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
                                     if (sel) {
                                       linkedIds.add(habit.id);
                                     } else {
@@ -505,7 +505,7 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                     );
                   }),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                   // Onay Butonu
                   SizedBox(
@@ -520,7 +520,7 @@ class _CreateRoadmapSheetState extends State<CreateRoadmapSheet> {
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                       ),
                     ),
                   ),

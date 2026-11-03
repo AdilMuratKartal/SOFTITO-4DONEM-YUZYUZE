@@ -1,26 +1,26 @@
 import 'package:flutter/foundation.dart';
 
 @immutable
-class MessageModel {
-  final String id;
-  final String appointmentId;
-  final String senderId;
-  final String senderName;
-  final String message;
-  final String timestamp;
-  final String createdAt;
+class MessageModel { // MessageModel sınıfının açılışı, uygulamada kullanılacak verinin model şemasıdır
+  final String id; // String türünden id adlı değişkenimiz
+  final String appointmentId; // String türünden appointmentId adlı değişkenimiz
+  final String senderId; // String türünden senderId adlı değişkenimiz
+  final String senderName; // String türünden senderName adlı değişkenimiz
+  final String message; // String türünden message adlı değişkenimiz
+  final String timestamp; // String türünden timestamp adlı değişkenimiz
+  final String createdAt; // String türünden createdAt adlı değişkenimiz
 
-  const MessageModel({
-    required this.id,
-    required this.appointmentId,
-    required this.senderId,
-    required this.senderName,
-    required this.message,
-    required this.timestamp,
-    required this.createdAt,
+  const MessageModel({ // Genel, sabit sınıf constructor'ı
+    required this.id, // id parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.appointmentId, // appointmentId parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.senderId, // senderId parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.senderName, // senderName parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.message, // message parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.timestamp, // timestamp parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.createdAt, // createdAt parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 
-  factory MessageModel.fromJson(Map<String, dynamic> json) {
+  factory MessageModel.fromJson(Map<String, dynamic> json) { // Gelen JSON haritasını (Map) nesneye dönüştüren factory kurucumuz
     return MessageModel(
       id: json['id'] as String? ?? '',
       appointmentId: json['appointmentId'] as String? ?? '',
@@ -32,7 +32,7 @@ class MessageModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson() { // Nesneyi sunucuya veya veritabanına göndermek için Map/JSON formatına çeviren metod
     return {
       'id': id,
       'appointmentId': appointmentId,

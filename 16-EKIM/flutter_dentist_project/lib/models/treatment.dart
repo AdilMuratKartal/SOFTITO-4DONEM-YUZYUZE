@@ -1,16 +1,16 @@
-class Treatment {
-  final String id;
-  final String name;
-  final String icon;
-  final int durationMinutes;
-  final double price;
+class Treatment { // Treatment sınıfının açılışı, uygulamada kullanılacak verinin model şemasıdır
+  final String id; // String türünden id adlı değişkenimiz
+  final String name; // String türünden name adlı değişkenimiz
+  final String icon; // String türünden icon adlı değişkenimiz
+  final int durationMinutes; // int türünden durationMinutes adlı değişkenimiz
+  final double price; // double türünden price adlı değişkenimiz
 
-  const Treatment({
-    required this.id,
-    required this.name,
-    required this.icon,
-    required this.durationMinutes,
-    required this.price,
+  const Treatment({ // Genel, sabit sınıf constructor'ı
+    required this.id, // id parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.name, // name parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.icon, // icon parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.durationMinutes, // durationMinutes parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.price, // price parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 }
 

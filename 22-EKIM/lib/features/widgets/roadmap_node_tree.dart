@@ -1,43 +1,43 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import 'package:flutter/services.dart'; // Veri çekme ve API haberleşmesini yapan servis katmanımızı dahil ediyoruz
 import '../../core/theme/app_theme.dart';
-import '../models/roadmap_model.dart';
-import '../models/habit_model.dart';
-import '../controllers/roadmap_controller.dart';
-import '../controllers/habit_controller.dart';
+import '../models/roadmap_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../models/habit_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../controllers/roadmap_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
+import '../controllers/habit_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
 
 /// Dikey Aşama Basamakları Ağacı (Milestone Stepper Tree)
-class RoadmapNodeTree extends StatelessWidget {
-  final RoadmapModel roadmap;
-  final RoadmapController roadmapController;
-  final HabitController habitController;
+class RoadmapNodeTree extends StatelessWidget { // RoadmapNodeTree sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
+  final RoadmapModel roadmap; // RoadmapModel türünden roadmap adlı değişkenimiz
+  final RoadmapController roadmapController; // RoadmapController türünden roadmapController adlı değişkenimiz
+  final HabitController habitController; // HabitController türünden habitController adlı değişkenimiz
   final void Function(RoadmapNodeModel node)? onNodeTap;
 
-  const RoadmapNodeTree({
+  const RoadmapNodeTree({ // Genel, sabit sınıf constructor'ı
     super.key,
-    required this.roadmap,
-    required this.roadmapController,
-    required this.habitController,
-    this.onNodeTap,
+    required this.roadmap, // roadmap parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.roadmapController, // roadmapController parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.habitController, // habitController parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    this.onNodeTap, // onNodeTap alanına değer aktarıyoruz
   });
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+      crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
       children: [
         // Ağaç Başlığı
-        Padding(
+        Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
             children: [
-              Row(
+              Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                 children: [
                   const Icon(Icons.alt_route_rounded, size: 20, color: AppColors.primary),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                   Text(
                     'Aşama Basamakları',
                     style: TextStyle(
@@ -59,14 +59,14 @@ class RoadmapNodeTree extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 12),
+        const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
         // Basamak Düğümleri Listesi
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: roadmap.nodes.length,
-          itemBuilder: (context, index) {
+        ListView.builder( // Sadece ekranda görünen elemanları çizerek RAM tasarrufu sağlayan performanslı liste
+          shrinkWrap: true, // Listenin sadece elemanları kadar yer kaplamasını sağlıyoruz, taşmasın diye
+          physics: const NeverScrollableScrollPhysics(), // Kendi içinde kaydırılmasını engelleyip dıştaki kaydırıcıya bırakıyoruz
+          itemCount: roadmap.nodes.length, // Listede kaç tane eleman gösterileceğini belirtiyoruz
+          itemBuilder: (context, index) { // Listenin her bir satırını sırayla oluşturan builder fonksiyonumuz
             final node = roadmap.nodes[index];
             final isLast = index == roadmap.nodes.length - 1;
 
@@ -115,15 +115,15 @@ class RoadmapNodeTree extends StatelessWidget {
             ))
         .toList();
 
-    return Stack(
+    return Stack( // Elemanları üst üste bindirmek (katmanlı tasarım yapmak) için Stack kullanıyoruz
       children: [
         // Sol Dikey Bağlantı Çizgisi
         if (!isLast)
-          Positioned(
+          Positioned( // Stack içindeki widget'ın konumunu (sol, sağ, üst, alt) piksel olarak ayarlamak için
             left: 15,
             top: 36,
             bottom: 0,
-            child: Container(
+            child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
               width: 2,
               color: isCompleted
                   ? AppColors.primary
@@ -131,18 +131,18 @@ class RoadmapNodeTree extends StatelessWidget {
             ),
           ),
 
-        Padding(
+        Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
           padding: const EdgeInsets.only(bottom: 24),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+            crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
             children: [
               // Düğüm Rozeti (Badge)
               _buildNodeBadge(isCompleted, isActive, isLocked, node.stepNumber, isDark),
 
-              const SizedBox(width: 14),
+              const SizedBox(width: 14), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // Düğüm Kart İçeriği
-              Expanded(
+              Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
                 child: _buildNodeCardContent(
                   context: context,
                   node: node,
@@ -169,10 +169,10 @@ class RoadmapNodeTree extends StatelessWidget {
     bool isDark,
   ) {
     if (isCompleted) {
-      return Container(
+      return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
         width: 32,
         height: 32,
-        decoration: BoxDecoration(
+        decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
           color: AppColors.primary,
           shape: BoxShape.circle,
           boxShadow: [
@@ -188,10 +188,10 @@ class RoadmapNodeTree extends StatelessWidget {
     }
 
     if (isActive) {
-      return Container(
+      return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
         width: 32,
         height: 32,
-        decoration: BoxDecoration(
+        decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
           color: isDark ? AppColors.surfaceContainerHighest : AppColors.surfaceVariantLight,
           shape: BoxShape.circle,
           border: Border.all(color: AppColors.primary, width: 2),
@@ -203,7 +203,7 @@ class RoadmapNodeTree extends StatelessWidget {
             ),
           ],
         ),
-        child: Center(
+        child: Center( // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
           child: Text(
             '$stepNumber',
             style: const TextStyle(
@@ -217,10 +217,10 @@ class RoadmapNodeTree extends StatelessWidget {
     }
 
     // Locked
-    return Container(
+    return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
       width: 32,
       height: 32,
-      decoration: BoxDecoration(
+      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
         color: isDark ? AppColors.surfaceContainerLow : AppColors.surfaceVariantLight,
         shape: BoxShape.circle,
         border: Border.all(
@@ -245,10 +245,10 @@ class RoadmapNodeTree extends StatelessWidget {
     required bool isLocked,
     required bool isDark,
   }) {
-    return GestureDetector(
+    return GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
       onTap: () {
         if (isLocked) {
-          ScaffoldMessenger.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar( // Ekranın altında kullanıcıya bilgi veren kısa SnackBar mesajı gösteriyoruz
             SnackBar(
               content: Text('🔒 Bu aşama kilitli! Önce ${node.stepNumber - 1}. Basamağı tamamlamalısın.'),
               duration: const Duration(seconds: 2),
@@ -258,16 +258,16 @@ class RoadmapNodeTree extends StatelessWidget {
           onNodeTap?.call(node);
         }
       },
-      child: AnimatedContainer(
+      child: AnimatedContainer( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(AppSizes.spaceMd),
-        decoration: BoxDecoration(
+        decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
           color: isLocked
               ? (isDark ? AppColors.surfaceContainerLow.withValues(alpha: 0.6) : AppColors.surfaceLight.withValues(alpha: 0.7))
               : (isActive
                   ? (isDark ? AppColors.surfaceContainer : AppColors.surfaceLight)
                   : (isDark ? AppColors.surfaceContainerLow : AppColors.surfaceLight)),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           border: Border.all(
             color: isActive
                 ? AppColors.primary.withValues(alpha: 0.5)
@@ -275,12 +275,12 @@ class RoadmapNodeTree extends StatelessWidget {
             width: isActive ? 1.5 : 1.0,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+          crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
           children: [
             // Üst Başlık & Durum Rozetleri
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
               children: [
                 Text(
                   isActive ? 'Basamak ${node.stepNumber} • Aktif Aşama' : 'Basamak ${node.stepNumber}',
@@ -295,20 +295,20 @@ class RoadmapNodeTree extends StatelessWidget {
                   ),
                 ),
                 if (isCompleted) ...[
-                  Row(
+                  Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
+                      Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                         padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                        decoration: BoxDecoration(
+                        decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                           color: AppColors.secondary.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                         ),
-                        child: Row(
+                        child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const Icon(Icons.local_fire_department, size: 12, color: AppColors.secondary),
-                            const SizedBox(width: 3),
+                            const SizedBox(width: 3), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                             Text(
                               '${node.targetDaysStreak} Gün Tamamlandı',
                               style: const TextStyle(
@@ -320,12 +320,12 @@ class RoadmapNodeTree extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      Container(
+                      const SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                      Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                         padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                        decoration: BoxDecoration(
+                        decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                           color: AppColors.primary.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                         ),
                         child: const Text(
                           'Tamamlandı',
@@ -335,17 +335,17 @@ class RoadmapNodeTree extends StatelessWidget {
                     ],
                   ),
                 ] else if (isActive) ...[
-                  Container(
+                  Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
+                    decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                       color: AppColors.secondary.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                     ),
-                    child: Row(
+                    child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         const Icon(Icons.local_fire_department, size: 12, color: AppColors.secondary),
-                        const SizedBox(width: 3),
+                        const SizedBox(width: 3), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                         Text(
                           '5 / ${node.targetDaysStreak} Gün Zincir',
                           style: const TextStyle(
@@ -358,17 +358,17 @@ class RoadmapNodeTree extends StatelessWidget {
                     ),
                   ),
                 ] else ...[
-                  Container(
+                  Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
+                    decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                       color: isDark ? AppColors.surfaceContainerHighest : AppColors.surfaceVariantLight,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                     ),
-                    child: Row(
+                    child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.lock_clock, size: 12, color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary),
-                        const SizedBox(width: 3),
+                        const SizedBox(width: 3), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                         Text(
                           'Kilitli',
                           style: TextStyle(
@@ -384,7 +384,7 @@ class RoadmapNodeTree extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(height: 6),
+            const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
             // Düğüm Başlığı & Açıklaması
             Text(
@@ -395,7 +395,7 @@ class RoadmapNodeTree extends StatelessWidget {
                 color: isDark ? AppColors.onSurface : AppColors.textLight,
               ),
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 3), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             Text(
               node.description,
               style: TextStyle(
@@ -407,14 +407,14 @@ class RoadmapNodeTree extends StatelessWidget {
 
             // AKTİF DÜĞÜM ÖZEL İÇERİĞİ
             if (isActive) ...[
-              const SizedBox(height: 12),
+              const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // Aşama İlerleme Çubuğu
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                     children: [
                       Text(
                         'Aşama İlerlemesi',
@@ -429,9 +429,9 @@ class RoadmapNodeTree extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(4), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                     child: const LinearProgressIndicator(
                       value: 0.35,
                       minHeight: 5,
@@ -442,7 +442,7 @@ class RoadmapNodeTree extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // BAĞLI GÜNLÜK ALIŞKANLIKLAR LİSTESİ
               if (linkedHabits.isNotEmpty) ...[
@@ -455,36 +455,36 @@ class RoadmapNodeTree extends StatelessWidget {
                     color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                 ...linkedHabits.map((habit) {
-                  return Container(
+                  return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                     margin: const EdgeInsets.only(bottom: 6),
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    decoration: BoxDecoration(
+                    decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                       color: isDark ? AppColors.surfaceContainerLow : AppColors.surfaceVariantLight,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                     ),
-                    child: Row(
+                    child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                       children: [
-                        Container(
+                        Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                           width: 30,
                           height: 30,
-                          decoration: BoxDecoration(
+                          decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                             color: AppColors.primary.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(8), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                           ),
                           child: const Icon(Icons.directions_run_rounded, size: 16, color: AppColors.primary),
                         ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        const SizedBox(width: 10), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                        Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                          child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                            crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                             children: [
                               Text(
                                 habit.title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1, // Metnin en fazla kaç satır olacağını sınırlıyoruz, taşmasın diye
+                                overflow: TextOverflow.ellipsis, // Metin sığmazsa taşmasın, sonuna üç nokta (...) koysun diye
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
@@ -506,7 +506,7 @@ class RoadmapNodeTree extends StatelessWidget {
                             ],
                           ),
                         ),
-                        IconButton(
+                        IconButton( // Sadece simgeden oluşan tıklanabilir ikon butonu
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                           icon: Icon(
@@ -525,7 +525,7 @@ class RoadmapNodeTree extends StatelessWidget {
                 }),
               ],
 
-              const SizedBox(height: 6),
+              const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // Basamak Aksiyon Butonu
               SizedBox(
@@ -540,29 +540,29 @@ class RoadmapNodeTree extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                     foregroundColor: isDark ? AppColors.onSurface : AppColors.textLight,
                     side: BorderSide(color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
                 ),
               ),
             ] else if (isCompleted) ...[
               // TAMAMLANMIŞ DÜĞÜM ETİKETLERİ
-              const SizedBox(height: 8),
-              Wrap(
+              const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+              Wrap( // Ekrana sığmayan butonlar ve etiketler alt satıra geçsin, taşma yapmasın diye Wrap kullanıyoruz
                 spacing: 6,
                 runSpacing: 4,
                 children: linkedHabits.map((h) {
-                  return Container(
+                  return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
+                    decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                       color: isDark ? AppColors.surfaceContainerHigh : AppColors.surfaceVariantLight,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(8), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                     ),
-                    child: Row(
+                    child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text('💧 ${h.title}', style: const TextStyle(fontSize: 11)),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                         const Icon(Icons.done_all_rounded, size: 13, color: AppColors.primary),
                       ],
                     ),
@@ -571,20 +571,20 @@ class RoadmapNodeTree extends StatelessWidget {
               ),
             ] else if (isLocked) ...[
               // KİLİTLİ DÜĞÜM UYARI KUTUSU
-              const SizedBox(height: 10),
-              Container(
+              const SizedBox(height: 10), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+              Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                 padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
+                decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                   color: isDark
                       ? AppColors.surfaceContainerHighest.withValues(alpha: 0.5)
                       : AppColors.surfaceVariantLight,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(8), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                 ),
-                child: Row(
+                child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                   children: [
                     const Icon(Icons.info_outline_rounded, size: 14, color: AppColors.secondary),
-                    const SizedBox(width: 6),
-                    Expanded(
+                    const SizedBox(width: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                    Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
                       child: Text(
                         '${node.stepNumber - 1}. Basamak tamamlandığında açılacak (${node.targetDaysStreak} Günlük seri gerekli).',
                         style: TextStyle(

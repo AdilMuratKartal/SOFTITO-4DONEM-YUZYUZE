@@ -1,28 +1,28 @@
 import 'dentist.dart';
 import 'treatment.dart';
 
-enum AppointmentStatus {
+enum AppointmentStatus { // AppointmentStatus enum yapısı, belirli sabit seçenekleri tip güvenli şekilde listelememizi sağlar
   pending,    // Bekliyor
   confirmed,  // Onaylandı
   cancelled,  // İptal Edildi
   completed,  // Tamamlandı
 }
 
-class Appointment {
-  final String id;
-  final Dentist dentist;
-  final Treatment treatment;
-  final DateTime date;
-  final String time;
-  final AppointmentStatus status;
+class Appointment { // Appointment sınıfının açılışı, uygulamada kullanılacak verinin model şemasıdır
+  final String id; // String türünden id adlı değişkenimiz
+  final Dentist dentist; // Dentist türünden dentist adlı değişkenimiz
+  final Treatment treatment; // Treatment türünden treatment adlı değişkenimiz
+  final DateTime date; // DateTime türünden date adlı değişkenimiz
+  final String time; // String türünden time adlı değişkenimiz
+  final AppointmentStatus status; // AppointmentStatus türünden status adlı değişkenimiz
 
-  const Appointment({
-    required this.id,
-    required this.dentist,
-    required this.treatment,
-    required this.date,
-    required this.time,
-    required this.status,
+  const Appointment({ // Genel, sabit sınıf constructor'ı
+    required this.id, // id parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.dentist, // dentist parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.treatment, // treatment parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.date, // date parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.time, // time parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.status, // status parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 }
 

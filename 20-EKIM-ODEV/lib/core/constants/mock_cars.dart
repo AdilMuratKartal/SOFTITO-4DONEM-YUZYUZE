@@ -1,5 +1,5 @@
 // Araç veri modelini içe aktarıyoruz
-import '../../features/car_listing/models/car_model.dart';
+import '../../features/car_listing/models/car_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
 /// TakeGO Başlangıç Bellek İçi Araç Veri Havuzu (In-Memory Mock Cars)
 ///

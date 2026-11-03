@@ -1,8 +1,8 @@
 import 'i_urun_servisi.dart';
-import '../models/kategori.dart';
-import '../models/urun.dart';
+import '../models/kategori.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../models/urun.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
-class MockUrunServisi implements IUrunServisi{
+class MockUrunServisi implements IUrunServisi{ // MockUrunServisi sınıfı, sözleşmedeki metodları gerçek hayata uyarlayıp kodladığımız sınıftır
     final List<Urun> _urunDeposu =const [
         Urun(
             id:1,
@@ -90,13 +90,13 @@ class MockUrunServisi implements IUrunServisi{
     ];
     MockUrunServisi(){}
 
-    @override
+    @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
     Future<List<Urun>> tumUrunleriGetir() async{
         await Future.delayed(const Duration(milliseconds:7000));
         return List.from(_urunDeposu);
     }
 
-    @override
+    @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
     Future<List<Urun>> adaGoreAra(String aramaMetni) async{
         await Future.delayed(const Duration(milliseconds:300));
         if(aramaMetni.trim().isEmpty){
@@ -110,7 +110,7 @@ class MockUrunServisi implements IUrunServisi{
         }).toList();
     }
 
-    @override
+    @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
     Future<List<Urun>> kategoriyeGoreGetir(Kategori kategori) async {
         await Future.delayed(const Duration(milliseconds:400));
         if(kategori == Kategori.hepsi){

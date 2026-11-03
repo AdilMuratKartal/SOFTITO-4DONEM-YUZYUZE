@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'models/app_theme_type.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import 'models/app_theme_type.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 import 'extensions/journal_theme_extension.dart';
 import 'palettes/neo_brutalist_colors.dart';
 import 'palettes/minimalist_colors.dart';

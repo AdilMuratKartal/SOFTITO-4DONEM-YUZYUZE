@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import '../models/water_entry_model.dart';
+import '../models/water_entry_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
 /// Su Tüketimini Yöneten Reaktif Kontrolcü (ValueNotifier Tabanlı)
 class WaterTrackerController {
@@ -56,7 +56,7 @@ class WaterTrackerController {
     }
   }
 
-  void dispose() {
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     totalWaterNotifier.dispose();
     dailyGoalNotifier.dispose();
     historyNotifier.dispose();

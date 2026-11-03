@@ -8,112 +8,112 @@ import 'rental_period_type.dart';
 /// Sistemdeki tüm kiralık araçların verilerini taşıyan,
 /// `@immutable` ve tip güvenli ana veri modelidir.
 @immutable
-class CarModel {
+class CarModel { // CarModel sınıfının açılışı, uygulamada kullanılacak verinin model şemasıdır
   // ---------------------------------------------------------------------------
   // MODEL ALANLARI (Properties)
   // ---------------------------------------------------------------------------
 
   /// Aracın benzersiz kimlik numarası (Örn: 'car-101')
-  final String id;
+  final String id; // String türünden id adlı değişkenimiz
 
   /// Araç üretici markası (Örn: 'Tesla', 'BMW', 'Volvo')
-  final String brand;
+  final String brand; // String türünden brand adlı değişkenimiz
 
   /// Araç model adı ve paket detayı (Örn: 'Model Y Long Range')
-  final String model;
+  final String model; // String türünden model adlı değişkenimiz
 
   /// Üretim model yılı (Örn: 2024)
-  final int year;
+  final int year; // int türünden year adlı değişkenimiz
 
   /// Araç tescil plakası (Örn: '34 TGO 101')
-  final String plate;
+  final String plate; // String türünden plate adlı değişkenimiz
 
   /// Benzin deposu veya batarya şarj yüzdesi (%0 - %100)
-  final int fuelPercent;
+  final int fuelPercent; // int türünden fuelPercent adlı değişkenimiz
 
   /// Aracın %100 elektrikli olup olmadığı bilgisi (true: elektrikli, false: içten yanmalı)
-  final bool isElectric;
+  final bool isElectric; // bool türünden isElectric adlı değişkenimiz
 
   /// Şanzıman türü ('Otomatik' veya 'Manuel')
-  final String transmission;
+  final String transmission; // String türünden transmission adlı değişkenimiz
 
   /// Araç yolcu koltuk kapasitesi (Varsayılan: 5 kişi)
-  final int seatCount;
+  final int seatCount; // int türünden seatCount adlı değişkenimiz
 
   /// Günlük kiralama birim fiyatı (TL)
-  final double dailyPrice;
+  final double dailyPrice; // double türünden dailyPrice adlı değişkenimiz
 
   /// Haftalık kiralama birim fiyatı (TL)
-  final double weeklyPrice;
+  final double weeklyPrice; // double türünden weeklyPrice adlı değişkenimiz
 
   /// Aylık kiralama birim fiyatı (TL)
-  final double monthlyPrice;
+  final double monthlyPrice; // double türünden monthlyPrice adlı değişkenimiz
 
   /// Kiralanabilirliğin başladığı ilk tarih
-  final DateTime availableFrom;
+  final DateTime availableFrom; // DateTime türünden availableFrom adlı değişkenimiz
 
   /// Kiralanabilirliğin sona erdiği son tarih
-  final DateTime availableTo;
+  final DateTime availableTo; // DateTime türünden availableTo adlı değişkenimiz
 
   /// Aracın teslim alınacağı ilçe ve şehir lokasyonu (Örn: 'Kadıköy, İstanbul')
-  final String location;
+  final String location; // String türünden location adlı değişkenimiz
 
   /// Kullanıcının konumuna olan yaklaşık mesafe (km cinsinden)
-  final double distanceKm;
+  final double distanceKm; // double türünden distanceKm adlı değişkenimiz
 
   /// Araç görselinin URL bağlantısı (Opsiyonel / Nullable)
-  final String? imageUrl;
+  final String? imageUrl; // String? türünden imageUrl adlı değişkenimiz
 
   /// Araç donanım özellikleri listesi (Örn: ['Otopilot', 'Cam Tavan'])
-  final List<String> features;
+  final List<String> features; // List<String> türünden features adlı değişkenimiz
 
   /// Araç sahibi açıklaması ve kiralama notları
-  final String description;
+  final String description; // String türünden description adlı değişkenimiz
 
   // ---------------------------------------------------------------------------
   // KURUCU METOT (Constructor)
   // ---------------------------------------------------------------------------
 
   /// CarModel kurucusu (const destekli değişmez yapı)
-  const CarModel({
+  const CarModel({ // Genel, sabit sınıf constructor'ı
     // Zorunlu benzersiz ID
-    required this.id,
+    required this.id, // id parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // Zorunlu araç markası
-    required this.brand,
+    required this.brand, // brand parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // Zorunlu araç modeli
-    required this.model,
+    required this.model, // model parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // Zorunlu üretim yılı
-    required this.year,
+    required this.year, // year parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // Zorunlu plaka bilgisi
-    required this.plate,
+    required this.plate, // plate parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // Zorunlu yakıt / şarj yüzdesi
-    required this.fuelPercent,
+    required this.fuelPercent, // fuelPercent parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // Zorunlu elektrikli araç durumu
-    required this.isElectric,
+    required this.isElectric, // isElectric parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // Zorunlu şanzıman tipi
-    required this.transmission,
+    required this.transmission, // transmission parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // Koltuk sayısı (varsayılan: 5)
-    this.seatCount = 5,
+    this.seatCount = 5, // seatCount alanına değer aktarıyoruz
     // Zorunlu günlük fiyat
-    required this.dailyPrice,
+    required this.dailyPrice, // dailyPrice parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // Zorunlu haftalık fiyat
-    required this.weeklyPrice,
+    required this.weeklyPrice, // weeklyPrice parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // Zorunlu aylık fiyat
-    required this.monthlyPrice,
+    required this.monthlyPrice, // monthlyPrice parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // Zorunlu müsaitlik başlangıç tarihi
-    required this.availableFrom,
+    required this.availableFrom, // availableFrom parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // Zorunlu müsaitlik bitiş tarihi
-    required this.availableTo,
+    required this.availableTo, // availableTo parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // Zorunlu teslim konumu
-    required this.location,
+    required this.location, // location parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // Yakınlık mesafesi (varsayılan: 1.0 km)
-    this.distanceKm = 1.0,
+    this.distanceKm = 1.0, // distanceKm alanına değer aktarıyoruz
     // Opsiyonel fotoğraf bağlantısı
-    this.imageUrl,
+    this.imageUrl, // imageUrl alanına değer aktarıyoruz
     // Donanım listesi (varsayılan boş liste)
-    this.features = const [],
+    this.features = const [], // features alanına değer aktarıyoruz
     // Açıklama metni (varsayılan tanıtım metni)
-    this.description = 'TakeGO güvencesiyle anında kiralanabilir araç.',
+    this.description = 'TakeGO güvencesiyle anında kiralanabilir araç.', // description alanına değer aktarıyoruz
   });
 
   // ---------------------------------------------------------------------------
@@ -147,7 +147,7 @@ class CarModel {
   // ---------------------------------------------------------------------------
 
   /// Mevcut modelin belirli alanlarını güncelleyerek yeni bir kopya üretir
-  CarModel copyWith({
+  CarModel copyWith({ // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
     String? id,
     String? brand,
     String? model,
@@ -171,43 +171,43 @@ class CarModel {
     // Parametre olarak verilen yeni değeri, yoksa mevcut nesnedeki değeri alarak yeni nesne döndürüyoruz
     return CarModel(
       // ID güncellemesi veya mevcut ID
-      id: id ?? this.id,
+      id: id ?? this.id, // id alanına değer aktarıyoruz
       // Marka güncellemesi veya mevcut marka
-      brand: brand ?? this.brand,
+      brand: brand ?? this.brand, // brand alanına değer aktarıyoruz
       // Model güncellemesi veya mevcut model
-      model: model ?? this.model,
+      model: model ?? this.model, // model alanına değer aktarıyoruz
       // Yıl güncellemesi veya mevcut yıl
-      year: year ?? this.year,
+      year: year ?? this.year, // year alanına değer aktarıyoruz
       // Plaka güncellemesi veya mevcut plaka
-      plate: plate ?? this.plate,
+      plate: plate ?? this.plate, // plate alanına değer aktarıyoruz
       // Yakıt güncellemesi veya mevcut yakıt
-      fuelPercent: fuelPercent ?? this.fuelPercent,
+      fuelPercent: fuelPercent ?? this.fuelPercent, // fuelPercent alanına değer aktarıyoruz
       // Elektrikli durumu güncellemesi
-      isElectric: isElectric ?? this.isElectric,
+      isElectric: isElectric ?? this.isElectric, // isElectric alanına değer aktarıyoruz
       // Şanzıman güncellemesi
-      transmission: transmission ?? this.transmission,
+      transmission: transmission ?? this.transmission, // transmission alanına değer aktarıyoruz
       // Koltuk sayısı güncellemesi
-      seatCount: seatCount ?? this.seatCount,
+      seatCount: seatCount ?? this.seatCount, // seatCount alanına değer aktarıyoruz
       // Günlük fiyat güncellemesi
-      dailyPrice: dailyPrice ?? this.dailyPrice,
+      dailyPrice: dailyPrice ?? this.dailyPrice, // dailyPrice alanına değer aktarıyoruz
       // Haftalık fiyat güncellemesi
-      weeklyPrice: weeklyPrice ?? this.weeklyPrice,
+      weeklyPrice: weeklyPrice ?? this.weeklyPrice, // weeklyPrice alanına değer aktarıyoruz
       // Aylık fiyat güncellemesi
-      monthlyPrice: monthlyPrice ?? this.monthlyPrice,
+      monthlyPrice: monthlyPrice ?? this.monthlyPrice, // monthlyPrice alanına değer aktarıyoruz
       // Başlangıç tarihi güncellemesi
-      availableFrom: availableFrom ?? this.availableFrom,
+      availableFrom: availableFrom ?? this.availableFrom, // availableFrom alanına değer aktarıyoruz
       // Bitiş tarihi güncellemesi
-      availableTo: availableTo ?? this.availableTo,
+      availableTo: availableTo ?? this.availableTo, // availableTo alanına değer aktarıyoruz
       // Konum güncellemesi
-      location: location ?? this.location,
+      location: location ?? this.location, // location alanına değer aktarıyoruz
       // Mesafe güncellemesi
-      distanceKm: distanceKm ?? this.distanceKm,
+      distanceKm: distanceKm ?? this.distanceKm, // distanceKm alanına değer aktarıyoruz
       // Resim URL güncellemesi
-      imageUrl: imageUrl ?? this.imageUrl,
+      imageUrl: imageUrl ?? this.imageUrl, // imageUrl alanına değer aktarıyoruz
       // Özellikler listesi güncellemesi
-      features: features ?? this.features,
+      features: features ?? this.features, // features alanına değer aktarıyoruz
       // Açıklama güncellemesi
-      description: description ?? this.description,
+      description: description ?? this.description, // description alanına değer aktarıyoruz
     );
   }
 
@@ -216,7 +216,7 @@ class CarModel {
   // ---------------------------------------------------------------------------
 
   /// Map (JSON) verisinden tip güvenli CarModel nesnesi türeten fabrika kurucusu
-  factory CarModel.fromJson(Map<String, dynamic> json) {
+  factory CarModel.fromJson(Map<String, dynamic> json) { // Gelen JSON haritasını (Map) nesneye dönüştüren factory kurucumuz
     // JSON anahtarlarını kontrol edip güvenli varsayılan değerlerle nesneyi oluşturuyoruz
     return CarModel(
       // JSON'daki id veya boş metin
@@ -268,7 +268,7 @@ class CarModel {
   }
 
   /// CarModel nesnesini harici depolama için Map (JSON) yapısına çevirir
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson() { // Nesneyi sunucuya veya veritabanına göndermek için Map/JSON formatına çeviren metod
     // Nesnenin tüm alanlarını Map anahtar-değer ikililerine dönüştürüyoruz
     return {
       'id': id,
@@ -294,7 +294,7 @@ class CarModel {
   }
 
   // İki CarModel nesnesinin ID bazında eşitliğini karşılaştıran operatör
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   bool operator ==(Object other) {
     // Aynı bellek referansı veya aynı ID'ye sahip nesneler eşittir
     return identical(this, other) ||
@@ -304,7 +304,7 @@ class CarModel {
   }
 
   // Nesnenin hash kodunu ID üzerinden üreten getter
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   int get hashCode {
     // ID alanının hash kodunu döndürüyoruz
     return id.hashCode;

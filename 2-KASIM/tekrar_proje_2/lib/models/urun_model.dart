@@ -1,23 +1,23 @@
-import 'dart:convert';
+import 'dart:convert'; // JSON çözümleme (jsonDecode) ve dönüştürme işlemleri için bu paketi ekliyoruz
 
-import 'package:http/http.dart';
+import 'package:http/http.dart'; // İnternet üzerinden REST API istekleri (GET, POST vb.) atabilmek için http paketini ekliyoruz
 
-class UrunModel{
-    final int id;
-    final String baslik;
-    final double fiyat;
-    final String resimUrl;
-    final String kategori;
+class UrunModel{ // UrunModel sınıfının açılışı, uygulamada kullanılacak verinin model şemasıdır
+    final int id; // int türünden id adlı değişkenimiz
+    final String baslik; // String türünden baslik adlı değişkenimiz
+    final double fiyat; // double türünden fiyat adlı değişkenimiz
+    final String resimUrl; // String türünden resimUrl adlı değişkenimiz
+    final String kategori; // String türünden kategori adlı değişkenimiz
     
-    const UrunModel({
-        required this.id,
-        required this.baslik,
-        required this.fiyat,
-        required this.resimUrl,
-        required this.kategori,
+    const UrunModel({ // Genel, sabit sınıf constructor'ı
+        required this.id, // id parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+        required this.baslik, // baslik parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+        required this.fiyat, // fiyat parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+        required this.resimUrl, // resimUrl parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+        required this.kategori, // kategori parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     });
     
-    factory UrunModel.fromJson(Map<String,dynamic> json){
+    factory UrunModel.fromJson(Map<String,dynamic> json){ // Gelen JSON haritasını (Map) nesneye dönüştüren factory kurucumuz
         return UrunModel(
             id: json['id'] as int? ?? 0,
             baslik: json['title'] as String? ?? 'İsimsiz Ürün',

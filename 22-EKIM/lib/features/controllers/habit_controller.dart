@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import '../models/habit_model.dart';
-import '../models/category_model.dart';
-import '../../core/services/storage_service.dart';
-import '../../core/services/notification_service.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import '../models/habit_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../models/category_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../../core/services/storage_service.dart'; // Veri çekme ve API haberleşmesini yapan servis katmanımızı dahil ediyoruz
+import '../../core/services/notification_service.dart'; // Veri çekme ve API haberleşmesini yapan servis katmanımızı dahil ediyoruz
 
 class HabitController {
   final ValueNotifier<List<HabitModel>> habitsNotifier = ValueNotifier<List<HabitModel>>([]);
@@ -45,7 +45,7 @@ class HabitController {
         final newStreak = newCompleted
             ? h.streakDays + 1
             : (h.streakDays > 0 ? h.streakDays - 1 : 0);
-        return h.copyWith(
+        return h.copyWith( // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
           isCompleted: newCompleted,
           streakDays: newStreak,
         );
@@ -60,7 +60,7 @@ class HabitController {
       if (h.id == id) {
         final newProgress = (h.currentProgress + step).clamp(0.0, h.targetProgress);
         final completed = newProgress >= h.targetProgress;
-        return h.copyWith(
+        return h.copyWith( // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
           currentProgress: newProgress,
           isCompleted: completed,
         );
@@ -74,7 +74,7 @@ class HabitController {
     habitsNotifier.value = habitsNotifier.value.map((h) {
       if (h.id == id) {
         final newProgress = (h.currentProgress - step).clamp(0.0, h.targetProgress);
-        return h.copyWith(
+        return h.copyWith( // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
           currentProgress: newProgress,
           isCompleted: newProgress >= h.targetProgress,
         );
@@ -98,7 +98,7 @@ class HabitController {
     selectedDateNotifier.value = date;
   }
 
-  void dispose() {
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     habitsNotifier.dispose();
     categoriesNotifier.dispose();
     selectedCategoryNotifier.dispose();

@@ -1,7 +1,7 @@
 // Flutter Materyal kütüphanesini içe aktarıyoruz
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 // Üretilecek araç verisi için CarModel sınıfını içe aktarıyoruz
-import '../../car_listing/models/car_model.dart';
+import '../../car_listing/models/car_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
 /// TakeGO Yeni Araç İlanı Verme Denetleyicisi (CreateListingController)
 ///
@@ -14,31 +14,31 @@ class CreateListingController {
   // ---------------------------------------------------------------------------
 
   /// Araç markası giriş kutusu kontrolcüsü (Örn: 'Tesla')
-  final TextEditingController brandController = TextEditingController();
+  final TextEditingController brandController = TextEditingController(); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
 
   /// Araç modeli giriş kutusu kontrolcüsü (Örn: 'Model Y')
-  final TextEditingController modelController = TextEditingController();
+  final TextEditingController modelController = TextEditingController(); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
 
   /// Model yılı giriş kutusu kontrolcüsü (Varsayılan: '2024')
-  final TextEditingController yearController = TextEditingController(text: '2024');
+  final TextEditingController yearController = TextEditingController(text: '2024'); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
 
   /// Tescil plakası giriş kutusu kontrolcüsü (Örn: '34 TGO 100')
-  final TextEditingController plateController = TextEditingController();
+  final TextEditingController plateController = TextEditingController(); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
 
   /// Teslimat lokasyonu giriş kutusu kontrolcüsü (Varsayılan: 'Kadıköy, İstanbul')
-  final TextEditingController locationController = TextEditingController(text: 'Kadıköy, İstanbul');
+  final TextEditingController locationController = TextEditingController(text: 'Kadıköy, İstanbul'); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
 
   /// Günlük kiralama bedeli (TL) giriş kutusu kontrolcüsü
-  final TextEditingController dailyPriceController = TextEditingController();
+  final TextEditingController dailyPriceController = TextEditingController(); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
 
   /// Haftalık kiralama bedeli (TL) giriş kutusu kontrolcüsü
-  final TextEditingController weeklyPriceController = TextEditingController();
+  final TextEditingController weeklyPriceController = TextEditingController(); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
 
   /// Aylık kiralama bedeli (TL) giriş kutusu kontrolcüsü
-  final TextEditingController monthlyPriceController = TextEditingController();
+  final TextEditingController monthlyPriceController = TextEditingController(); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
 
   /// Araç açıklaması ve kiralama kuralları metin kutusu kontrolcüsü
-  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController(); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
 
   // ---------------------------------------------------------------------------
   // REAKTİF FORM DURUMLARI (ValueNotifier)
@@ -169,7 +169,7 @@ class CreateListingController {
   // ---------------------------------------------------------------------------
 
   /// Form denetleyicileri ve dinleyicilerini serbest bırakır
-  void dispose() {
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     // Marka metin denetleyicisini temizle
     brandController.dispose();
     // Model metin denetleyicisini temizle

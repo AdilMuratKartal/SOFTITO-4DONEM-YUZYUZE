@@ -1,18 +1,18 @@
-import 'package:flutter/material.dart';
-import '../models/dentist.dart';
-import '../models/treatment.dart';
-import '../models/appointment.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import '../models/dentist.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../models/treatment.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../models/appointment.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatelessWidget { // HomeScreen sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
+  const HomeScreen({super.key}); // Sabit constructor, üst sınıfa key parametresini gönderir
 
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
+    return SingleChildScrollView( // Küçük ekranlarda taşma (overflow) hatası vermesin, ekran rahatça kaydırılsın diye sarmalıyoruz
+      physics: const BouncingScrollPhysics(), // iOS tarzı yaylanma kaydırma efekti veriyoruz
       padding: const EdgeInsets.only(bottom: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+        crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
         children: [
           _buildHeader(),
           _buildSearchBar(),
@@ -28,10 +28,10 @@ class HomeScreen extends StatelessWidget {
   // 1) Üst Başlık — Karşılama
   // ──────────────────────────────────────────
   Widget _buildHeader() {
-    return Container(
+    return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(20, 56, 20, 28),
-      decoration: const BoxDecoration(
+      decoration: const BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
         gradient: LinearGradient(
           colors: [Color(0xFF0EA5E9), Color(0xFF38BDF8)],
           begin: Alignment.topLeft,
@@ -42,11 +42,11 @@ class HomeScreen extends StatelessWidget {
           bottomRight: Radius.circular(28),
         ),
       ),
-      child: Row(
+      child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+            child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+              crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
               children: const [
                 Text(
                   'Merhaba, Kullanıcı 👋',
@@ -56,7 +56,7 @@ class HomeScreen extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                SizedBox(height: 6),
+                SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                 Text(
                   'Bugün dişlerine bakmaya ne dersin?',
                   style: TextStyle(fontSize: 14, color: Colors.white70),
@@ -65,20 +65,20 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           // Profil avatarı
-          Stack(
+          Stack( // Elemanları üst üste bindirmek (katmanlı tasarım yapmak) için Stack kullanıyoruz
             children: [
               const CircleAvatar(
                 radius: 26,
                 backgroundColor: Colors.white24,
                 child: Icon(Icons.person, size: 30, color: Colors.white),
               ),
-              Positioned(
+              Positioned( // Stack içindeki widget'ın konumunu (sol, sağ, üst, alt) piksel olarak ayarlamak için
                 bottom: 0,
                 right: 0,
-                child: Container(
+                child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                   width: 14,
                   height: 14,
-                  decoration: BoxDecoration(
+                  decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                     color: const Color(0xFF22C55E),
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white, width: 2),
@@ -96,13 +96,13 @@ class HomeScreen extends StatelessWidget {
   // 2) Arama Çubuğu
   // ──────────────────────────────────────────
   Widget _buildSearchBar() {
-    return Padding(
+    return Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-      child: Container(
+      child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
+        decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
           color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(14), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
@@ -111,7 +111,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-        child: const TextField(
+        child: const TextField( // Kullanıcıdan metin girdisi almak için form alanı
           decoration: InputDecoration(
             hintText: 'Doktor veya tedavi ara...',
             hintStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
@@ -134,10 +134,10 @@ class HomeScreen extends StatelessWidget {
       orElse: () => dummyAppointments.first,
     );
 
-    return Padding(
+    return Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+        crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
         children: [
           const Text(
             'Yaklaşan Randevunuz',
@@ -147,17 +147,17 @@ class HomeScreen extends StatelessWidget {
               color: Color(0xFF1E293B),
             ),
           ),
-          const SizedBox(height: 12),
-          Container(
+          const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+          Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
             width: double.infinity,
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
+            decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
               gradient: const LinearGradient(
                 colors: [Color(0xFF0EA5E9), Color(0xFF06B6D4)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(18), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
               boxShadow: [
                 BoxShadow(
                   color: const Color(0xFF0EA5E9).withOpacity(0.3),
@@ -166,24 +166,24 @@ class HomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-            child: Row(
+            child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
               children: [
                 // Doktor ikonu
-                Container(
+                Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                   width: 52,
                   height: 52,
-                  decoration: BoxDecoration(
+                  decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                     color: Colors.white24,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(14), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                   ),
                   child: const Icon(Icons.medical_services_rounded,
                       color: Colors.white, size: 26),
                 ),
-                const SizedBox(width: 14),
+                const SizedBox(width: 14), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                 // Bilgiler
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                  child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                    crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                     children: [
                       Text(
                         upcoming.dentist.name,
@@ -193,7 +193,7 @@ class HomeScreen extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                       Text(
                         upcoming.treatment.name,
                         style: const TextStyle(
@@ -203,8 +203,8 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 // Tarih & saat
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                  crossAxisAlignment: CrossAxisAlignment.end, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                   children: [
                     Text(
                       '${upcoming.date.day}/${upcoming.date.month}/${upcoming.date.year}',
@@ -214,13 +214,13 @@ class HomeScreen extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Container(
+                    const SizedBox(height: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                    Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
+                      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                         color: Colors.white24,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                       ),
                       child: Text(
                         upcoming.time,
@@ -245,12 +245,12 @@ class HomeScreen extends StatelessWidget {
   // 4) Tedavi Kategorileri — Yatay Scroll
   // ──────────────────────────────────────────
   Widget _buildTreatmentCategories() {
-    return Padding(
+    return Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
       padding: const EdgeInsets.only(top: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+        crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
         children: [
-          const Padding(
+          const Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               'Tedavi Türleri',
@@ -261,22 +261,22 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
           SizedBox(
             height: 110,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: dummyTreatments.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 12),
-              itemBuilder: (context, index) {
+              itemCount: dummyTreatments.length, // Listede kaç tane eleman gösterileceğini belirtiyoruz
+              separatorBuilder: (_, __) => const SizedBox(width: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+              itemBuilder: (context, index) { // Listenin her bir satırını sırayla oluşturan builder fonksiyonumuz
                 final t = dummyTreatments[index];
-                return Container(
+                return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                   width: 100,
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
+                  decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                     border: Border.all(color: const Color(0xFFE2E8F0)),
                     boxShadow: [
                       BoxShadow(
@@ -286,16 +286,16 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                    mainAxisAlignment: MainAxisAlignment.center, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                     children: [
                       Text(t.icon, style: const TextStyle(fontSize: 28)),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                       Text(
                         t.name,
                         textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2, // Metnin en fazla kaç satır olacağını sınırlıyoruz, taşmasın diye
+                        overflow: TextOverflow.ellipsis, // Metin sığmazsa taşmasın, sonuna üç nokta (...) koysun diye
                         style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
@@ -319,10 +319,10 @@ class HomeScreen extends StatelessWidget {
   Widget _buildTopDentists() {
     final available = dummyDentists.where((d) => d.isAvailable).toList();
 
-    return Padding(
+    return Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+        crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
         children: [
           const Text(
             'Popüler Doktorlar',
@@ -332,20 +332,20 @@ class HomeScreen extends StatelessWidget {
               color: Color(0xFF1E293B),
             ),
           ),
-          const SizedBox(height: 12),
-          ...available.map((d) => _dentistCard(d)),
+          const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+          ...available.map((d) => _dentistCard(d)), // Kartın arkasına gölge verip derinlik katıyoruz (elevation - z koordinatı)
         ],
       ),
     );
   }
 
-  Widget _dentistCard(Dentist d) {
-    return Container(
+  Widget _dentistCard(Dentist d) { // Kartın arkasına gölge verip derinlik katıyoruz (elevation - z koordinatı)
+    return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
+      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.04),
@@ -354,7 +354,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
+      child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
         children: [
           // Avatar
           CircleAvatar(
@@ -369,11 +369,11 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 14),
+          const SizedBox(width: 14), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
           // Ad & uzmanlık
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+            child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+              crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
               children: [
                 Text(
                   d.name,
@@ -383,7 +383,7 @@ class HomeScreen extends StatelessWidget {
                     color: Color(0xFF1E293B),
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                 Text(
                   d.specialty,
                   style: const TextStyle(
@@ -395,15 +395,15 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           // Yıldız & deneyim
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+            crossAxisAlignment: CrossAxisAlignment.end, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
             children: [
-              Row(
+              Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Icon(Icons.star_rounded,
                       color: Color(0xFFF59E0B), size: 18),
-                  const SizedBox(width: 3),
+                  const SizedBox(width: 3), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                   Text(
                     d.rating.toString(),
                     style: const TextStyle(
@@ -414,7 +414,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
               Text(
                 '${d.experienceYears} yıl',
                 style: const TextStyle(

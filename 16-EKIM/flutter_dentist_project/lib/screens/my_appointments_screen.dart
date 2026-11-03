@@ -1,27 +1,27 @@
-import 'package:flutter/material.dart';
-import '../models/appointment.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import '../models/appointment.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
-class MyAppointmentsScreen extends StatefulWidget {
-  const MyAppointmentsScreen({super.key});
+class MyAppointmentsScreen extends StatefulWidget { // MyAppointmentsScreen sınıfı, zamanla durumu (state) değişebilen dinamik ekranımız için StatefulWidget yapısıdır
+  const MyAppointmentsScreen({super.key}); // Sabit constructor, üst sınıfa key parametresini gönderir
 
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   State<MyAppointmentsScreen> createState() => _MyAppointmentsScreenState();
 }
 
-class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
+class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> // Ekranın durumunu (state), mantığını ve değişkenlerini tuttuğumuz State sınıfımız
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+  late TabController _tabController; // TabController türünden _tabController adlı değişkenimiz
 
-  @override
-  void initState() {
-    super.initState();
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  void initState() { // State ağaca ilk eklendiğinde çalışan metod, sayfa açılırkenki ilk hazırlıklar burda yapılır
+    super.initState(); // Üst sınıfın initState metodunu tetikleyip başlatıyoruz
     _tabController = TabController(length: 3, vsync: this);
   }
 
-  @override
-  void dispose() {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     _tabController.dispose();
-    super.dispose();
+    super.dispose(); // Üst sınıfın dispose metodunu çağırıp temizliği tamamlıyoruz
   }
 
   List<Appointment> _filterByStatuses(List<AppointmentStatus> statuses) {
@@ -30,13 +30,13 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
         .toList();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
+    return Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
       children: [
         _buildHeader(),
         _buildTabBar(),
-        Expanded(
+        Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
           child: TabBarView(
             controller: _tabController,
             children: [
@@ -66,12 +66,12 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
   // 1) Üst Başlık
   // ──────────────────────────────────────────
   Widget _buildHeader() {
-    return Container(
+    return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(20, 56, 20, 16),
       color: const Color(0xFFF8FAFC),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+        mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
         children: [
           const Text(
             'Randevularım',
@@ -81,11 +81,11 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
               color: Color(0xFF1E293B),
             ),
           ),
-          Container(
+          Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
+            decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
               color: const Color(0xFFE0F2FE),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
             ),
             child: Text(
               '${dummyAppointments.length} kayıt',
@@ -105,17 +105,17 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
   // 2) Tab Bar — Aktif / Tamamlanan / İptal
   // ──────────────────────────────────────────
   Widget _buildTabBar() {
-    return Container(
+    return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
+      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
         color: const Color(0xFFF1F5F9),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
       ),
       child: TabBar(
         controller: _tabController,
-        indicator: BoxDecoration(
+        indicator: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
           color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.06),
@@ -149,13 +149,13 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
     required String emptyMessage,
   }) {
     if (appointments.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      return Center( // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
+        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+          mainAxisAlignment: MainAxisAlignment.center, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
           children: [
             const Icon(Icons.event_busy_rounded,
                 size: 64, color: Color(0xFFCBD5E1)),
-            const SizedBox(height: 12),
+            const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             Text(
               emptyMessage,
               style: const TextStyle(
@@ -169,12 +169,12 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
     }
 
     return ListView.separated(
-      physics: const BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(), // iOS tarzı yaylanma kaydırma efekti veriyoruz
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-      itemCount: appointments.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
-      itemBuilder: (context, index) {
-        return _appointmentCard(appointments[index]);
+      itemCount: appointments.length, // Listede kaç tane eleman gösterileceğini belirtiyoruz
+      separatorBuilder: (_, __) => const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+      itemBuilder: (context, index) { // Listenin her bir satırını sırayla oluşturan builder fonksiyonumuz
+        return _appointmentCard(appointments[index]); // Kartın arkasına gölge verip derinlik katıyoruz (elevation - z koordinatı)
       },
     );
   }
@@ -182,14 +182,14 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
   // ──────────────────────────────────────────
   // 4) Tek Randevu Kartı
   // ──────────────────────────────────────────
-  Widget _appointmentCard(Appointment appt) {
+  Widget _appointmentCard(Appointment appt) { // Kartın arkasına gölge verip derinlik katıyoruz (elevation - z koordinatı)
     final statusInfo = _statusStyle(appt.status);
 
-    return Container(
+    return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
+      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(18), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.04),
@@ -198,10 +198,10 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
           ),
         ],
       ),
-      child: Column(
+      child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
         children: [
           // Üst: Doktor bilgisi + durum badge
-          Row(
+          Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
             children: [
               CircleAvatar(
                 radius: 24,
@@ -215,10 +215,10 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              const SizedBox(width: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+              Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                  crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                   children: [
                     Text(
                       appt.dentist.name,
@@ -228,7 +228,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
                         color: Color(0xFF1E293B),
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 2), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                     Text(
                       appt.dentist.specialty,
                       style: const TextStyle(
@@ -239,12 +239,12 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
                   ],
                 ),
               ),
-              Container(
+              Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
+                decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                   color: statusInfo.color.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(8), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                 ),
                 child: Text(
                   statusInfo.label,
@@ -257,35 +257,35 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 14), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
           // Divider
-          Container(
+          Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
             height: 1,
             color: const Color(0xFFF1F5F9),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 14), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
           // Alt: Tedavi, tarih, saat
-          Row(
+          Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
             children: [
               _infoChip(Icons.medical_services_outlined,
                   appt.treatment.name),
               const Spacer(),
               _infoChip(Icons.calendar_today_rounded,
                   '${appt.date.day}/${appt.date.month}/${appt.date.year}'),
-              const SizedBox(width: 12),
+              const SizedBox(width: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
               _infoChip(Icons.access_time_rounded, appt.time),
             ],
           ),
           // İptal / Yeniden planla butonları (aktif randevularda)
           if (appt.status == AppointmentStatus.confirmed ||
               appt.status == AppointmentStatus.pending) ...[
-            const SizedBox(height: 14),
-            Row(
+            const SizedBox(height: 14), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+            Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
               children: [
-                Expanded(
-                  child: OutlinedButton(
+                Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                  child: OutlinedButton( // Kullanıcının tıklayabileceği aksiyon butonu bileşenimiz
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar( // Ekranın altında kullanıcıya bilgi veren kısa SnackBar mesajı gösteriyoruz
                         const SnackBar(
                           content: Text('Randevu iptal edildi.'),
                           backgroundColor: Color(0xFFEF4444),
@@ -296,7 +296,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
                       foregroundColor: const Color(0xFFEF4444),
                       side: const BorderSide(color: Color(0xFFFECACA)),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 10),
                     ),
@@ -304,11 +304,11 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
                         style: TextStyle(fontSize: 13)),
                   ),
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: ElevatedButton(
+                const SizedBox(width: 10), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                  child: ElevatedButton( // Kullanıcının tıklayabileceği aksiyon butonu bileşenimiz
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar( // Ekranın altında kullanıcıya bilgi veren kısa SnackBar mesajı gösteriyoruz
                         const SnackBar(
                           content: Text('Yeniden planlama açıldı.'),
                           backgroundColor: Color(0xFF0EA5E9),
@@ -318,10 +318,10 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF0EA5E9),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 10),
-                      elevation: 0,
+                      elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
                     ),
                     child: const Text('Yeniden Planla',
                         style:
@@ -337,11 +337,11 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
   }
 
   Widget _infoChip(IconData icon, String text) {
-    return Row(
+    return Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: 15, color: const Color(0xFF94A3B8)),
-        const SizedBox(width: 4),
+        const SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
         Text(
           text,
           style: const TextStyle(
@@ -368,7 +368,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
 }
 
 class _StatusStyle {
-  final String label;
-  final Color color;
-  const _StatusStyle(this.label, this.color);
+  final String label; // String türünden label adlı değişkenimiz
+  final Color color; // Color türünden color adlı değişkenimiz
+  const _StatusStyle(this.label, this.color); // label alanına değer aktarıyoruz
 }

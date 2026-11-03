@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
-import '../../../core/services/storage_service.dart';
-import '../models/journal_entry_model.dart';
+import '../../../core/services/storage_service.dart'; // Veri çekme ve API haberleşmesini yapan servis katmanımızı dahil ediyoruz
+import '../models/journal_entry_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
 /// Günlük Yazma / Düzenleme ekranının reaktif durumlarını yöneten Controller.
 class EntryEditorController {
-  final JournalEntry? initialEntry;
-  final DateTime? targetDate;
-  final String? initialMood;
+  final JournalEntry? initialEntry; // JournalEntry? türünden initialEntry adlı değişkenimiz
+  final DateTime? targetDate; // DateTime? türünden targetDate adlı değişkenimiz
+  final String? initialMood; // String? türünden initialMood adlı değişkenimiz
 
   late final ValueNotifier<String> titleNotifier;
   late final ValueNotifier<String> contentNotifier;
@@ -17,9 +17,9 @@ class EntryEditorController {
       ValueNotifier<String?>(null);
 
   EntryEditorController({
-    this.initialEntry,
-    this.targetDate,
-    this.initialMood,
+    this.initialEntry, // initialEntry alanına değer aktarıyoruz
+    this.targetDate, // targetDate alanına değer aktarıyoruz
+    this.initialMood, // initialMood alanına değer aktarıyoruz
   }) {
     titleNotifier = ValueNotifier<String>(initialEntry?.title ?? '');
     contentNotifier = ValueNotifier<String>(initialEntry?.content ?? '');
@@ -63,7 +63,7 @@ class EntryEditorController {
     isSavingNotifier.value = true;
     errorMessageNotifier.value = null;
 
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       final entry = JournalEntry(
         id: initialEntry?.id ??
             DateTime.now().millisecondsSinceEpoch.toString(),
@@ -81,7 +81,7 @@ class EntryEditorController {
     }
   }
 
-  void dispose() {
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     titleNotifier.dispose();
     contentNotifier.dispose();
     selectedMoodNotifier.dispose();

@@ -1,5 +1,5 @@
 // Ürün kategorilerini tip güvenli (type-safe) şekilde yöneten numaralandırma (enum)
-enum Kategori {
+enum Kategori { // Kategori enum yapısı, belirli sabit seçenekleri tip güvenli şekilde listelememizi sağlar
   // Tüm kategorileri temsil eden varsayılan filtre seçeneği
   hepsi,
   // Elektronik ürünler kategorisi (FakeStore: electronics)

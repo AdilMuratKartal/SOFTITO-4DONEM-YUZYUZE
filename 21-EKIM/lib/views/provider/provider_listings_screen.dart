@@ -1,18 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import 'package:provider/provider.dart'; // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
 import '../../core/theme/app_theme.dart';
-import '../../providers/auth_provider.dart';
-import '../../providers/listing_provider.dart';
-import '../shared/widgets/location_badge.dart';
-import 'create_listing_screen.dart';
+import '../../providers/auth_provider.dart'; // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
+import '../../providers/listing_provider.dart'; // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
+import '../shared/widgets/location_badge.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
+import 'create_listing_screen.dart'; // Sayfa ve ekran tasarım dosyalarımızı bu dosyaya import ediyoruz
 
-class ProviderListingsScreen extends StatelessWidget {
-  final bool isTab;
+class ProviderListingsScreen extends StatelessWidget { // ProviderListingsScreen sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
+  final bool isTab; // bool türünden isTab adlı değişkenimiz
 
-  const ProviderListingsScreen({super.key, this.isTab = false});
+  const ProviderListingsScreen({super.key, this.isTab = false}); // Sabit constructor, üst sınıfa key parametresini gönderir
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     final authProvider = context.watch<AuthProvider>();
     final listingProvider = context.watch<ListingProvider>();
     final currentUser = authProvider.currentUser;
@@ -21,42 +21,42 @@ class ProviderListingsScreen extends StatelessWidget {
         ? listingProvider.getByProvider(currentUser.id)
         : [];
 
-    return Scaffold(
+    return Scaffold( // Sayfa iskeletini (appBar, body, floatingActionButton) oluşturan ana Scaffold widget'ımız
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Müsaitlik ve Hizmet İlanlarım'),
+      appBar: AppBar( // Sayfanın üst kısmındaki başlık ve aksiyon barı (AppBar)
+        title: const Text('Müsaitlik ve Hizmet İlanlarım'), // Sayfa başlığını ekrana yazdırıyoruz
         automaticallyImplyLeading: !isTab,
       ),
       body: myListings.isEmpty
-          ? Center(
-              child: Padding(
+          ? Center( // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
+              child: Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
                 padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                  mainAxisAlignment: MainAxisAlignment.center, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                   children: [
-                    Container(
+                    Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                       padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
+                      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                         color: AppColors.secondary.withAlpha(20),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.storefront_outlined, size: 48, color: AppColors.secondary),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                     const Text(
                       'Henüz Yayında Bir İlanınız Yok',
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                     const Text(
                       'Müşterilerden randevu ve teklif alabilmek için çalışma saatlerinizi ve hizmetinizi yayınlayın.',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                     ElevatedButton.icon(
                       onPressed: () {
-                        Navigator.of(context).push(
+                        Navigator.of(context).push( // Yeni bir sayfaya geçiş yapıp sayfa yığınına (stack) ekliyoruz
                           MaterialPageRoute(builder: (_) => const CreateListingScreen()),
                         );
                       },
@@ -67,21 +67,21 @@ class ProviderListingsScreen extends StatelessWidget {
                 ),
               ),
             )
-          : ListView.builder(
+          : ListView.builder( // Sadece ekranda görünen elemanları çizerek RAM tasarrufu sağlayan performanslı liste
               padding: const EdgeInsets.all(16),
-              itemCount: myListings.length,
-              itemBuilder: (context, index) {
+              itemCount: myListings.length, // Listede kaç tane eleman gösterileceğini belirtiyoruz
+              itemBuilder: (context, index) { // Listenin her bir satırını sırayla oluşturan builder fonksiyonumuz
                 final listing = myListings[index];
 
-                return Card(
-                  child: Padding(
+                return Card( // Kartın arkasına gölge verip derinlik katıyoruz (elevation - z koordinatı)
+                  child: Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
                     padding: const EdgeInsets.all(14),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                      crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                       children: [
-                        Row(
+                        Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                           children: [
-                            Expanded(
+                            Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
                               child: Text(
                                 listing.title,
                                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -97,14 +97,14 @@ class ProviderListingsScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 6),
-                        Row(
+                        const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                        Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                           children: [
-                            Container(
+                            Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                              decoration: BoxDecoration(
+                              decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                                 color: AppColors.primary.withAlpha(20),
-                                borderRadius: BorderRadius.circular(6),
+                                borderRadius: BorderRadius.circular(6), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                               ),
                               child: Text(
                                 listing.sector,
@@ -115,16 +115,16 @@ class ProviderListingsScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                             LocationBadge(locationType: listing.locationType),
                           ],
                         ),
-                        const SizedBox(height: 8),
-                        Row(
+                        const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                        Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                           children: [
                             const Icon(Icons.location_on_outlined, size: 14, color: AppColors.textSecondary),
-                            const SizedBox(width: 4),
-                            Expanded(
+                            const SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                            Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
                               child: Text(
                                 listing.shopAddress,
                                 style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
@@ -132,21 +132,21 @@ class ProviderListingsScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                         const Text(
                           'Müsait Saat Dilimleri:',
                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                         ),
-                        const SizedBox(height: 6),
-                        Wrap(
+                        const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                        Wrap( // Ekrana sığmayan butonlar ve etiketler alt satıra geçsin, taşma yapmasın diye Wrap kullanıyoruz
                           spacing: 6,
                           runSpacing: 4,
                           children: listing.timeSlots.map<Widget>((slot) {
-                            return Container(
+                            return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                              decoration: BoxDecoration(
+                              decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                                 color: AppColors.background,
-                                borderRadius: BorderRadius.circular(6),
+                                borderRadius: BorderRadius.circular(6), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                                 border: Border.all(color: AppColors.border),
                               ),
                               child: Text(slot, style: const TextStyle(fontSize: 11, color: AppColors.textPrimary)),
@@ -161,7 +161,7 @@ class ProviderListingsScreen extends StatelessWidget {
             ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.of(context).push(
+          Navigator.of(context).push( // Yeni bir sayfaya geçiş yapıp sayfa yığınına (stack) ekliyoruz
             MaterialPageRoute(builder: (_) => const CreateListingScreen()),
           );
         },

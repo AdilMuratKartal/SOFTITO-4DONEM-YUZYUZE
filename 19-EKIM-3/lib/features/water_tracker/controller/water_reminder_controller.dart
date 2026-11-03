@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:async'; // Asenkron işlemler, Timer ve Stream (veri akışı) yapıları için içeri aktarıyoruz
 import 'package:flutter/foundation.dart';
 
 /// Su İçme Hatırlatıcı Zamanlayıcı Kontrolcüsü
@@ -65,7 +65,7 @@ class WaterReminderController {
     isCompletedNotifier.value = false;
   }
 
-  void dispose() {
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     _timer?.cancel();
     remainingSecondsNotifier.dispose();
     initialSecondsNotifier.dispose();

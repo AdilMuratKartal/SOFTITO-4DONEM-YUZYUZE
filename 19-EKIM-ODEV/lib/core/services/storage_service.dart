@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import '../../features/entry_editor/models/journal_entry_model.dart';
-import '../theme/models/app_theme_type.dart';
+import '../../features/entry_editor/models/journal_entry_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../theme/models/app_theme_type.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
 /// iJournal uygulamasının yerel veri saklama servisi.
 ///
@@ -13,7 +13,7 @@ class StorageService {
   final ValueNotifier<List<JournalEntry>> entriesNotifier =
       ValueNotifier<List<JournalEntry>>([]);
 
-  bool _initialized = false;
+  bool _initialized = false; // Durum kontrolü için tuttuğumuz bool bayrağımız (_initialized)
 
   /// Servisi başlatır ve demo/kayıtlı verileri yükler.
   Future<void> init() async {

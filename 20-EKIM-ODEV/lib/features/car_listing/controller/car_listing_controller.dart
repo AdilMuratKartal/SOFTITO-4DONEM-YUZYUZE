@@ -3,9 +3,9 @@ import 'package:flutter/foundation.dart';
 // Başlangıç mock araçlar listesini içe aktarıyoruz
 import '../../../core/constants/mock_cars.dart';
 // Araç veri modelini tip güvenliği için içe aktarıyoruz
-import '../models/car_model.dart';
+import '../models/car_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 // Kiralama periyot tiplerini (günlük, haftalık, aylık) içe aktarıyoruz
-import '../models/rental_period_type.dart';
+import '../models/rental_period_type.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
 /// TakeGO İlan Listeleme ve Arama Denetleyicisi (CarListingController)
 ///
@@ -132,7 +132,7 @@ class CarListingController {
   // ---------------------------------------------------------------------------
 
   /// Sayfa kapatıldığında tüm dinleyicileri serbest bırakır (Memory leak önler)
-  void dispose() {
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     // Seçili periyot bildiricisini temizle
     selectedPeriod.dispose();
     // Ana araç listesi bildiricisini temizle

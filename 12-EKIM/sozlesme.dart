@@ -113,16 +113,16 @@ class GenericCache<T extends Identifiable>{
 
 import 'dart:async';
 
-void main(){
-  print("1.Senkron başladı");
-  scheduleMicrotask((){
-    print("2.Task Oluştu(Vip Kuyruk)");
+void main(){//dart CLI başlatması için kullandığımız ana fonksiyon 
+  print("1.Senkron başladı");//terminale yazdırıyoruz.
+  scheduleMicrotask((){//microtask kuyruğuna alıp öncelikli olarak bunun için dekileri çalıştırıyoruz
+    print("2.Task Oluştu(Vip Kuyruk)");//terminale yazdırıyoruz
   });
   Future((){
-    print("3.Standart Event Kuyruğu");
+    print("3.Standart Event Kuyruğu");//eventqueue kuyruğuna alıp microtasklardan sonra olarak bunun için dekileri çalıştırıyoruz //terminale yazdırıyoruz
   });
   Future.microtask((){
-    print("4.Future microtask çalıştı");
+    print("4.Future microtask çalıştı");//microtask kuyruğuna alıp öncelikli olarak bunun için dekileri çalıştırıyoruz //terminale yazdırıyoruz
   });
-  print("5.Senkron kod tamamlandı");//1.5.2.4.3.
+  print("5.Senkron kod tamamlandı");//1.5.2.4.3. //terminale yazdırıyoruz
 }

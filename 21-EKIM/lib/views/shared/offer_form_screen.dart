@@ -1,51 +1,51 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import 'package:provider/provider.dart'; // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
 import '../../core/theme/app_theme.dart';
-import '../../models/listing_model.dart';
-import '../../models/appointment_model.dart';
-import '../../providers/auth_provider.dart';
-import '../../providers/appointment_provider.dart';
-import 'widgets/time_slot_chip.dart';
-import 'widgets/location_badge.dart';
+import '../../models/listing_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../../models/appointment_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../../providers/auth_provider.dart'; // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
+import '../../providers/appointment_provider.dart'; // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
+import 'widgets/time_slot_chip.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
+import 'widgets/location_badge.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
 
-class OfferFormScreen extends StatefulWidget {
-  final ListingModel? listing;
+class OfferFormScreen extends StatefulWidget { // OfferFormScreen sınıfı, zamanla durumu (state) değişebilen dinamik ekranımız için StatefulWidget yapısıdır
+  final ListingModel? listing; // ListingModel? türünden listing adlı değişkenimiz
   final AppointmentModel? existingAppointment; // Karşı teklif için mevcut randevu
-  final bool isCounterOffer;
+  final bool isCounterOffer; // bool türünden isCounterOffer adlı değişkenimiz
 
-  const OfferFormScreen({
+  const OfferFormScreen({ // Genel, sabit sınıf constructor'ı
     super.key,
-    this.listing,
-    this.existingAppointment,
-    this.isCounterOffer = false,
+    this.listing, // listing alanına değer aktarıyoruz
+    this.existingAppointment, // existingAppointment alanına değer aktarıyoruz
+    this.isCounterOffer = false, // isCounterOffer alanına değer aktarıyoruz
   });
 
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   State<OfferFormScreen> createState() => _OfferFormScreenState();
 }
 
-class _OfferFormScreenState extends State<OfferFormScreen> {
+class _OfferFormScreenState extends State<OfferFormScreen> { // Ekranın durumunu (state), mantığını ve değişkenlerini tuttuğumuz State sınıfımız
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _priceController;
   late final TextEditingController _customAddressController;
   late final TextEditingController _noteController;
 
   String? _selectedTime;
-  late String _selectedLocationType;
-  bool _useProfileAddress = true;
-  String _selectedDate = '2026-10-22';
+  late String _selectedLocationType; // String türünden _selectedLocationType adlı değişkenimiz
+  bool _useProfileAddress = true; // Durum kontrolü için tuttuğumuz bool bayrağımız (_useProfileAddress)
+  String _selectedDate = '2026-10-22'; // String türünden _selectedDate değişkenimiz
 
-  @override
-  void initState() {
-    super.initState();
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  void initState() { // State ağaca ilk eklendiğinde çalışan metod, sayfa açılırkenki ilk hazırlıklar burda yapılır
+    super.initState(); // Üst sınıfın initState metodunu tetikleyip başlatıyoruz
     final basePrice = widget.existingAppointment?.offeredPrice ??
         widget.listing?.basePrice ??
         400.0;
-    _priceController = TextEditingController(text: basePrice.toStringAsFixed(0));
-    _customAddressController = TextEditingController(
+    _priceController = TextEditingController(text: basePrice.toStringAsFixed(0)); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
+    _customAddressController = TextEditingController( // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
       text: widget.existingAppointment?.address ?? '',
     );
-    _noteController = TextEditingController(
+    _noteController = TextEditingController( // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
       text: widget.existingAppointment?.description ?? '',
     );
 
@@ -62,18 +62,18 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
     }
   }
 
-  @override
-  void dispose() {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     _priceController.dispose();
     _customAddressController.dispose();
     _noteController.dispose();
-    super.dispose();
+    super.dispose(); // Üst sınıfın dispose metodunu çağırıp temizliği tamamlıyoruz
   }
 
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedTime == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar( // Ekranın altında kullanıcıya bilgi veren kısa SnackBar mesajı gösteriyoruz
         const SnackBar(content: Text('Lütfen bir randevu saati seçiniz.')),
       );
       return;
@@ -105,13 +105,13 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
         counterOfferBy: currentUser.role,
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar( // Ekranın altında kullanıcıya bilgi veren kısa SnackBar mesajı gösteriyoruz
         const SnackBar(
           content: Text('Karşı teklif başarıyla iletildi!'),
           backgroundColor: AppColors.approvedText,
         ),
       );
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(); // Açık olan sayfayı veya diyaloğu kapatıp bir önceki ekrana dönüyoruz
     } else if (widget.listing != null) {
       // Yeni randevu talebi / İlk teklif
       final newAppointment = AppointmentModel(
@@ -119,8 +119,8 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
         listingId: widget.listing!.id,
         customerId: currentUser.id,
         customerName: currentUser.name,
-        providerId: widget.listing!.providerId,
-        providerName: widget.listing!.providerName,
+        providerId: widget.listing!.providerId, // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
+        providerName: widget.listing!.providerName, // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
         serviceTitle: widget.listing!.title,
         description: _noteController.text.trim().isEmpty
             ? 'Randevu talebi oluşturuldu.'
@@ -137,56 +137,56 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
 
       appointmentProvider.createOffer(newAppointment);
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar( // Ekranın altında kullanıcıya bilgi veren kısa SnackBar mesajı gösteriyoruz
         const SnackBar(
           content: Text('Teklifiniz ve randevu talebiniz hizmet verene iletildi!'),
           backgroundColor: AppColors.approvedText,
         ),
       );
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(); // Açık olan sayfayı veya diyaloğu kapatıp bir önceki ekrana dönüyoruz
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     final appointmentProvider = context.watch<AppointmentProvider>();
     final authProvider = context.watch<AuthProvider>();
     final currentUser = authProvider.currentUser;
 
     final serviceTitle = widget.listing?.title ?? widget.existingAppointment?.serviceTitle ?? 'Hizmet';
-    final providerName = widget.listing?.providerName ?? widget.existingAppointment?.providerName ?? 'Uzman';
+    final providerName = widget.listing?.providerName ?? widget.existingAppointment?.providerName ?? 'Uzman'; // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
     final shopAddress = widget.listing?.shopAddress ?? 'Dükkan Adresi';
     final timeSlots = widget.listing?.timeSlots ??
         ['09:00', '10:30', '12:00', '14:00', '15:30', '17:00'];
 
-    return Scaffold(
+    return Scaffold( // Sayfa iskeletini (appBar, body, floatingActionButton) oluşturan ana Scaffold widget'ımız
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: Text(widget.isCounterOffer ? 'Karşı Teklif Sun' : 'Randevu ve Teklif Formu'),
+      appBar: AppBar( // Sayfanın üst kısmındaki başlık ve aksiyon barı (AppBar)
+        title: Text(widget.isCounterOffer ? 'Karşı Teklif Sun' : 'Randevu ve Teklif Formu'), // Sayfa başlığını ekrana yazdırıyoruz
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
+      body: SafeArea( // Çentik ve sistem çubuklarıyla arayüzün çakışmasını önleyen güvenli alan
+        child: SingleChildScrollView( // Küçük ekranlarda taşma (overflow) hatası vermesin, ekran rahatça kaydırılsın diye sarmalıyoruz
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Form(
             key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+              crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
               children: [
                 // Başlık Kartı
-                Card(
-                  child: Padding(
+                Card( // Kartın arkasına gölge verip derinlik katıyoruz (elevation - z koordinatı)
+                  child: Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
                     padding: const EdgeInsets.all(14),
-                    child: Row(
+                    child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                       children: [
                         CircleAvatar(
                           radius: 22,
                           backgroundColor: AppColors.primary.withAlpha(25),
                           child: const Icon(Icons.handyman_outlined, color: AppColors.primary),
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        const SizedBox(width: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                        Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                          child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                            crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                             children: [
                               Text(
                                 serviceTitle,
@@ -196,9 +196,9 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
                                   color: AppColors.textPrimary,
                                 ),
                               ),
-                              const SizedBox(height: 2),
+                              const SizedBox(height: 2), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                               Text(
-                                providerName,
+                                providerName, // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
                                 style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
                               ),
                             ],
@@ -210,15 +210,15 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                 // 1. Saat Dilimi Seçimi
                 const Text(
                   'Saat Dilimi Seçimi',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
                 ),
-                const SizedBox(height: 8),
-                Wrap(
+                const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                Wrap( // Ekrana sığmayan butonlar ve etiketler alt satıra geçsin, taşma yapmasın diye Wrap kullanıyoruz
                   spacing: 8,
                   runSpacing: 8,
                   children: timeSlots.map<Widget>((time) {
@@ -232,50 +232,50 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
                       isBooked: isBooked,
                       isSelected: isSelected,
                       onTap: () {
-                        setState(() {
+                        setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
                           _selectedTime = time;
                         });
                       },
                     );
                   }).toList(),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                 // 2. Ulaşım ve Konum Seçimi
                 const Text(
                   'Ulaşım ve Hizmet Yeri Tercihi',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
                 ),
-                const SizedBox(height: 8),
-                Row(
+                const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                   children: [
-                    Expanded(
-                      child: GestureDetector(
+                    Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                      child: GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
                         onTap: () {
-                          setState(() {
+                          setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
                             _selectedLocationType = 'sen_gel';
                           });
                         },
-                        child: Container(
+                        child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
-                          decoration: BoxDecoration(
+                          decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                             color: _selectedLocationType == 'sen_gel' ? AppColors.comeToMeBg : AppColors.surface,
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(8), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                             border: Border.all(
                               color: _selectedLocationType == 'sen_gel' ? AppColors.comeToMeText : AppColors.border,
                               width: _selectedLocationType == 'sen_gel' ? 1.5 : 1,
                             ),
                           ),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          child: const Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                            mainAxisAlignment: MainAxisAlignment.center, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                             children: [
                               Icon(Icons.home_repair_service_outlined, size: 15, color: AppColors.comeToMeText),
-                              SizedBox(width: 4),
+                              SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                               Flexible(
                                 child: Text(
                                   'Sen Gel (Adrese)',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1, // Metnin en fazla kaç satır olacağını sınırlıyoruz, taşmasın diye
+                                  overflow: TextOverflow.ellipsis, // Metin sığmazsa taşmasın, sonuna üç nokta (...) koysun diye
                                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.comeToMeText),
                                 ),
                               ),
@@ -284,34 +284,34 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: GestureDetector(
+                    const SizedBox(width: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                    Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                      child: GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
                         onTap: () {
-                          setState(() {
+                          setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
                             _selectedLocationType = 'ben_geleyim';
                           });
                         },
-                        child: Container(
+                        child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
-                          decoration: BoxDecoration(
+                          decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                             color: _selectedLocationType == 'ben_geleyim' ? AppColors.iWillComeBg : AppColors.surface,
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(8), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                             border: Border.all(
                               color: _selectedLocationType == 'ben_geleyim' ? AppColors.iWillComeText : AppColors.border,
                               width: _selectedLocationType == 'ben_geleyim' ? 1.5 : 1,
                             ),
                           ),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          child: const Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                            mainAxisAlignment: MainAxisAlignment.center, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                             children: [
                               Icon(Icons.storefront_outlined, size: 15, color: AppColors.iWillComeText),
-                              SizedBox(width: 4),
+                              SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                               Flexible(
                                 child: Text(
                                   'Ben Geleyim (Dükkan)',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1, // Metnin en fazla kaç satır olacağını sınırlıyoruz, taşmasın diye
+                                  overflow: TextOverflow.ellipsis, // Metin sığmazsa taşmasın, sonuna üç nokta (...) koysun diye
                                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.iWillComeText),
                                 ),
                               ),
@@ -322,24 +322,24 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                 // Adres Kartı
                 if (_selectedLocationType == 'ben_geleyim') ...[
-                  Card(
-                    child: Padding(
+                  Card( // Kartın arkasına gölge verip derinlik katıyoruz (elevation - z koordinatı)
+                    child: Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
                       padding: const EdgeInsets.all(12),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                        crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                         children: [
                           const Icon(Icons.location_on_outlined, color: AppColors.iWillComeText, size: 20),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          const SizedBox(width: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                          Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                            child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                              crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                               children: [
                                 const Text('Hizmet Verenin Dükkan Adresi', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-                                const SizedBox(height: 2),
+                                const SizedBox(height: 2), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                                 Text(shopAddress, style: const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
                               ],
                             ),
@@ -349,30 +349,30 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
                     ),
                   ),
                 ] else ...[
-                  Card(
-                    child: Padding(
+                  Card( // Kartın arkasına gölge verip derinlik katıyoruz (elevation - z koordinatı)
+                    child: Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
                       padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                        crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                         children: [
-                          CheckboxListTile(
+                          CheckboxListTile( // Başlık, alt başlık ve simgeleri hazır düzenli gösteren standart liste satırı widget'ı
                             contentPadding: EdgeInsets.zero,
-                            title: const Text('Profilimdeki Kayıtlı Adresi Kullan', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                            title: const Text('Profilimdeki Kayıtlı Adresi Kullan', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)), // Sayfa başlığını ekrana yazdırıyoruz
                             value: _useProfileAddress,
                             activeColor: AppColors.primary,
                             onChanged: (val) {
-                              setState(() {
+                              setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
                                 _useProfileAddress = val ?? true;
                               });
                             },
                           ),
                           if (_useProfileAddress)
-                            Container(
+                            Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                               width: double.infinity,
                               padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
+                              decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                                 color: AppColors.background,
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                               ),
                               child: Text(
                                 currentUser?.savedAddress ?? 'Kayıtlı adresiniz bulunmuyor, lütfen yeni adres giriniz.',
@@ -380,9 +380,9 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
                               ),
                             )
                           else
-                            TextFormField(
+                            TextFormField( // Kullanıcıdan metin girdisi almak için form alanı
                               controller: _customAddressController,
-                              maxLines: 2,
+                              maxLines: 2, // Metnin en fazla kaç satır olacağını sınırlıyoruz, taşmasın diye
                               decoration: const InputDecoration(
                                 hintText: 'Hizmet alınacak tam açık adresi yazınız...',
                               ),
@@ -398,15 +398,15 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
                     ),
                   ),
                 ],
-                const SizedBox(height: 16),
+                const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                 // 3. Fiyat Teklifi ve Not
                 const Text(
                   'Fiyat Teklifiniz (₺)',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
                 ),
-                const SizedBox(height: 8),
-                TextFormField(
+                const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                TextFormField( // Kullanıcıdan metin girdisi almak için form alanı
                   controller: _priceController,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
@@ -419,26 +419,26 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                 const Text(
                   'Detay / Açıklama',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
                 ),
-                const SizedBox(height: 8),
-                TextFormField(
+                const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                TextFormField( // Kullanıcıdan metin girdisi almak için form alanı
                   controller: _noteController,
-                  maxLines: 2,
+                  maxLines: 2, // Metnin en fazla kaç satır olacağını sınırlıyoruz, taşmasın diye
                   decoration: const InputDecoration(
                     hintText: 'İşin özeti, arıza veya randevu notunuzu belirtiniz...',
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 24), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                 // Gönder Butonu
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
+                  child: ElevatedButton( // Kullanıcının tıklayabileceği aksiyon butonu bileşenimiz
                     onPressed: _submit,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: widget.isCounterOffer ? AppColors.secondary : AppColors.primary,

@@ -1,27 +1,27 @@
 // Flutter çekirdek Material tasarım kütüphanesini içe aktarıyoruz
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 // Açık ve koyu tema stillerini barındıran AppTheme sınıfını içe aktarıyoruz
 import 'core/theme/app_theme.dart';
 // Reaktif tema modunu (Light/Dark) yöneten ThemeController sınıfını içe aktarıyoruz
-import 'core/theme/theme_controller.dart';
+import 'core/theme/theme_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
 // İlan detay sayfası için fiyat hesaplama kontrolcüsünü içe aktarıyoruz
-import 'features/car_detail/controller/car_detail_controller.dart';
+import 'features/car_detail/controller/car_detail_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
 // İlan detay ve rezervasyon sayfasını içe aktarıyoruz
-import 'features/car_detail/view/car_detail_view.dart';
+import 'features/car_detail/view/car_detail_view.dart'; // Sayfa ve ekran tasarım dosyalarımızı bu dosyaya import ediyoruz
 // Araç vitrin listesini ve arama mantığını yöneten kontrolcüyü içe aktarıyoruz
-import 'features/car_listing/controller/car_listing_controller.dart';
+import 'features/car_listing/controller/car_listing_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
 // Araç veri modelini tip güvenliği için içe aktarıyoruz
-import 'features/car_listing/models/car_model.dart';
+import 'features/car_listing/models/car_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 // Araç listeleme ana vitrin ekranını içe aktarıyoruz
-import 'features/car_listing/view/car_listing_view.dart';
+import 'features/car_listing/view/car_listing_view.dart'; // Sayfa ve ekran tasarım dosyalarımızı bu dosyaya import ediyoruz
 // Yeni araç ilanı verme form kontrolcüsünü içe aktarıyoruz
-import 'features/create_listing/controller/create_listing_controller.dart';
+import 'features/create_listing/controller/create_listing_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
 // Yeni araç ilanı verme form arayüzünü içe aktarıyoruz
-import 'features/create_listing/view/create_listing_view.dart';
+import 'features/create_listing/view/create_listing_view.dart'; // Sayfa ve ekran tasarım dosyalarımızı bu dosyaya import ediyoruz
 // Dijital anahtar ve yol asistanı durum kontrolcüsünü içe aktarıyoruz
-import 'features/smart_key_assistant/controller/smart_key_controller.dart';
+import 'features/smart_key_assistant/controller/smart_key_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
 // Dijital kokpit ve anahtar yönetim sayfasını içe aktarıyoruz
-import 'features/smart_key_assistant/view/smart_key_sheet.dart';
+import 'features/smart_key_assistant/view/smart_key_sheet.dart'; // Sayfa ve ekran tasarım dosyalarımızı bu dosyaya import ediyoruz
 
 // =============================================================================
 // UYGULAMA GİRİŞ NOKTASI (main)
@@ -32,7 +32,7 @@ import 'features/smart_key_assistant/view/smart_key_sheet.dart';
 // =============================================================================
 
 // Flutter uygulamasının başlangıç fonksiyonu
-void main() {
+void main() { // Dart ve Flutter uygulamasını başlatan ana giriş fonksiyonumuz
   // Flutter widget motorunun alt sistemlerle doğru haberleştiğini garanti altına alıyoruz
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -40,25 +40,25 @@ void main() {
   final themeController = ThemeController();
 
   // 2. Kök TakeGoApp uygulamasını ayağa kaldırıyoruz
-  runApp(
+  runApp( // runApp ile uygulamanın kök widget'ını yükleyip çizim döngüsünü başlatıyoruz
     // Kök widget'a tema denetleyicisini iletiyoruz
     TakeGoApp(themeController: themeController),
   );
 }
 
 /// TakeGO Ana Kök Uygulama Bileşeni (StatelessWidget)
-class TakeGoApp extends StatelessWidget {
+class TakeGoApp extends StatelessWidget { // TakeGoApp sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // Global tema durumunu yöneten denetleyici referansı
-  final ThemeController themeController;
+  final ThemeController themeController; // ThemeController türünden themeController adlı değişkenimiz
 
   // Sabit kurucu metot
-  const TakeGoApp({
+  const TakeGoApp({ // Genel, sabit sınıf constructor'ı
     super.key,
-    required this.themeController,
+    required this.themeController, // themeController parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     // ValueListenableBuilder ile Gece/Gündüz modları ağır setState olmadan reaktif dinlenir
     return ValueListenableBuilder<ThemeMode>(
       // Dinlenecek olan tema durumu bildiricisi
@@ -66,7 +66,7 @@ class TakeGoApp extends StatelessWidget {
       // Tema modu her değiştiğinde bu fonksiyon tetiklenir
       builder: (context, themeMode, _) {
         // Ana MaterialApp kök widget'ı
-        return MaterialApp(
+        return MaterialApp( // Flutter'ın Material Design temellerini ve yönlendirmesini başlatan ana MaterialApp widget'ı
           // Sağ üstteki debug etiketini gizliyoruz
           debugShowCheckedModeBanner: false,
           // Uygulama başlığı
@@ -86,24 +86,24 @@ class TakeGoApp extends StatelessWidget {
 }
 
 /// Ana Navigasyon Çubuğunu (NavigationBar) Yöneten İskelet Sayfa
-class TakeGoRootNavigation extends StatefulWidget {
+class TakeGoRootNavigation extends StatefulWidget { // TakeGoRootNavigation sınıfı, zamanla durumu (state) değişebilen dinamik ekranımız için StatefulWidget yapısıdır
   // Tema değiştirme butonuna AppBar üzerinden erişebilmek için kontrolcü
-  final ThemeController themeController;
+  final ThemeController themeController; // ThemeController türünden themeController adlı değişkenimiz
 
   // Kurucu fonksiyon
-  const TakeGoRootNavigation({
+  const TakeGoRootNavigation({ // Genel, sabit sınıf constructor'ı
     super.key,
-    required this.themeController,
+    required this.themeController, // themeController parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   State<TakeGoRootNavigation> createState() => _TakeGoRootNavigationState();
 }
 
 // Ana navigasyon sekme durumunu tutan State sınıfı
-class _TakeGoRootNavigationState extends State<TakeGoRootNavigation> {
+class _TakeGoRootNavigationState extends State<TakeGoRootNavigation> { // Ekranın durumunu (state), mantığını ve değişkenlerini tuttuğumuz State sınıfımız
   // Seçili aktif sekme indeksi (0: Vitrin/İlanlar, 1: İlan Ver, 2: Kokpit/Anahtar)
-  int _currentIndex = 0;
+  int _currentIndex = 0; // int türünden _currentIndex değişkenimiz
 
   // Araç listeleme ekranının iş mantığı denetleyicisi
   late final CarListingController _carListingController;
@@ -117,10 +117,10 @@ class _TakeGoRootNavigationState extends State<TakeGoRootNavigation> {
   // Kullanıcının kiraladığı aktif araç referansı (nullable)
   CarModel? _activeBookedCar;
 
-  @override
-  void initState() {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  void initState() { // State ağaca ilk eklendiğinde çalışan metod, sayfa açılırkenki ilk hazırlıklar burda yapılır
     // Üst sınıfın initState metodunu çağırıyoruz
-    super.initState();
+    super.initState(); // Üst sınıfın initState metodunu tetikleyip başlatıyoruz
 
     // 1. İlan kontrolcüsünü oluşturup mock verileri yüklüyoruz
     _carListingController = CarListingController()..init();
@@ -132,8 +132,8 @@ class _TakeGoRootNavigationState extends State<TakeGoRootNavigation> {
     _smartKeyController = SmartKeyController()..init();
   }
 
-  @override
-  void dispose() {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     // Bellek sızıntılarını önlemek için ilan listeleme kontrolcüsünü temizliyoruz
     _carListingController.dispose();
 
@@ -144,7 +144,7 @@ class _TakeGoRootNavigationState extends State<TakeGoRootNavigation> {
     _smartKeyController.dispose();
 
     // Üst sınıfın dispose metodunu çağırıyoruz
-    super.dispose();
+    super.dispose(); // Üst sınıfın dispose metodunu çağırıp temizliği tamamlıyoruz
   }
 
   /// Bir araç kartına tıklandığında detay sayfasına geçişi sağlayan fonksiyon
@@ -168,26 +168,26 @@ class _TakeGoRootNavigationState extends State<TakeGoRootNavigation> {
           // Kullanıcı 'Rezervasyon Yap' butonuna bastığında çalışan eylem
           onBookAndOpenKey: () {
             // Rezervasyon yapıldı, aktif kiralanan aracı güncelliyoruz
-            setState(() {
+            setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
               // Kiralanan aracı referansa alıyoruz
               _activeBookedCar = car;
               // 2 numaralı sekmeye (Dijital Kokpit sekmesine) geçiş yapıyoruz
               _currentIndex = 2;
             });
             // Detay sayfasını kapatıp ana ekrana geri dönüyoruz
-            Navigator.pop(context);
+            Navigator.pop(context); // Açık olan sayfayı veya diyaloğu kapatıp bir önceki ekrana dönüyoruz
           },
         ),
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     // 40 satır kuralına uygun ana gezinme gövdesi
-    return Scaffold(
+    return Scaffold( // Sayfa iskeletini (appBar, body, floatingActionButton) oluşturan ana Scaffold widget'ımız
       // Sekmeler arası geçişlerde sayfaların durumunu koruyan IndexedStack
-      body: IndexedStack(
+      body: IndexedStack( // Elemanları üst üste bindirmek (katmanlı tasarım yapmak) için Stack kullanıyoruz
         // Aktif olarak gösterilecek sekme numarası
         index: _currentIndex,
         // Sekmelerin listesi
@@ -202,13 +202,13 @@ class _TakeGoRootNavigationState extends State<TakeGoRootNavigation> {
             onCarSelected: _openCarDetail,
             // 'İlan Ver' butonuna basıldığında 1. sekmeye geçiren eylem
             onAddListingPressed: () {
-              setState(() {
+              setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
                 _currentIndex = 1;
               });
             },
             // 'Dijital Anahtar' ikonuna basıldığında 2. sekmeye geçiren eylem
             onOpenSmartKeyPressed: () {
-              setState(() {
+              setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
                 _currentIndex = 2;
               });
             },
@@ -223,7 +223,7 @@ class _TakeGoRootNavigationState extends State<TakeGoRootNavigation> {
               // Yeni eklenen aracı vitrin listesine en baştan ekliyoruz
               _carListingController.addNewListing(newCar);
               // Kullanıcıyı vitrin sekmesine geri yönlendiriyoruz
-              setState(() {
+              setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
                 _currentIndex = 0;
               });
             },
@@ -245,7 +245,7 @@ class _TakeGoRootNavigationState extends State<TakeGoRootNavigation> {
         selectedIndex: _currentIndex,
         // Kullanıcı bir sekmeye dokunduğunda indeksi güncelleyen callback
         onDestinationSelected: (index) {
-          setState(() {
+          setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
             _currentIndex = index;
           });
         },

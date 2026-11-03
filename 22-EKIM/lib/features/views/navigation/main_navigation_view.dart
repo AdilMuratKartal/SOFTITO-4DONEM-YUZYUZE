@@ -1,33 +1,33 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 import '../../../core/theme/app_theme.dart';
-import '../../controllers/habit_controller.dart';
-import '../../controllers/mood_controller.dart';
-import '../../controllers/roadmap_controller.dart';
-import '../../widgets/daily_mood_dialog.dart';
-import '../home/home_view.dart';
-import '../roadmap/roadmap_view.dart';
-import '../timer/pomodoro_view.dart';
-import '../analytics/analytics_view.dart';
-import '../profile/profile_view.dart';
+import '../../controllers/habit_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
+import '../../controllers/mood_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
+import '../../controllers/roadmap_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
+import '../../widgets/daily_mood_dialog.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
+import '../home/home_view.dart'; // Sayfa ve ekran tasarım dosyalarımızı bu dosyaya import ediyoruz
+import '../roadmap/roadmap_view.dart'; // Sayfa ve ekran tasarım dosyalarımızı bu dosyaya import ediyoruz
+import '../timer/pomodoro_view.dart'; // Sayfa ve ekran tasarım dosyalarımızı bu dosyaya import ediyoruz
+import '../analytics/analytics_view.dart'; // Sayfa ve ekran tasarım dosyalarımızı bu dosyaya import ediyoruz
+import '../profile/profile_view.dart'; // Sayfa ve ekran tasarım dosyalarımızı bu dosyaya import ediyoruz
 
-class MainNavigationView extends StatefulWidget {
-  final ValueNotifier<ThemeMode> themeModeNotifier;
+class MainNavigationView extends StatefulWidget { // MainNavigationView sınıfı, zamanla durumu (state) değişebilen dinamik ekranımız için StatefulWidget yapısıdır
+  final ValueNotifier<ThemeMode> themeModeNotifier; // ValueNotifier<ThemeMode> türünden themeModeNotifier adlı değişkenimiz
 
-  const MainNavigationView({super.key, required this.themeModeNotifier});
+  const MainNavigationView({super.key, required this.themeModeNotifier}); // Sabit constructor, üst sınıfa key parametresini gönderir
 
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   State<MainNavigationView> createState() => _MainNavigationViewState();
 }
 
-class _MainNavigationViewState extends State<MainNavigationView> {
-  int _currentIndex = 0;
+class _MainNavigationViewState extends State<MainNavigationView> { // Ekranın durumunu (state), mantığını ve değişkenlerini tuttuğumuz State sınıfımız
+  int _currentIndex = 0; // int türünden _currentIndex değişkenimiz
   late final HabitController _habitController;
   late final MoodController _moodController;
   late final RoadmapController _roadmapController;
 
-  @override
-  void initState() {
-    super.initState();
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  void initState() { // State ağaca ilk eklendiğinde çalışan metod, sayfa açılırkenki ilk hazırlıklar burda yapılır
+    super.initState(); // Üst sınıfın initState metodunu tetikleyip başlatıyoruz
     _habitController = HabitController();
     _moodController = MoodController();
     _roadmapController = RoadmapController(habitController: _habitController);
@@ -48,16 +48,16 @@ class _MainNavigationViewState extends State<MainNavigationView> {
     });
   }
 
-  @override
-  void dispose() {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     _habitController.dispose();
     _moodController.dispose();
     _roadmapController.dispose();
-    super.dispose();
+    super.dispose(); // Üst sınıfın dispose metodunu çağırıp temizliği tamamlıyoruz
   }
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     final pages = [
       HomeView(
         habitController: _habitController,
@@ -72,15 +72,15 @@ class _MainNavigationViewState extends State<MainNavigationView> {
       ProfileView(themeModeNotifier: widget.themeModeNotifier),
     ];
 
-    return Scaffold(
-      body: IndexedStack(
+    return Scaffold( // Sayfa iskeletini (appBar, body, floatingActionButton) oluşturan ana Scaffold widget'ımız
+      body: IndexedStack( // Elemanları üst üste bindirmek (katmanlı tasarım yapmak) için Stack kullanıyoruz
         index: _currentIndex,
         children: pages,
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
         onDestinationSelected: (index) {
-          setState(() {
+          setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
             _currentIndex = index;
           });
         },

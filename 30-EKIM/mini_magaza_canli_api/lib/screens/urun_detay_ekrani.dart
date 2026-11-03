@@ -1,48 +1,48 @@
 // Flutter temel arayüz kütüphanesini içe aktarır
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 // Detayları gösterilecek ürün veri modelini içe aktarır
-import '../models/urun.dart';
+import '../models/urun.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 // Kategori Türkçe adını almak için kategori modelini içe aktarır
-import '../models/kategori.dart';
+import '../models/kategori.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 // Stok rozeti bileşenini içe aktarır
-import '../widgets/stok_rozeti.dart';
+import '../widgets/stok_rozeti.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
 
 // Tıklanan ürünün geniş görselini, açıklamasını ve satın alma butonunu sunan detay ekranı
-class UrunDetayEkrani extends StatelessWidget {
+class UrunDetayEkrani extends StatelessWidget { // UrunDetayEkrani sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // Ekranda gösterilecek olan ürün nesnesi
-  final Urun urun;
+  final Urun urun; // Urun türünden urun adlı değişkenimiz
 
   // UrunDetayEkrani sınıfının kurucu metodu
-  const UrunDetayEkrani({
+  const UrunDetayEkrani({ // Genel, sabit sınıf constructor'ı
     // Widget ağacı için süper anahtar
     super.key,
     // Gösterilecek ürün nesnesinin zorunlu olduğunu belirtir
-    required this.urun,
+    required this.urun, // urun parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   // Kurucu metodun kapanış parantezi
   });
 
   // Ekranın görsel ağacını inşa eden build metodu
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   // BuildContext parametresini alan metot
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     // Ekranın temel iskeletini sağlayan Scaffold bileşeni
-    return Scaffold(
+    return Scaffold( // Sayfa iskeletini (appBar, body, floatingActionButton) oluşturan ana Scaffold widget'ımız
       // Sayfanın üst başlık çubuğu (AppBar)
-      appBar: AppBar(
+      appBar: AppBar( // Sayfanın üst kısmındaki başlık ve aksiyon barı (AppBar)
         // Başlık metni
-        title: const Text('Ürün Detayı'),
+        title: const Text('Ürün Detayı'), // Sayfa başlığını ekrana yazdırıyoruz
         // Başlığı ortalar
-        centerTitle: true,
+        centerTitle: true, // Başlığı ortalamak için true veriyoruz
       // AppBar kapanışı
       ),
       // Sayfa içeriğinin taşmasını önleyen ve kaydırılmasını sağlayan SingleChildScrollView
-      body: SingleChildScrollView(
+      body: SingleChildScrollView( // Küçük ekranlarda taşma (overflow) hatası vermesin, ekran rahatça kaydırılsın diye sarmalıyoruz
         // Tüm sayfa içeriği için kenar boşlukları
         padding: const EdgeInsets.all(16),
         // Sayfa elemanlarını dikeyde alt alta dizen Column bileşeni
-        child: Column(
+        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
           // Elemanları sola yaslar
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
           // Column çocukları listesi
           children: [
             // Liste ekranındaki küçük resimle eşleşen Hero animasyon widget'ı
@@ -50,13 +50,13 @@ class UrunDetayEkrani extends StatelessWidget {
               // Liste kartındaki etiket ile birebir aynı etiket (tag)
               tag: 'urun_resim_${urun.id}',
               // Resmi ortalayan Center widget'ı
-              child: Center(
+              child: Center( // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
                 // Sabit yüksekliğe sahip kutu
                 child: SizedBox(
                   // Resmin dikey yüksekliği (240 piksel)
                   height: 240,
                   // İnternetten ürünün büyük halini çeken Image.network
-                  child: Image.network(
+                  child: Image.network( // İnternet üzerinden URL ile resim çekip ekranda göstermek için
                     // Ürünün FakeStore görsel adresi
                     urun.resimUrl,
                     // Resmin orijinal oranını koruyarak kutuya sığmasını sağlar
@@ -66,7 +66,7 @@ class UrunDetayEkrani extends StatelessWidget {
                       // Yükleme bittiyse resmi göster
                       if (progress == null) return child;
                       // Yüklenirken dönen çember
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator()); // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
                     // loadingBuilder kapanışı
                     },
                   // Image.network kapanışı
@@ -78,23 +78,23 @@ class UrunDetayEkrani extends StatelessWidget {
             // Hero kapanışı
             ),
             // Resim ile bilgiler arasına 20 piksel dikey boşluk
-            const SizedBox(height: 20),
+            const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             // Kategori adı ve Stok rozetini yan yana gösteren satır
-            Row(
+            Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
               // İki uca yaslar
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
               // Satır çocukları
               children: [
                 // Kategori adı kutusu
-                Container(
+                Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                   // Kutu içi kenar boşlukları
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   // Kutu dekorasyonu
-                  decoration: BoxDecoration(
+                  decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                     // Açık indigo zemin rengi
                     color: Colors.indigo.shade50,
                     // Yuvarlatılmış köşeler
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(8), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                   // BoxDecoration kapanışı
                   ),
                   // Kategori adı metni
@@ -122,7 +122,7 @@ class UrunDetayEkrani extends StatelessWidget {
             // Row kapanışı
             ),
             // 12 piksel dikey boşluk
-            const SizedBox(height: 12),
+            const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             // Ürün başlığını büyük puntolarla gösteren metin
             Text(
               // Ürünün tam başlığı
@@ -138,15 +138,15 @@ class UrunDetayEkrani extends StatelessWidget {
             // Text kapanışı
             ),
             // 8 piksel dikey boşluk
-            const SizedBox(height: 8),
+            const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             // Puan, yıldız simgesi ve oy sayısını gösteren satır
-            Row(
+            Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
               // Sıra elemanları
               children: [
                 // Sarı yıldız simgesi
                 const Icon(Icons.star, size: 20, color: Colors.amber),
                 // 4 piksel boşluk
-                const SizedBox(width: 4),
+                const SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                 // Ortalama puan metni
                 Text(
                   // Puan değeri
@@ -162,7 +162,7 @@ class UrunDetayEkrani extends StatelessWidget {
                 // Text kapanışı
                 ),
                 // 6 piksel boşluk
-                const SizedBox(width: 6),
+                const SizedBox(width: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                 // Toplam oy sayısı metni
                 Text(
                   // Oy adedi açıklaması
@@ -182,11 +182,11 @@ class UrunDetayEkrani extends StatelessWidget {
             // Row kapanışı
             ),
             // 16 piksel dikey boşluk
-            const SizedBox(height: 16),
+            const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             // İnce ayırıcı çizgi
-            const Divider(),
+            const Divider(), // Bölümler arasına ince bir ayırıcı çizgi çekmek için
             // 12 piksel dikey boşluk
-            const SizedBox(height: 12),
+            const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             // 'Ürün Açıklaması' ara başlığı
             const Text(
               // Başlık metni
@@ -202,7 +202,7 @@ class UrunDetayEkrani extends StatelessWidget {
             // Text kapanışı
             ),
             // 8 piksel dikey boşluk
-            const SizedBox(height: 8),
+            const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             // Ürünün uzun açıklama metni
             Text(
               // Açıklama metni içeriği
@@ -220,7 +220,7 @@ class UrunDetayEkrani extends StatelessWidget {
             // Text kapanışı
             ),
             // Sayfanın altındaki sabit barın üstünü kapatmaması için 40 piksel boşluk
-            const SizedBox(height: 40),
+            const SizedBox(height: 40), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
           // Column çocukları kapanışı
           ],
         // Column kapanışı
@@ -228,11 +228,11 @@ class UrunDetayEkrani extends StatelessWidget {
       // SingleChildScrollView kapanışı
       ),
       // Ekranın en altında sabit duran fiyat ve satın alma çubuğu
-      bottomNavigationBar: Container(
+      bottomNavigationBar: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
         // Çubuk iç kenar boşlukları
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         // Çubuk zemin dekorasyonu
-        decoration: BoxDecoration(
+        decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
           // Beyaz arka plan
           color: Colors.white,
           // Üste doğru hafif gölge efekti
@@ -252,19 +252,19 @@ class UrunDetayEkrani extends StatelessWidget {
         // BoxDecoration kapanışı
         ),
         // Güvenli alan (özellikle alt çizgiye sahip telefonlar için)
-        child: SafeArea(
+        child: SafeArea( // Çentik ve sistem çubuklarıyla arayüzün çakışmasını önleyen güvenli alan
           // Fiyat ile Butonu yan yana dizen Row bileşeni
-          child: Row(
+          child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
             // İki uca yaslar
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
             // Elemanlar
             children: [
               // Fiyat sütunu
-              Column(
+              Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
                 // Sütunun sadece kapladığı kadar alan tutmasını sağlar
                 mainAxisSize: MainAxisSize.min,
                 // Sola yaslar
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                 // Elemanlar
                 children: [
                   // 'Toplam Fiyat' etiket metni
@@ -302,7 +302,7 @@ class UrunDetayEkrani extends StatelessWidget {
                     // Stokta var ise tıklanınca çalışacak fonksiyon
                     ? () {
                         // Kullanıcıya işlemin başarılı olduğunu bildiren SnackBar gösterir
-                        ScaffoldMessenger.of(context).showSnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar( // Ekranın altında kullanıcıya bilgi veren kısa SnackBar mesajı gösteriyoruz
                           // Gösterilecek SnackBar içeriği
                           SnackBar(
                             // Bildirim mesajı metni
@@ -334,7 +334,7 @@ class UrunDetayEkrani extends StatelessWidget {
                   // Yuvarlak köşeler
                   shape: RoundedRectangleBorder(
                     // 12 piksellik ovallik
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                   // RoundedRectangleBorder kapanışı
                   ),
                 // styleFrom kapanışı

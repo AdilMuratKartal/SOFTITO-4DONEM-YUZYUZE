@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 import '../../../core/theme/app_theme.dart';
 
-class StatusBadge extends StatelessWidget {
-  final String status;
+class StatusBadge extends StatelessWidget { // StatusBadge sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
+  final String status; // String türünden status adlı değişkenimiz
 
-  const StatusBadge({super.key, required this.status});
+  const StatusBadge({super.key, required this.status}); // Sabit constructor, üst sınıfa key parametresini gönderir
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     Color textColor;
     Color bgColor;
     String label;
@@ -35,11 +35,11 @@ class StatusBadge extends StatelessWidget {
         label = 'Beklemede';
     }
 
-    return Container(
+    return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
+      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
         color: bgColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
       ),
       child: Text(
         label,

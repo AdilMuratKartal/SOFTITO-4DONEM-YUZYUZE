@@ -1,5 +1,5 @@
 // Flutter'ın temel materyal tasarım kütüphanesini içe aktarıyoruz
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 // Kurumsal Cyber Drive paleti renk ve boyut sabitlerini içe aktarıyoruz
 import '../constants/app_colors.dart';
 
@@ -56,7 +56,7 @@ class AppTheme {
         // İkon ve metin ön plan rengi
         foregroundColor: AppColors.lightTextPrimary,
         // Düz ve gölgesiz modern görünüm
-        elevation: 0,
+        elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
         // Kaydırıldığında oluşan hafif gölge
         scrolledUnderElevation: 1,
         // Başlığı sola dayalı hizala
@@ -75,13 +75,13 @@ class AppTheme {
         // Kart zemin rengi
         color: AppColors.lightSurface,
         // Sıfır yükseklik (gölgesiz)
-        elevation: 0,
+        elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
         // Kenar taşmalarını kesen anti-alias kırpma
         clipBehavior: Clip.antiAlias,
         // Kart kenarlık şekli ve köşe yuvarlaklığı
         shape: RoundedRectangleBorder(
           // 16 piksel yuvarlatılmış köşeler
-          borderRadius: BorderRadius.circular(AppColors.cardBorderRadius),
+          borderRadius: BorderRadius.circular(AppColors.cardBorderRadius), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           // İnce kart çerçeve çizgisi
           side: const BorderSide(color: AppColors.lightBorder, width: 1),
         ),
@@ -92,7 +92,7 @@ class AppTheme {
         style: ButtonStyle(
           // 12px yuvarlatılmış hap biçimi
           shape: WidgetStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           ),
           // Buton içi metin stili
           textStyle: WidgetStateProperty.all(
@@ -111,7 +111,7 @@ class AppTheme {
           // Minimum 50px ergonomik dokunma yüksekliği
           minimumSize: const Size.fromHeight(50),
           // 14 piksel yuvarlatılmış buton köşesi
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           // Kalın ve okunaklı buton yazı tipi
           textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
         ),
@@ -127,17 +127,17 @@ class AppTheme {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         // Standart kenarlık stili
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           borderSide: const BorderSide(color: AppColors.lightBorder),
         ),
         // Etkin (odaklanılmamış) kenarlık stili
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           borderSide: const BorderSide(color: AppColors.lightBorder),
         ),
         // Odaklanılmış (aktif) kenarlık stili
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           borderSide: const BorderSide(color: AppColors.lightPrimary, width: 1.5),
         ),
       ),
@@ -188,7 +188,7 @@ class AppTheme {
         // Beyaz metin ve ikon rengi
         foregroundColor: AppColors.darkTextPrimary,
         // Sıfır gölge
-        elevation: 0,
+        elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
         // Kaydırmada hafif ayırıcı gölge
         scrolledUnderElevation: 1,
         // Başlığı sola dayalı hizala
@@ -207,13 +207,13 @@ class AppTheme {
         // Koyu kart zemin rengi
         color: AppColors.darkSurface,
         // Sıfır yükseklik
-        elevation: 0,
+        elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
         // Kenar taşmalarını kesen anti-alias kırpma
         clipBehavior: Clip.antiAlias,
         // Kart kenarlık şekli ve köşe yuvarlaklığı
         shape: RoundedRectangleBorder(
           // 16 piksel yuvarlatılmış köşeler
-          borderRadius: BorderRadius.circular(AppColors.cardBorderRadius),
+          borderRadius: BorderRadius.circular(AppColors.cardBorderRadius), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           // Loş kokpit çerçeve çizgisi
           side: const BorderSide(color: AppColors.darkBorder, width: 1),
         ),
@@ -224,7 +224,7 @@ class AppTheme {
         style: ButtonStyle(
           // 12px yuvarlatılmış köşeler
           shape: WidgetStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           ),
           // Buton içi metin stili
           textStyle: WidgetStateProperty.all(
@@ -243,7 +243,7 @@ class AppTheme {
           // 50px sabit ergonomik yükseklik
           minimumSize: const Size.fromHeight(50),
           // 14 piksel yuvarlatılmış buton köşesi
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           // Kalın buton yazı tipi
           textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
         ),
@@ -259,17 +259,17 @@ class AppTheme {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         // Standart kenarlık stili
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           borderSide: const BorderSide(color: AppColors.darkBorder),
         ),
         // Etkin (odaklanılmamış) kenarlık stili
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           borderSide: const BorderSide(color: AppColors.darkBorder),
         ),
         // Odaklanılmış (aktif) kenarlık stili
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           borderSide: const BorderSide(color: AppColors.darkPrimary, width: 1.5),
         ),
       ),

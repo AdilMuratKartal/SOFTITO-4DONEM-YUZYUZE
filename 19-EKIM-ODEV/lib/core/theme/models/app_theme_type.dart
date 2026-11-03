@@ -1,4 +1,4 @@
-enum JournalTheme {
+enum JournalTheme { // JournalTheme enum yapısı, belirli sabit seçenekleri tip güvenli şekilde listelememizi sağlar
   neoBrutalist,
   minimalist,
   journal,

@@ -1,68 +1,68 @@
 // Flutter Materyal tasarım paketini içe aktarıyoruz
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 // Context extension ile tema renklerine ve SnackBar yardımcısına erişim sağlıyoruz
 import '../../../core/extensions/context_extensions.dart';
 // Üretilecek araç veri modelini içe aktarıyoruz
-import '../../car_listing/models/car_model.dart';
+import '../../car_listing/models/car_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 // İlan verme formu iş mantığı ve doğrulama denetleyicisini içe aktarıyoruz
-import '../controller/create_listing_controller.dart';
+import '../controller/create_listing_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
 // Takvimden müsaitlik tarih aralığı seçici bileşenini içe aktarıyoruz
-import '../widget/date_range_picker_widget.dart';
+import '../widget/date_range_picker_widget.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
 // Yakıt / batarya kaydırıcı bileşenini içe aktarıyoruz
-import '../widget/fuel_input_slider.dart';
+import '../widget/fuel_input_slider.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
 // 140px sabit boyutlu resim seçici alanını içe aktarıyoruz
-import '../widget/image_upload_placeholder.dart';
+import '../widget/image_upload_placeholder.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
 
 /// TakeGO Yeni Araç İlanı Verme Form Ekranı (CreateListingView)
 ///
 /// Bireysel araç sahiplerinin kendi araçlarını kiralama vitrinine
 /// eklemek üzere detaylı bilgileri girdiği zengin form sayfasıdır.
-class CreateListingView extends StatelessWidget {
+class CreateListingView extends StatelessWidget { // CreateListingView sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // Form girdi alanlarını ve doğrulama mantığını yöneten kontrolcü
-  final CreateListingController controller;
+  final CreateListingController controller; // CreateListingController türünden controller adlı değişkenimiz
 
   // Yeni araç başarıyla üretilip kaydedildiğinde çağrılan eylem (callback)
   final void Function(CarModel newCar)? onListingCreated;
 
   // Sabit kurucu metot
-  const CreateListingView({
+  const CreateListingView({ // Genel, sabit sınıf constructor'ı
     super.key,
-    required this.controller,
-    this.onListingCreated,
+    required this.controller, // controller parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    this.onListingCreated, // onListingCreated alanına değer aktarıyoruz
   });
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     // 40 satır kuralına uygun ana sayfa düzeni
-    return Scaffold(
+    return Scaffold( // Sayfa iskeletini (appBar, body, floatingActionButton) oluşturan ana Scaffold widget'ımız
       // Üst başlık çubuğu
-      appBar: AppBar(
+      appBar: AppBar( // Sayfanın üst kısmındaki başlık ve aksiyon barı (AppBar)
         // Başlık metni
-        title: const Text('Yeni Araç İlanı Ver'),
+        title: const Text('Yeni Araç İlanı Ver'), // Sayfa başlığını ekrana yazdırıyoruz
       ),
       // Klavye açıldığında taşmayı önleyen tek yönlü dikey kaydırma alanı
-      body: SingleChildScrollView(
+      body: SingleChildScrollView( // Küçük ekranlarda taşma (overflow) hatası vermesin, ekran rahatça kaydırılsın diye sarmalıyoruz
         // Ekran kenarlarından 16 piksel dolgu boşluğu
         padding: const EdgeInsets.all(16),
         // Form bileşenlerini dikeyde alt alta dizen Column
-        child: Column(
+        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
           // Elemanları sola hizalıyoruz
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
           children: [
             // 1. Sabit 140px Fotoğraf Yükleme Çerçevesi (RenderFlex overflow önler)
             const ImageUploadPlaceholder(),
             // 20 piksel dikey boşluk
-            const SizedBox(height: 20),
+            const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
             // 2. Araç Temel Bilgileri Girdi Alanları (Marka, Model, Yıl, Plaka)
             _CarInfoInputs(controller: controller),
             // 16 piksel dikey boşluk
-            const SizedBox(height: 16),
+            const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
             // 3. Şanzıman ve Elektrikli Araç Seçim Satırı
-            _TransmissionAndPowertrainRow(controller: controller),
+            _TransmissionAndPowertrainRow(controller: controller), // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
             // 16 piksel dikey boşluk
-            const SizedBox(height: 16),
+            const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
             // 4. Benzin / Şarj Seviyesi Ayar Kaydırıcısı (Slider)
             FuelInputSlider(
@@ -72,29 +72,29 @@ class CreateListingView extends StatelessWidget {
               isElectricNotifier: controller.isElectricNotifier,
             ),
             // 16 piksel dikey boşluk
-            const SizedBox(height: 16),
+            const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
             // 5. Kiralama Periyot Fiyatları (Günlük, Haftalık, Aylık)
             _PriceInputs(controller: controller),
             // 16 piksel dikey boşluk
-            const SizedBox(height: 16),
+            const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
             // 6. Müsaitlik Tarih Aralığı Takvim Seçicisi
             DateRangePickerWidget(
               dateRangeNotifier: controller.dateRangeNotifier,
             ),
             // 16 piksel dikey boşluk
-            const SizedBox(height: 16),
+            const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
             // 7. Lokasyon ve Ek Açıklama Girdi Alanları
             _LocationAndDescriptionInputs(controller: controller),
             // 20 piksel dikey boşluk
-            const SizedBox(height: 20),
+            const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
             // 8. Hata Mesajı Bildirimi Banner'ı (Doğrulama hatası varsa açılır)
             _ErrorMessageBanner(controller: controller),
             // 12 piksel dikey boşluk
-            const SizedBox(height: 12),
+            const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
             // 9. Kaydet ve Vitrinde Yayınla Butonu
             _SubmitButton(
@@ -104,7 +104,7 @@ class CreateListingView extends StatelessWidget {
               onListingCreated: onListingCreated,
             ),
             // Sayfa altı güvenli boşluğu: 40 piksel
-            const SizedBox(height: 40),
+            const SizedBox(height: 40), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
           ],
         ),
       ),
@@ -117,23 +117,23 @@ class CreateListingView extends StatelessWidget {
 // -----------------------------------------------------------------------------
 
 // Araç kimlik bilgilerini kullanıcıdan alan metin kutuları grubu
-class _CarInfoInputs extends StatelessWidget {
+class _CarInfoInputs extends StatelessWidget { // _CarInfoInputs sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // Form kontrolcüsü
-  final CreateListingController controller;
+  final CreateListingController controller; // CreateListingController türünden controller adlı değişkenimiz
 
   // Kurucu fonksiyon
-  const _CarInfoInputs({required this.controller});
+  const _CarInfoInputs({required this.controller}); // Genel, sabit sınıf constructor'ı
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
+    return Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
       children: [
         // 1. Satır: Marka ve Model Girişi
-        Row(
+        Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
           children: [
             // Marka giriş kutusu (kalan genişliği eşit böler)
-            Expanded(
-              child: TextField(
+            Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+              child: TextField( // Kullanıcıdan metin girdisi almak için form alanı
                 // Kontrolcü bağlanıyor
                 controller: controller.brandController,
                 // Görsel süsleme ve etiket
@@ -143,10 +143,10 @@ class _CarInfoInputs extends StatelessWidget {
               ),
             ),
             // İki kutu arasına 12 piksel boşluk
-            const SizedBox(width: 12),
+            const SizedBox(width: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             // Model giriş kutusu
-            Expanded(
-              child: TextField(
+            Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+              child: TextField( // Kullanıcıdan metin girdisi almak için form alanı
                 // Kontrolcü bağlanıyor
                 controller: controller.modelController,
                 // Görsel süsleme ve etiket
@@ -158,14 +158,14 @@ class _CarInfoInputs extends StatelessWidget {
           ],
         ),
         // Satırlar arasına 12 piksel dikey boşluk
-        const SizedBox(height: 12),
+        const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
         // 2. Satır: Üretim Yılı ve Plaka Girişi
-        Row(
+        Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
           children: [
             // Üretim yılı kutusu (sayısal klavye)
-            Expanded(
-              child: TextField(
+            Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+              child: TextField( // Kullanıcıdan metin girdisi almak için form alanı
                 controller: controller.yearController,
                 // Sadece rakam klavyesi açılır
                 keyboardType: TextInputType.number,
@@ -175,10 +175,10 @@ class _CarInfoInputs extends StatelessWidget {
               ),
             ),
             // İki kutu arasına 12 piksel boşluk
-            const SizedBox(width: 12),
+            const SizedBox(width: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             // Plaka kutusu (otomatik büyük harf)
-            Expanded(
-              child: TextField(
+            Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+              child: TextField( // Kullanıcıdan metin girdisi almak için form alanı
                 controller: controller.plateController,
                 // Klavyede yazılan harfleri otomatik büyük harf yapar
                 textCapitalization: TextCapitalization.characters,
@@ -199,23 +199,23 @@ class _CarInfoInputs extends StatelessWidget {
 // -----------------------------------------------------------------------------
 
 // Vites türü ve elektrikli motor seçimi sağlayan arayüz satırı
-class _TransmissionAndPowertrainRow extends StatelessWidget {
+class _TransmissionAndPowertrainRow extends StatelessWidget { // _TransmissionAndPowertrainRow sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // Form kontrolcüsü
-  final CreateListingController controller;
+  final CreateListingController controller; // CreateListingController türünden controller adlı değişkenimiz
 
   // Kurucu fonksiyon
-  const _TransmissionAndPowertrainRow({required this.controller});
+  const _TransmissionAndPowertrainRow({required this.controller}); // Genel, sabit sınıf constructor'ı
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     // Tema renklerini alıyoruz
     final colors = context.colors;
 
     // Elemanları yan yana dizen Row
-    return Row(
+    return Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
       children: [
         // Sol Taraf: Otomatik / Manuel Şanzıman Seçici (SegmentedButton)
-        Expanded(
+        Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
           child: ValueListenableBuilder<String>(
             // Şanzıman bildiricisini dinliyoruz
             valueListenable: controller.transmissionNotifier,
@@ -238,7 +238,7 @@ class _TransmissionAndPowertrainRow extends StatelessWidget {
           ),
         ),
         // Araya 12 piksel boşluk
-        const SizedBox(width: 12),
+        const SizedBox(width: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
         // Sağ Taraf: 'Elektrikli' Araç Filtre Çipi
         ValueListenableBuilder<bool>(
@@ -274,17 +274,17 @@ class _TransmissionAndPowertrainRow extends StatelessWidget {
 // -----------------------------------------------------------------------------
 
 // Kiralama periyot bedellerini kullanıcıdan alan 3'lü kutu grubu
-class _PriceInputs extends StatelessWidget {
+class _PriceInputs extends StatelessWidget { // _PriceInputs sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // Form kontrolcüsü
-  final CreateListingController controller;
+  final CreateListingController controller; // CreateListingController türünden controller adlı değişkenimiz
 
   // Kurucu fonksiyon
-  const _PriceInputs({required this.controller});
+  const _PriceInputs({required this.controller}); // Genel, sabit sınıf constructor'ı
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
+    return Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+      crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
       children: [
         // Fiyatlandırma bölüm başlığı
         const Text(
@@ -292,36 +292,36 @@ class _PriceInputs extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
         ),
         // 8 piksel dikey boşluk
-        const SizedBox(height: 8),
+        const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
         // 3 Fiyat kutusunu yan yana dizen satır
-        Row(
+        Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
           children: [
             // 1. Kutu: Günlük Fiyat (Zorunlu)
-            Expanded(
-              child: TextField(
+            Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+              child: TextField( // Kullanıcıdan metin girdisi almak için form alanı
                 controller: controller.dailyPriceController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Günlük (₺) *'),
               ),
             ),
             // 8 piksel boşluk
-            const SizedBox(width: 8),
+            const SizedBox(width: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
             // 2. Kutu: Haftalık Fiyat (Opsiyonel / Otomatik hesaplanabilir)
-            Expanded(
-              child: TextField(
+            Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+              child: TextField( // Kullanıcıdan metin girdisi almak için form alanı
                 controller: controller.weeklyPriceController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Haftalık (₺)'),
               ),
             ),
             // 8 piksel boşluk
-            const SizedBox(width: 8),
+            const SizedBox(width: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
             // 3. Kutu: Aylık Fiyat (Opsiyonel / Otomatik hesaplanabilir)
-            Expanded(
-              child: TextField(
+            Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+              child: TextField( // Kullanıcıdan metin girdisi almak için form alanı
                 controller: controller.monthlyPriceController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Aylık (₺)'),
@@ -339,19 +339,19 @@ class _PriceInputs extends StatelessWidget {
 // -----------------------------------------------------------------------------
 
 // Teslim alınacak adres ve araç açıklamasını alan form alanı
-class _LocationAndDescriptionInputs extends StatelessWidget {
+class _LocationAndDescriptionInputs extends StatelessWidget { // _LocationAndDescriptionInputs sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // Form kontrolcüsü
-  final CreateListingController controller;
+  final CreateListingController controller; // CreateListingController türünden controller adlı değişkenimiz
 
   // Kurucu fonksiyon
-  const _LocationAndDescriptionInputs({required this.controller});
+  const _LocationAndDescriptionInputs({required this.controller}); // Genel, sabit sınıf constructor'ı
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
+    return Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
       children: [
         // Lokasyon giriş kutusu
-        TextField(
+        TextField( // Kullanıcıdan metin girdisi almak için form alanı
           controller: controller.locationController,
           decoration: const InputDecoration(
             labelText: 'Teslim Lokasyonu (İlçe, Şehir)',
@@ -359,12 +359,12 @@ class _LocationAndDescriptionInputs extends StatelessWidget {
           ),
         ),
         // 12 piksel dikey boşluk
-        const SizedBox(height: 12),
+        const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
         // Açıklama ve kiralama şartları metin kutusu (2 satır)
-        TextField(
+        TextField( // Kullanıcıdan metin girdisi almak için form alanı
           controller: controller.descriptionController,
-          maxLines: 2,
+          maxLines: 2, // Metnin en fazla kaç satır olacağını sınırlıyoruz, taşmasın diye
           decoration: const InputDecoration(
             labelText: 'Araç Açıklaması ve Kiralama Şartları',
             alignLabelWithHint: true,
@@ -380,15 +380,15 @@ class _LocationAndDescriptionInputs extends StatelessWidget {
 // -----------------------------------------------------------------------------
 
 // Form doğrulaması başarısız olduğunda kırmızı hata kutusunu ekrana basan bileşen
-class _ErrorMessageBanner extends StatelessWidget {
+class _ErrorMessageBanner extends StatelessWidget { // _ErrorMessageBanner sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // Form kontrolcüsü
-  final CreateListingController controller;
+  final CreateListingController controller; // CreateListingController türünden controller adlı değişkenimiz
 
   // Kurucu fonksiyon
-  const _ErrorMessageBanner({required this.controller});
+  const _ErrorMessageBanner({required this.controller}); // Genel, sabit sınıf constructor'ı
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     // Hata mesajı bildiricisini dinliyoruz
     return ValueListenableBuilder<String?>(
       valueListenable: controller.errorMessageNotifier,
@@ -397,14 +397,14 @@ class _ErrorMessageBanner extends StatelessWidget {
         if (error == null) return const SizedBox.shrink();
 
         // Hata varsa kırmızı çerçeveli uyarı kutusu çiziyoruz
-        return Container(
+        return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
           padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
+          decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
             color: context.colors.error.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
             border: Border.all(color: context.colors.error),
           ),
-          child: Row(
+          child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
             children: [
               // Hata ikonu
               Icon(
@@ -413,9 +413,9 @@ class _ErrorMessageBanner extends StatelessWidget {
                 size: 20,
               ),
               // 8 piksel boşluk
-              const SizedBox(width: 8),
+              const SizedBox(width: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
               // Hata metni
-              Expanded(
+              Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
                 child: Text(
                   error,
                   style: TextStyle(
@@ -438,20 +438,20 @@ class _ErrorMessageBanner extends StatelessWidget {
 // -----------------------------------------------------------------------------
 
 // Formu doğrulayıp yeni aracı vitrine kaydeden buton bileşeni
-class _SubmitButton extends StatelessWidget {
+class _SubmitButton extends StatelessWidget { // _SubmitButton sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // Form kontrolcüsü
-  final CreateListingController controller;
+  final CreateListingController controller; // CreateListingController türünden controller adlı değişkenimiz
   // Başarılı kayıt geri çağırma eylemi
   final void Function(CarModel newCar)? onListingCreated;
 
   // Kurucu fonksiyon
-  const _SubmitButton({
-    required this.controller,
-    required this.onListingCreated,
+  const _SubmitButton({ // Genel, sabit sınıf constructor'ı
+    required this.controller, // controller parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.onListingCreated, // onListingCreated parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     // İkonlu ve dolu buton (FilledButton)
     return FilledButton.icon(
       // Butona dokunulduğunda formu doğruluyoruz

@@ -1,5 +1,5 @@
 // Flutter Materyal kütüphanesini içe aktarıyoruz
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 
 /// TakeGO Tema Yönetim Denetleyicisi (ThemeController)
 ///
@@ -57,7 +57,7 @@ class ThemeController {
   // ---------------------------------------------------------------------------
 
   /// Uygulama veya servis kapandığında dinleyici kaynaklarını serbest bırakır
-  void dispose() {
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     // Bellek sızıntılarını önlemek için ValueNotifier dinleyicisini serbest bırakıyoruz
     themeModeNotifier.dispose();
   }

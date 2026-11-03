@@ -1,45 +1,45 @@
-import 'dart:convert';
+import 'dart:convert'; // JSON çözümleme (jsonDecode) ve dönüştürme işlemleri için bu paketi ekliyoruz
 import 'package:flutter/foundation.dart';
 
-enum HabitType { checkmark, counter, timer }
+enum HabitType { checkmark, counter, timer } // HabitType enum yapısı, belirli sabit seçenekleri tip güvenli şekilde listelememizi sağlar
 
 @immutable
-class HabitModel {
-  final String id;
-  final String title;
-  final String categoryId;
-  final String iconPath;
-  final HabitType type;
+class HabitModel { // HabitModel sınıfının açılışı, uygulamada kullanılacak verinin model şemasıdır
+  final String id; // String türünden id adlı değişkenimiz
+  final String title; // String türünden title adlı değişkenimiz
+  final String categoryId; // String türünden categoryId adlı değişkenimiz
+  final String iconPath; // String türünden iconPath adlı değişkenimiz
+  final HabitType type; // HabitType türünden type adlı değişkenimiz
   final List<int> selectedDays; // [1..7] (1: Pzt, 7: Paz)
   final String startTime;       // Örn: '09:45'
   final String endTime;         // Örn: '15:36'
-  final bool hasReminder;
-  final double currentProgress;
-  final double targetProgress;
-  final String unit;
-  final int streakDays;
-  final bool isCompleted;
-  final DateTime createdAt;
+  final bool hasReminder; // bool türünden hasReminder adlı değişkenimiz
+  final double currentProgress; // double türünden currentProgress adlı değişkenimiz
+  final double targetProgress; // double türünden targetProgress adlı değişkenimiz
+  final String unit; // String türünden unit adlı değişkenimiz
+  final int streakDays; // int türünden streakDays adlı değişkenimiz
+  final bool isCompleted; // bool türünden isCompleted adlı değişkenimiz
+  final DateTime createdAt; // DateTime türünden createdAt adlı değişkenimiz
 
-  const HabitModel({
-    required this.id,
-    required this.title,
-    required this.categoryId,
-    required this.iconPath,
-    this.type = HabitType.checkmark,
-    this.selectedDays = const [1, 2, 3, 4, 5, 6, 7],
-    required this.startTime,
-    required this.endTime,
-    this.hasReminder = false,
-    this.currentProgress = 0.0,
-    this.targetProgress = 1.0,
-    this.unit = 'kez',
-    this.streakDays = 0,
-    this.isCompleted = false,
-    required this.createdAt,
+  const HabitModel({ // Genel, sabit sınıf constructor'ı
+    required this.id, // id parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.title, // title parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.categoryId, // categoryId parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.iconPath, // iconPath parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    this.type = HabitType.checkmark, // type alanına değer aktarıyoruz
+    this.selectedDays = const [1, 2, 3, 4, 5, 6, 7], // selectedDays alanına değer aktarıyoruz
+    required this.startTime, // startTime parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.endTime, // endTime parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    this.hasReminder = false, // hasReminder alanına değer aktarıyoruz
+    this.currentProgress = 0.0, // currentProgress alanına değer aktarıyoruz
+    this.targetProgress = 1.0, // targetProgress alanına değer aktarıyoruz
+    this.unit = 'kez', // unit alanına değer aktarıyoruz
+    this.streakDays = 0, // streakDays alanına değer aktarıyoruz
+    this.isCompleted = false, // isCompleted alanına değer aktarıyoruz
+    required this.createdAt, // createdAt parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 
-  HabitModel copyWith({
+  HabitModel copyWith({ // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
     String? title,
     String? categoryId,
     String? iconPath,
@@ -56,19 +56,19 @@ class HabitModel {
   }) {
     return HabitModel(
       id: id,
-      title: title ?? this.title,
-      categoryId: categoryId ?? this.categoryId,
-      iconPath: iconPath ?? this.iconPath,
-      type: type ?? this.type,
-      selectedDays: selectedDays ?? this.selectedDays,
-      startTime: startTime ?? this.startTime,
-      endTime: endTime ?? this.endTime,
-      hasReminder: hasReminder ?? this.hasReminder,
-      currentProgress: currentProgress ?? this.currentProgress,
-      targetProgress: targetProgress ?? this.targetProgress,
-      unit: unit ?? this.unit,
-      streakDays: streakDays ?? this.streakDays,
-      isCompleted: isCompleted ?? this.isCompleted,
+      title: title ?? this.title, // title alanına değer aktarıyoruz
+      categoryId: categoryId ?? this.categoryId, // categoryId alanına değer aktarıyoruz
+      iconPath: iconPath ?? this.iconPath, // iconPath alanına değer aktarıyoruz
+      type: type ?? this.type, // type alanına değer aktarıyoruz
+      selectedDays: selectedDays ?? this.selectedDays, // selectedDays alanına değer aktarıyoruz
+      startTime: startTime ?? this.startTime, // startTime alanına değer aktarıyoruz
+      endTime: endTime ?? this.endTime, // endTime alanına değer aktarıyoruz
+      hasReminder: hasReminder ?? this.hasReminder, // hasReminder alanına değer aktarıyoruz
+      currentProgress: currentProgress ?? this.currentProgress, // currentProgress alanına değer aktarıyoruz
+      targetProgress: targetProgress ?? this.targetProgress, // targetProgress alanına değer aktarıyoruz
+      unit: unit ?? this.unit, // unit alanına değer aktarıyoruz
+      streakDays: streakDays ?? this.streakDays, // streakDays alanına değer aktarıyoruz
+      isCompleted: isCompleted ?? this.isCompleted, // isCompleted alanına değer aktarıyoruz
       createdAt: createdAt,
     );
   }
@@ -115,6 +115,6 @@ class HabitModel {
 
   String toJson() => json.encode(toMap());
 
-  factory HabitModel.fromJson(String source) =>
+  factory HabitModel.fromJson(String source) => // Gelen JSON haritasını (Map) nesneye dönüştüren factory kurucumuz
       HabitModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

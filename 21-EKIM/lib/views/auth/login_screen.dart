@@ -1,32 +1,32 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import 'package:provider/provider.dart'; // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
 import '../../core/theme/app_theme.dart';
-import '../../providers/auth_provider.dart';
-import '../customer/customer_home_screen.dart';
-import '../provider/provider_appointments_screen.dart';
+import '../../providers/auth_provider.dart'; // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
+import '../customer/customer_home_screen.dart'; // Sayfa ve ekran tasarım dosyalarımızı bu dosyaya import ediyoruz
+import '../provider/provider_appointments_screen.dart'; // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends StatelessWidget { // LoginScreen sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
+  const LoginScreen({super.key}); // Sabit constructor, üst sınıfa key parametresini gönderir
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     final authProvider = context.watch<AuthProvider>();
     final users = authProvider.users;
 
-    return Scaffold(
+    return Scaffold( // Sayfa iskeletini (appBar, body, floatingActionButton) oluşturan ana Scaffold widget'ımız
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: Padding(
+      body: SafeArea( // Çentik ve sistem çubuklarıyla arayüzün çakışmasını önleyen güvenli alan
+        child: Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+            crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
             children: [
-              const SizedBox(height: 20),
-              Container(
+              const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+              Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                 padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
+                decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                   color: AppColors.primary.withAlpha(25),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                 ),
                 child: const Icon(
                   Icons.calendar_month_rounded,
@@ -34,7 +34,7 @@ class LoginScreen extends StatelessWidget {
                   color: AppColors.primary,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
               const Text(
                 'Randevu ve Hizmet Platformu',
                 style: TextStyle(
@@ -43,7 +43,7 @@ class LoginScreen extends StatelessWidget {
                   color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
               const Text(
                 'Lütfen test etmek istediğiniz kullanıcı hesabını seçiniz:',
                 style: TextStyle(
@@ -51,36 +51,36 @@ class LoginScreen extends StatelessWidget {
                   color: AppColors.textSecondary,
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 24), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // Kullanıcı Kartları
-              Expanded(
+              Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
                 child: authProvider.isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : ListView.builder(
-                        itemCount: users.length,
-                        itemBuilder: (context, index) {
+                    ? const Center(child: CircularProgressIndicator()) // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
+                    : ListView.builder( // Sadece ekranda görünen elemanları çizerek RAM tasarrufu sağlayan performanslı liste
+                        itemCount: users.length, // Listede kaç tane eleman gösterileceğini belirtiyoruz
+                        itemBuilder: (context, index) { // Listenin her bir satırını sırayla oluşturan builder fonksiyonumuz
                           final user = users[index];
                           final isSelected = authProvider.currentUser?.id == user.id;
 
-                          return Card(
-                            elevation: 0,
+                          return Card( // Kartın arkasına gölge verip derinlik katıyoruz (elevation - z koordinatı)
+                            elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
                             margin: const EdgeInsets.only(bottom: 14),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
+                              borderRadius: BorderRadius.circular(14), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                               side: BorderSide(
                                 color: isSelected ? AppColors.primary : AppColors.border,
                                 width: isSelected ? 2 : 1,
                               ),
                             ),
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(14),
+                            child: InkWell( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
+                              borderRadius: BorderRadius.circular(14), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                               onTap: () {
                                 authProvider.switchUser(user);
                               },
-                              child: Padding(
+                              child: Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
                                 padding: const EdgeInsets.all(16),
-                                child: Row(
+                                child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                                   children: [
                                     CircleAvatar(
                                       radius: 26,
@@ -97,14 +97,14 @@ class LoginScreen extends StatelessWidget {
                                         size: 28,
                                       ),
                                     ),
-                                    const SizedBox(width: 14),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                    const SizedBox(width: 14), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                                    Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                                      child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                                        crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                                         children: [
-                                          Row(
+                                          Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                                             children: [
-                                              Expanded(
+                                              Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
                                                 child: Text(
                                                   user.name,
                                                   style: const TextStyle(
@@ -114,14 +114,14 @@ class LoginScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                               ),
-                                              Container(
+                                              Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                                                 padding: const EdgeInsets.symmetric(
                                                     horizontal: 8, vertical: 3),
-                                                decoration: BoxDecoration(
+                                                decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                                                   color: user.isCustomer
                                                       ? AppColors.iWillComeBg
                                                       : AppColors.comeToMeBg,
-                                                  borderRadius: BorderRadius.circular(6),
+                                                  borderRadius: BorderRadius.circular(6), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                                                 ),
                                                 child: Text(
                                                   user.isCustomer ? 'MÜŞTERİ' : 'HİZMET VEREN',
@@ -136,13 +136,13 @@ class LoginScreen extends StatelessWidget {
                                               ),
                                             ],
                                           ),
-                                          const SizedBox(height: 4),
+                                          const SizedBox(height: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                                           Text(
                                             user.isCustomer
                                                 ? 'Kayıtlı Adres: ${user.savedAddress ?? "Belirtilmedi"}'
                                                 : 'Sektör: ${user.sector ?? "Genel"} • ${user.shopAddress ?? ""}',
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2, // Metnin en fazla kaç satır olacağını sınırlıyoruz, taşmasın diye
+                                            overflow: TextOverflow.ellipsis, // Metin sığmazsa taşmasın, sonuna üç nokta (...) koysun diye
                                             style: const TextStyle(
                                               fontSize: 12,
                                               color: AppColors.textSecondary,
@@ -151,7 +151,7 @@ class LoginScreen extends StatelessWidget {
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(width: 8),
+                                    const SizedBox(width: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                                     Icon(
                                       isSelected
                                           ? Icons.radio_button_checked
@@ -170,7 +170,7 @@ class LoginScreen extends StatelessWidget {
               // Giriş Yap ve Uygulamaya Devam Et Butonu
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
+                child: ElevatedButton( // Kullanıcının tıklayabileceği aksiyon butonu bileşenimiz
                   onPressed: authProvider.currentUser == null
                       ? null
                       : () {

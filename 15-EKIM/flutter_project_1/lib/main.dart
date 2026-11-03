@@ -1,31 +1,30 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';//flutter'ın hazır widgetları bulunduran tasarımlı, paketi
+import 'screens/01_layout_screen.dart';//sayfanın düzenini belli eden dart'ı import ediyoruz
+import 'screens/02_markets_list_screen.dart';//2. sayfaynı tasarımını import ediyoruz
+import 'screens/03_transfer_form_screen.dart';//3. sayfaynı tasarımını import ediyoruz
 
-import 'screens/01_layout_screen.dart';
-import 'screens/02_markets_list_screen.dart';
-import 'screens/03_transfer_form_screen.dart';
-
-void main() {
-  runApp(const DtmMasterApp());
+void main() {//flutter'ın çalıştırıdığı ana fonkyion
+  runApp(const DtmMasterApp());//runApp ile mobil uygulamanın ana widget'ını yüklüyoruz ve uygulamamızı çizim döngüsünü başlatıyoruz burda kök widget'ımız DtmMasterApp() widget'ı olarak belirliyoruz.
 }
 
-class DtmMasterApp extends StatelessWidget {
-  const DtmMasterApp({
-    super.key,
+class DtmMasterApp extends StatelessWidget {//kök widget'ımızı statelesswidget olarak başlatıyoruz.
+  const DtmMasterApp({//statelesswidget'an bir key alıp bu sabit constructor'ımıza atıyoruz
+    super.key,//satetlesswidget'imizdan aldığımız key
   }); // super verdiğimiz Stateless'e key i gönderir.
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "DTM Flutter Sınıfı",
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF6366F1),
-          brightness: Brightness.light,
+  @override//build metodunun üzerine yazabilmek için override ediyoruz
+  Widget build(BuildContext context) {//WİDGET'Imızın tasarımını yapacağımız build metodumuz ve ona girdi olarak context veriyoruz
+    return MaterialApp( //flutter'ın material paketini uygulamak için ana widget olan MaterialApp ile return'luyoruzki tasarımlarımız çalışsın
+      debugShowCheckedModeBanner: false,//uygulamanın sağında yazan debug yazısını kaldırır
+      title: "DTM Flutter Sınıfı",//uygulama başlığı
+      theme: ThemeData(//uygulamanın tema verilerini girdiğimiz ThemeData() sınıfımızı açıyoruz
+        useMaterial3: true,//güncel tasarım dili material design 3 standartlarını aktifleştirmek için true yapıyoruz
+        colorScheme: ColorScheme.fromSeed(//uygulama renk paletini ayarlıyoruz , diğer widgetlarda duruma göre burdan yararlanır.
+          seedColor: const Color(0xFF6366F1),//renk paletimizde ana rengi belirliyoruz
+          brightness: Brightness.light,//aydınlık modunu ise light olarak açık olarak belirliyoruz
         ),
       ),
-      home: const LiveCanvasScreen(),
+      home: const LiveCanvasScreen(),//uygulama açıldığında çalışacak olan LiveCanvasScreen widget'ımız olduğunu belirtiyoruz
     );
   }
 }

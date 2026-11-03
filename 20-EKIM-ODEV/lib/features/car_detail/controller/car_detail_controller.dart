@@ -1,9 +1,9 @@
 // Flutter temel sınıfları ve ValueNotifier için foundation paketini içe aktarıyoruz
 import 'package:flutter/foundation.dart';
 // İncelenen araç modelini içe aktarıyoruz
-import '../../car_listing/models/car_model.dart';
+import '../../car_listing/models/car_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 // Kiralama periyodu enum tipini (günlük, haftalık, aylık) içe aktarıyoruz
-import '../../car_listing/models/rental_period_type.dart';
+import '../../car_listing/models/rental_period_type.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
 /// TakeGO İlan İnceleme ve Fiyat Hesaplama Denetleyicisi (CarDetailController)
 ///
@@ -12,14 +12,14 @@ import '../../car_listing/models/rental_period_type.dart';
 /// [ValueNotifier] ile dinamik olarak hesaplar.
 class CarDetailController {
   /// İncelenmekte olan araç modeli referansı
-  final CarModel car;
+  final CarModel car; // CarModel türünden car adlı değişkenimiz
 
   // ---------------------------------------------------------------------------
   // REAKTİF DURUM TANIMLARI (ValueNotifier)
   // ---------------------------------------------------------------------------
 
   /// Kullanıcının seçtiği kiralama periyodu bildiricisi (Günlük / Haftalık / Aylık)
-  final ValueNotifier<RentalPeriodType> selectedPeriodNotifier;
+  final ValueNotifier<RentalPeriodType> selectedPeriodNotifier; // ValueNotifier<RentalPeriodType> türünden selectedPeriodNotifier adlı değişkenimiz
 
   /// Kiralama süresi adedi bildiricisi (Varsayılan: 1 birim, örn: 1 gün veya 1 hafta)
   final ValueNotifier<int> durationUnitsNotifier = ValueNotifier<int>(1);
@@ -34,7 +34,7 @@ class CarDetailController {
   /// CarDetailController kurucusu: İncelenecek aracı ve başlangıç periyodunu alır
   CarDetailController({
     // Zorunlu araç referansı
-    required this.car,
+    required this.car, // car parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // Başlangıç periyodu (varsayılan: Günlük)
     RentalPeriodType initialPeriod = RentalPeriodType.daily,
   })  : // Seçili periyot bildiricisini başlangıç değeriyle başlatıyoruz
@@ -123,7 +123,7 @@ class CarDetailController {
   // ---------------------------------------------------------------------------
 
   /// Sayfa kapandığında dinleyicileri bellekten temizler
-  void dispose() {
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     // Seçili periyot dinleyicisini serbest bırak
     selectedPeriodNotifier.dispose();
     // Süre adedi dinleyicisini serbest bırak

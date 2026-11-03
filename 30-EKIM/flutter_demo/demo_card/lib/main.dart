@@ -1,20 +1,20 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 
 /*
 color: Colors.green,//Color X değil Colors s harfi varmış
               decoration: BoxDecoration( //decoration ile yazılıyor sonra altında padding border vs yapıyorsuın
  */
 
-void main() {
-  runApp(const MyApp());
+void main() { // Dart ve Flutter uygulamasını başlatan ana giriş fonksiyonumuz
+  runApp(const MyApp()); // runApp ile uygulamanın kök widget'ını yükleyip çizim döngüsünü başlatıyoruz
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatelessWidget { // MyApp sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
+  const MyApp({super.key}); // Sabit constructor, üst sınıfa key parametresini gönderir
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
+    return MaterialApp( // Flutter'ın Material Design temellerini ve yönlendirmesini başlatan ana MaterialApp widget'ı
       title: 'Demo Mağaza',
       debugShowCheckedModeBanner: false,//ai dan alındı
       theme: ThemeData(
@@ -25,53 +25,53 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class MyHomePage extends StatefulWidget { // MyHomePage sınıfı, zamanla durumu (state) değişebilen dinamik ekranımız için StatefulWidget yapısıdır
+  const MyHomePage({super.key}); // Sabit constructor, üst sınıfa key parametresini gönderir
 
 
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MyHomePageState extends State<MyHomePage> { // Ekranın durumunu (state), mantığını ve değişkenlerini tuttuğumuz State sınıfımız
+  int _counter = 0; // int türünden _counter değişkenimiz
 
   void _incrementCounter() {
-    setState(() {
+    setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
       _counter++;
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
 
-    return Scaffold(
+    return Scaffold( // Sayfa iskeletini (appBar, body, floatingActionButton) oluşturan ana Scaffold widget'ımız
       appBar:AppBar(
-        title: const Text("DenemeBar"),
+        title: const Text("DenemeBar"), // Sayfa başlığını ekrana yazdırıyoruz
       ),
-      body:Center(
-        child: Column(
+      body:Center( // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
+        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
           mainAxisAlignment: MainAxisAlignment.center,//alignment isim yanlışı yapıldı ai'dan bakıldı. paddibg alındı row vs.
           children: [
             
-            Container(
+            Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
               color: Colors.grey,
-              child: Padding(
+              child: Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
               padding: const EdgeInsets.all(40.0),
               child: 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                   children: [Text("Adil"),]
                 ),
               ),
             ),
-            Container(
+            Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
               color: Colors.grey,
-              child: Padding(
+              child: Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
               padding: const EdgeInsets.all(40.0),
               child: 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                   children: [Text("Adil"),]
                 ),
               ),

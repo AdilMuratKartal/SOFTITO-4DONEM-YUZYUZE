@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import '../../../core/extensions/date_extensions.dart';
-import '../../../core/services/storage_service.dart';
-import '../../entry_editor/models/journal_entry_model.dart';
+import '../../../core/services/storage_service.dart'; // Veri çekme ve API haberleşmesini yapan servis katmanımızı dahil ediyoruz
+import '../../entry_editor/models/journal_entry_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
 class CalendarController {
   final ValueNotifier<DateTime> focusedDateNotifier =
@@ -62,7 +62,7 @@ class CalendarController {
         .length;
   }
 
-  void dispose() {
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     if (_storageListener != null) {
       StorageService.instance.entriesNotifier
           .removeListener(_storageListener!);

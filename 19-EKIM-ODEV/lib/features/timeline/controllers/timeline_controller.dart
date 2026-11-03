@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import '../../../core/extensions/date_extensions.dart';
-import '../../../core/services/storage_service.dart';
-import '../../entry_editor/models/journal_entry_model.dart';
-import '../models/timeline_filter_model.dart';
+import '../../../core/services/storage_service.dart'; // Veri çekme ve API haberleşmesini yapan servis katmanımızı dahil ediyoruz
+import '../../entry_editor/models/journal_entry_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../models/timeline_filter_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
 class TimelineController {
   final ValueNotifier<bool> isLoadingNotifier = ValueNotifier<bool>(false);
@@ -35,7 +35,7 @@ class TimelineController {
 
   Future<void> init() async {
     isLoadingNotifier.value = true;
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       await StorageService.instance.init();
       applyFilter();
     } finally {
@@ -93,19 +93,19 @@ class TimelineController {
   }
 
   void updateSearch(String query) {
-    filterNotifier.value = filterNotifier.value.copyWith(searchQuery: query);
+    filterNotifier.value = filterNotifier.value.copyWith(searchQuery: query); // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
     applyFilter();
   }
 
   void setMoodFilter(String? mood) {
     filterNotifier.value = filterNotifier.value
-        .copyWith(selectedMood: mood, clearMood: mood == null);
+        .copyWith(selectedMood: mood, clearMood: mood == null); // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
     applyFilter();
   }
 
   void setTagFilter(String? tag) {
     filterNotifier.value =
-        filterNotifier.value.copyWith(selectedTag: tag, clearTag: tag == null);
+        filterNotifier.value.copyWith(selectedTag: tag, clearTag: tag == null); // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
     applyFilter();
   }
 
@@ -158,7 +158,7 @@ class TimelineController {
     await StorageService.instance.deleteEntry(id);
   }
 
-  void dispose() {
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     if (_storageListener != null) {
       StorageService.instance.entriesNotifier
           .removeListener(_storageListener!);

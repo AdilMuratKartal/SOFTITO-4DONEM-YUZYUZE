@@ -14,7 +14,7 @@ class NotificationService {
   static Future<void> init() async {
     if (_isInitialized) return;
 
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       // Timezone başlatma
       tz.initializeTimeZones();
 
@@ -54,14 +54,14 @@ class NotificationService {
 
       _isInitialized = true;
       debugPrint('[NotificationService] Başarıyla başlatıldı.');
-    } catch (e) {
+    } catch (e) { // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
       debugPrint('[NotificationService Hata]: $e');
     }
   }
 
   /// Platforma göre bildirim izinlerini ister
   static Future<bool> requestPermissions() async {
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       if (!kIsWeb && Platform.isMacOS) {
         final macosPlugin = _notificationsPlugin
             .resolvePlatformSpecificImplementation<
@@ -90,7 +90,7 @@ class NotificationService {
         return granted ?? false;
       }
       return true;
-    } catch (e) {
+    } catch (e) { // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
       debugPrint('[NotificationService İzin Hatası]: $e');
       return false;
     }
@@ -100,10 +100,10 @@ class NotificationService {
   static Future<bool> showInstantNotification({
     required String title,
     required String body,
-    int id = 9999,
+    int id = 9999, // int türünden id değişkenimiz
     String? payload,
   }) async {
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       if (!_isInitialized) await init();
 
       const AndroidNotificationDetails androidDetails =
@@ -139,7 +139,7 @@ class NotificationService {
 
       debugPrint('[NotificationService]: Anlık bildirim gönderildi -> $title');
       return true;
-    } catch (e) {
+    } catch (e) { // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
       debugPrint('[NotificationService Bildirim Gönderilemedi]: $e');
       return false;
     }
@@ -151,7 +151,7 @@ class NotificationService {
     required String timeString, // Örn: "09:45"
     String? habitId,
   }) async {
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       if (!_isInitialized) await init();
 
       final parts = timeString.split(':');
@@ -214,7 +214,7 @@ class NotificationService {
 
       debugPrint('[NotificationService]: "$habitTitle" için $timeString saatine planlandı (ID: $notifId).');
       return true;
-    } catch (e) {
+    } catch (e) { // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
       debugPrint('[NotificationService Zamanlama Hatası]: $e');
       return false;
     }
@@ -222,21 +222,21 @@ class NotificationService {
 
   /// Belirli bir alışkanlığın bildirimini iptal eder
   static Future<void> cancelHabitReminder(String habitId) async {
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       final notifId = habitId.hashCode.abs() % 100000;
       await _notificationsPlugin.cancel(id: notifId);
       debugPrint('[NotificationService]: Bildirim iptal edildi -> ID: $notifId (Habit: $habitId)');
-    } catch (e) {
+    } catch (e) { // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
       debugPrint('[NotificationService İptal Hatası]: $e');
     }
   }
 
   /// Tüm bildirimleri temizler
   static Future<void> cancelAllNotifications() async {
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       await _notificationsPlugin.cancelAll();
       debugPrint('[NotificationService]: Tüm bildirimler iptal edildi.');
-    } catch (e) {
+    } catch (e) { // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
       debugPrint('[NotificationService Hata]: $e');
     }
   }

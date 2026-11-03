@@ -1,45 +1,45 @@
 // Flutter'ın temel materyal tasarım widget kütüphanesini içe aktarıyoruz
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 // Kiralama periyodu enum tanımını (günlük, haftalık, aylık) içe aktarıyoruz
-import '../models/rental_period_type.dart';
+import '../models/rental_period_type.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
 /// TakeGO Kiralama Periyodu Seçici Çipleri (PeriodFilterChips)
 ///
 /// Kullanıcının Günlük, Haftalık ve Aylık kiralama periyotları
 /// arasında dinamik geçiş yapmasını sağlayan SegmentedButton bileşenidir.
-class PeriodFilterChips extends StatelessWidget {
+class PeriodFilterChips extends StatelessWidget { // PeriodFilterChips sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // ---------------------------------------------------------------------------
   // ÖZELLİKLER (Properties)
   // ---------------------------------------------------------------------------
 
   /// Halihazırda seçili olan kiralama periyodu (günlük, haftalık veya aylık)
-  final RentalPeriodType selectedPeriod;
+  final RentalPeriodType selectedPeriod; // RentalPeriodType türünden selectedPeriod adlı değişkenimiz
 
   /// Kullanıcı periyot butonlarından birine tıkladığında çağrılan bildirim fonksiyonu
-  final ValueChanged<RentalPeriodType> onPeriodChanged;
+  final ValueChanged<RentalPeriodType> onPeriodChanged; // ValueChanged<RentalPeriodType> türünden onPeriodChanged adlı değişkenimiz
 
   // ---------------------------------------------------------------------------
   // KURUCU METOT (Constructor)
   // ---------------------------------------------------------------------------
 
   /// Sabit kurucu metot: Dışarıdan zorunlu periyot durumu ve tetikleyici fonksiyon alır
-  const PeriodFilterChips({
+  const PeriodFilterChips({ // Genel, sabit sınıf constructor'ı
     // Widget ağacında performans optimizasyonu sağlayan super.key
     super.key,
     // Aktif periyot seçimi (Zorunlu alan)
-    required this.selectedPeriod,
+    required this.selectedPeriod, // selectedPeriod parametresinin verilmesinin zorunlu olduğunu söylüyoruz
     // Periyot değiştiğinde tetiklenecek fonksiyon (Zorunlu alan)
-    required this.onPeriodChanged,
+    required this.onPeriodChanged, // onPeriodChanged parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 
   // ---------------------------------------------------------------------------
   // ARAYÜZ OLUŞTURMA (Build)
   // ---------------------------------------------------------------------------
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     // Çipleri ekranda ferah göstermek için dış kenar boşluğu ekliyoruz
-    return Padding(
+    return Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
       // Yatayda 16px, dikeyde 8px padding değeri tanımlıyoruz
       padding: const EdgeInsets.symmetric(
         horizontal: 16,

@@ -1,53 +1,53 @@
 // Flutter Materyal kütüphanesini içe aktarıyoruz
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 // Context extension ile tema renklerine hızlı erişimi içe aktarıyoruz
 import '../../../core/extensions/context_extensions.dart';
 // Günlük, haftalık, aylık çip seçici bileşenini içe aktarıyoruz
-import '../../car_listing/widget/period_filter_chips.dart';
+import '../../car_listing/widget/period_filter_chips.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
 // Kiralama periyot türü enumını içe aktarıyoruz
-import '../../car_listing/models/rental_period_type.dart';
+import '../../car_listing/models/rental_period_type.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 // İlan detay ve fiyat hesaplama denetleyicisini içe aktarıyoruz
-import '../controller/car_detail_controller.dart';
+import '../controller/car_detail_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
 // Sabit 260px kapak görseli banner'ını içe aktarıyoruz
-import '../widget/car_image_banner.dart';
+import '../widget/car_image_banner.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
 // Yakıt / batarya grafiksel ilerleme çubuğu bileşenini içe aktarıyoruz
-import '../widget/fuel_gauge_widget.dart';
+import '../widget/fuel_gauge_widget.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
 // Dinamik fiyat dökümü ve kasko hesaplayıcı kartını içe aktarıyoruz
-import '../widget/price_breakdown_card.dart';
+import '../widget/price_breakdown_card.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
 
 /// TakeGO İlan Detay ve Rezervasyon Ekranı (CarDetailView)
 ///
 /// Sabit 260px kapak görseli, araç özellikleri, benzin göstergesi,
 /// dinamik fiyat dökümü ve dijital anahtar rezervasyon butonunu barındırır.
-class CarDetailView extends StatelessWidget {
+class CarDetailView extends StatelessWidget { // CarDetailView sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // İlan detay sayfasının durum ve hesaplama kontrolcüsü
-  final CarDetailController controller;
+  final CarDetailController controller; // CarDetailController türünden controller adlı değişkenimiz
 
   // Kullanıcı 'Rezervasyon Yap' butonuna bastığında çağrılan eylem
-  final VoidCallback? onBookAndOpenKey;
+  final VoidCallback? onBookAndOpenKey; // VoidCallback? türünden onBookAndOpenKey adlı değişkenimiz
 
   // Sabit kurucu metot
-  const CarDetailView({
+  const CarDetailView({ // Genel, sabit sınıf constructor'ı
     super.key,
-    required this.controller,
-    this.onBookAndOpenKey,
+    required this.controller, // controller parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    this.onBookAndOpenKey, // onBookAndOpenKey alanına değer aktarıyoruz
   });
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     // 40 satır kuralına uygun ana sayfa düzeni
-    return Scaffold(
+    return Scaffold( // Sayfa iskeletini (appBar, body, floatingActionButton) oluşturan ana Scaffold widget'ımız
       // Üst başlık çubuğu
-      appBar: AppBar(
+      appBar: AppBar( // Sayfanın üst kısmındaki başlık ve aksiyon barı (AppBar)
         // Başlıkta aracın marka ve model tam adını gösteriyoruz
-        title: Text(controller.car.fullName),
+        title: Text(controller.car.fullName), // Sayfa başlığını ekrana yazdırıyoruz
       ),
       // Sayfa içeriğini dikeyde kaydırılabilir kılan SingleChildScrollView
-      body: SingleChildScrollView(
+      body: SingleChildScrollView( // Küçük ekranlarda taşma (overflow) hatası vermesin, ekran rahatça kaydırılsın diye sarmalıyoruz
         // Elemanları dikeyde alt alta dizen Column
-        child: Column(
+        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
           // Elemanları sola yaslıyoruz
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
           children: [
             // 1. Sabit 260px Yükseklikli Kapak Görseli Banner'ı
             CarImageBanner(car: controller.car),
@@ -56,7 +56,7 @@ class CarDetailView extends StatelessWidget {
             _DetailHeader(controller: controller),
 
             // 3. Yakıt / Batarya Gösterge Kartı
-            Padding(
+            Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
               // Kenarlardan 16 yatay, 8 dikey boşluk
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               // Yakıt ilerleme göstergesi
@@ -72,16 +72,16 @@ class CarDetailView extends StatelessWidget {
             _PeriodSelector(controller: controller),
 
             // 5. Dinamik Fiyat Dökümü ve Süre Belirleme Kartı
-            Padding(
+            Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: PriceBreakdownCard(controller: controller),
+              child: PriceBreakdownCard(controller: controller), // Kartın arkasına gölge verip derinlik katıyoruz (elevation - z koordinatı)
             ),
 
             // 6. Araç Açıklaması ve Donanım Çipleri Alanı
             _FeaturesSection(controller: controller),
 
             // Alt barın içeriği örtmesini önlemek için 100 piksel alt boşluk
-            const SizedBox(height: 100),
+            const SizedBox(height: 100), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
           ],
         ),
       ),
@@ -101,25 +101,25 @@ class CarDetailView extends StatelessWidget {
 // -----------------------------------------------------------------------------
 
 // Araç adını, mesafesini ve temel özellik rozetlerini (şanzıman, koltuk, yıl vb.) çizen bileşen
-class _DetailHeader extends StatelessWidget {
+class _DetailHeader extends StatelessWidget { // _DetailHeader sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // Detay kontrolcüsü
-  final CarDetailController controller;
+  final CarDetailController controller; // CarDetailController türünden controller adlı değişkenimiz
 
   // Kurucu fonksiyon
-  const _DetailHeader({required this.controller});
+  const _DetailHeader({required this.controller}); // Genel, sabit sınıf constructor'ı
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     // Tema renklerini alıyoruz
     final colors = context.colors;
     // Araç modelini alıyoruz
     final car = controller.car;
 
     // Başlık etrafına iç boşluk uyguluyoruz
-    return Padding(
+    return Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+        crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
         children: [
           // Büyük ve kalın araç marka-model başlığı
           Text(
@@ -130,10 +130,10 @@ class _DetailHeader extends StatelessWidget {
             ),
           ),
           // 4 piksel dikey boşluk
-          const SizedBox(height: 4),
+          const SizedBox(height: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
           // Lokasyon ve kullanıcıya olan mesafe satırı
-          Row(
+          Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
             children: [
               // Lokasyon pini ikonu
               Icon(
@@ -142,7 +142,7 @@ class _DetailHeader extends StatelessWidget {
                 color: colors.primary,
               ),
               // 4 piksel yatay boşluk
-              const SizedBox(width: 4),
+              const SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
               // Konum ve mesafe metni
               Text(
                 '${car.location} • ${car.distanceKm} km uzaklıkta',
@@ -154,10 +154,10 @@ class _DetailHeader extends StatelessWidget {
             ],
           ),
           // 12 piksel dikey boşluk
-          const SizedBox(height: 12),
+          const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
           // Donanım rozetlerini esnek dizen Wrap bileşeni
-          Wrap(
+          Wrap( // Ekrana sığmayan butonlar ve etiketler alt satıra geçsin, taşma yapmasın diye Wrap kullanıyoruz
             // Rozetler arası yatay boşluk
             spacing: 8,
             // Satır taşmalarında dikey boşluk
@@ -180,18 +180,18 @@ class _DetailHeader extends StatelessWidget {
 
   // Ortak rozet kutucuğu üreten yardımcı fonksiyon
   Widget _badge(IconData icon, String text, ColorScheme colors) {
-    return Container(
+    return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
+      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
         color: colors.surfaceContainer,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(8), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
         border: Border.all(color: colors.outlineVariant),
       ),
-      child: Row(
+      child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 14, color: colors.onSurfaceVariant),
-          const SizedBox(width: 4),
+          const SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
           Text(
             text,
             style: const TextStyle(
@@ -210,15 +210,15 @@ class _DetailHeader extends StatelessWidget {
 // -----------------------------------------------------------------------------
 
 // Kiralama periyodunu (Günlük/Haftalık/Aylık) dinleyen ve değiştiren alan
-class _PeriodSelector extends StatelessWidget {
+class _PeriodSelector extends StatelessWidget { // _PeriodSelector sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // Kontrolcü nesnesi
-  final CarDetailController controller;
+  final CarDetailController controller; // CarDetailController türünden controller adlı değişkenimiz
 
   // Kurucu fonksiyon
-  const _PeriodSelector({required this.controller});
+  const _PeriodSelector({required this.controller}); // Genel, sabit sınıf constructor'ı
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     // Seçili periyot bildiricisini dinliyoruz
     return ValueListenableBuilder<RentalPeriodType>(
       valueListenable: controller.selectedPeriodNotifier,
@@ -240,25 +240,25 @@ class _PeriodSelector extends StatelessWidget {
 // -----------------------------------------------------------------------------
 
 // Aracın detaylı açıklama metnini ve donanım etiketlerini listeleyen bileşen
-class _FeaturesSection extends StatelessWidget {
+class _FeaturesSection extends StatelessWidget { // _FeaturesSection sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // Kontrolcü nesnesi
-  final CarDetailController controller;
+  final CarDetailController controller; // CarDetailController türünden controller adlı değişkenimiz
 
   // Kurucu fonksiyon
-  const _FeaturesSection({required this.controller});
+  const _FeaturesSection({required this.controller}); // Genel, sabit sınıf constructor'ı
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     // Tema renklerini alıyoruz
     final colors = context.colors;
     // Araç nesnesini alıyoruz
     final car = controller.car;
 
     // Açıklama alanı kutusu
-    return Padding(
+    return Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+        crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
         children: [
           // Bölüm başlığı
           const Text(
@@ -266,7 +266,7 @@ class _FeaturesSection extends StatelessWidget {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           // 8 piksel boşluk
-          const SizedBox(height: 8),
+          const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
           // Açıklama paragrafı
           Text(
             car.description,
@@ -276,7 +276,7 @@ class _FeaturesSection extends StatelessWidget {
             ),
           ),
           // 14 piksel boşluk
-          const SizedBox(height: 14),
+          const SizedBox(height: 14), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
           // Donanım özellikleri listesi varsa gösteriyoruz
           if (car.features.isNotEmpty) ...[
@@ -285,9 +285,9 @@ class _FeaturesSection extends StatelessWidget {
               'Öne Çıkan Donanımlar',
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             // Donanımları çip olarak dizen Wrap
-            Wrap(
+            Wrap( // Ekrana sığmayan butonlar ve etiketler alt satıra geçsin, taşma yapmasın diye Wrap kullanıyoruz
               spacing: 6,
               runSpacing: 6,
               children: car.features.map((f) {
@@ -295,7 +295,7 @@ class _FeaturesSection extends StatelessWidget {
                   label: Text(f, style: const TextStyle(fontSize: 12)),
                   backgroundColor: colors.surfaceContainer,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(8), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                   ),
                 );
               }).toList(),
@@ -312,36 +312,36 @@ class _FeaturesSection extends StatelessWidget {
 // -----------------------------------------------------------------------------
 
 // Ekranın altına yapışık toplam tutarı ve rezervasyon yap butonunu sunan alan
-class _BookingBottomBar extends StatelessWidget {
+class _BookingBottomBar extends StatelessWidget { // _BookingBottomBar sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // Kontrolcü nesnesi
-  final CarDetailController controller;
+  final CarDetailController controller; // CarDetailController türünden controller adlı değişkenimiz
   // Rezervasyon onay eylemi
-  final VoidCallback? onBookPressed;
+  final VoidCallback? onBookPressed; // VoidCallback? türünden onBookPressed adlı değişkenimiz
 
   // Kurucu fonksiyon
-  const _BookingBottomBar({
-    required this.controller,
-    required this.onBookPressed,
+  const _BookingBottomBar({ // Genel, sabit sınıf constructor'ı
+    required this.controller, // controller parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.onBookPressed, // onBookPressed parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     // Tema renklerini alıyoruz
     final colors = context.colors;
 
     // Alt sabit bar kapsayıcısı
-    return Container(
+    return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
+      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
         color: colors.surface,
         border: Border(top: BorderSide(color: colors.outlineVariant)),
       ),
       // Cihaz çentiği ve alt gezinme çizgisine taşmaması için SafeArea
-      child: SafeArea(
-        child: Row(
+      child: SafeArea( // Çentik ve sistem çubuklarıyla arayüzün çakışmasını önleyen güvenli alan
+        child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
           children: [
             // Sol Taraf: Toplam Tutar Göstergesi (Fiyat değişimlerini dinler)
-            Expanded(
+            Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
               flex: 2,
               child: ListenableBuilder(
                 // Periyot, süre veya kasko değiştiğinde bu alan güncellenir
@@ -351,9 +351,9 @@ class _BookingBottomBar extends StatelessWidget {
                   controller.fullInsuranceNotifier,
                 ]),
                 builder: (context, _) {
-                  return Column(
+                  return Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
                     mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                     children: [
                       // Küçük etiket
                       Text(
@@ -379,7 +379,7 @@ class _BookingBottomBar extends StatelessWidget {
             ),
 
             // Sağ Taraf: 'Rezervasyon Yap' eylem butonu
-            Expanded(
+            Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
               flex: 3,
               child: FilledButton.icon(
                 // Butona tıklandığında rezervasyon eylemini çalıştır

@@ -1,12 +1,12 @@
-class TimeSlot {
-  final String id;
-  final String time;
-  final bool isAvailable;
+class TimeSlot { // TimeSlot sınıfının açılışı, uygulamada kullanılacak verinin model şemasıdır
+  final String id; // String türünden id adlı değişkenimiz
+  final String time; // String türünden time adlı değişkenimiz
+  final bool isAvailable; // bool türünden isAvailable adlı değişkenimiz
 
-  const TimeSlot({
-    required this.id,
-    required this.time,
-    required this.isAvailable,
+  const TimeSlot({ // Genel, sabit sınıf constructor'ı
+    required this.id, // id parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.time, // time parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.isAvailable, // isAvailable parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 }
 

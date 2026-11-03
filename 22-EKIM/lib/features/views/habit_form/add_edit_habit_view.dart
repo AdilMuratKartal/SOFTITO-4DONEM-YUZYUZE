@@ -1,44 +1,44 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 import '../../../core/theme/app_theme.dart';
-import '../../models/habit_model.dart';
-import '../../models/category_model.dart';
-import '../../widgets/confirmation_dialog.dart';
+import '../../models/habit_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../../models/category_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../../widgets/confirmation_dialog.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
 
-class AddEditHabitModal extends StatefulWidget {
-  final HabitModel? existingHabit;
-  final List<CategoryModel> categories;
-  final ValueChanged<HabitModel> onSave;
-  final VoidCallback? onDelete;
-  final ValueChanged<CategoryModel>? onCategoryAdded;
+class AddEditHabitModal extends StatefulWidget { // AddEditHabitModal sınıfı, zamanla durumu (state) değişebilen dinamik ekranımız için StatefulWidget yapısıdır
+  final HabitModel? existingHabit; // HabitModel? türünden existingHabit adlı değişkenimiz
+  final List<CategoryModel> categories; // List<CategoryModel> türünden categories adlı değişkenimiz
+  final ValueChanged<HabitModel> onSave; // ValueChanged<HabitModel> türünden onSave adlı değişkenimiz
+  final VoidCallback? onDelete; // VoidCallback? türünden onDelete adlı değişkenimiz
+  final ValueChanged<CategoryModel>? onCategoryAdded; // ValueChanged<CategoryModel>? türünden onCategoryAdded adlı değişkenimiz
 
-  const AddEditHabitModal({
+  const AddEditHabitModal({ // Genel, sabit sınıf constructor'ı
     super.key,
-    this.existingHabit,
-    required this.categories,
-    required this.onSave,
-    this.onDelete,
-    this.onCategoryAdded,
+    this.existingHabit, // existingHabit alanına değer aktarıyoruz
+    required this.categories, // categories parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.onSave, // onSave parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    this.onDelete, // onDelete alanına değer aktarıyoruz
+    this.onCategoryAdded, // onCategoryAdded alanına değer aktarıyoruz
   });
 
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   State<AddEditHabitModal> createState() => _AddEditHabitModalState();
 }
 
-class _AddEditHabitModalState extends State<AddEditHabitModal> {
+class _AddEditHabitModalState extends State<AddEditHabitModal> { // Ekranın durumunu (state), mantığını ve değişkenlerini tuttuğumuz State sınıfımız
   final _formKey = GlobalKey<FormState>();
 
-  late TextEditingController _titleController;
-  late String _selectedCategoryId;
-  late String _selectedIconName;
-  late List<int> _selectedDays;
-  late TimeOfDay _startTime;
-  late TimeOfDay _endTime;
-  late bool _hasReminder;
-  late List<CategoryModel> _localCategories;
+  late TextEditingController _titleController; // TextEditingController türünden _titleController adlı değişkenimiz
+  late String _selectedCategoryId; // String türünden _selectedCategoryId adlı değişkenimiz
+  late String _selectedIconName; // String türünden _selectedIconName adlı değişkenimiz
+  late List<int> _selectedDays; // List<int> türünden _selectedDays adlı değişkenimiz
+  late TimeOfDay _startTime; // TimeOfDay türünden _startTime adlı değişkenimiz
+  late TimeOfDay _endTime; // TimeOfDay türünden _endTime adlı değişkenimiz
+  late bool _hasReminder; // bool türünden _hasReminder adlı değişkenimiz
+  late List<CategoryModel> _localCategories; // List<CategoryModel> türünden _localCategories adlı değişkenimiz
 
-  bool _isNewCategoryOpen = false;
-  final TextEditingController _customCategoryController = TextEditingController();
-  int _selectedColorIndex = 0;
+  bool _isNewCategoryOpen = false; // Durum kontrolü için tuttuğumuz bool bayrağımız (_isNewCategoryOpen)
+  final TextEditingController _customCategoryController = TextEditingController(); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
+  int _selectedColorIndex = 0; // int türünden _selectedColorIndex değişkenimiz
 
   final List<int> _customColorPalette = const [
     0xFF4EDEA3, // primary
@@ -62,11 +62,11 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
     {'name': 'Uyku', 'key': 'bedtime', 'icon': Icons.bedtime_rounded, 'color': AppColors.tertiary},
   ];
 
-  @override
-  void initState() {
-    super.initState();
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  void initState() { // State ağaca ilk eklendiğinde çalışan metod, sayfa açılırkenki ilk hazırlıklar burda yapılır
+    super.initState(); // Üst sınıfın initState metodunu tetikleyip başlatıyoruz
     final h = widget.existingHabit;
-    _titleController = TextEditingController(text: h?.title ?? 'Sabah Koşusu ve Egzersiz');
+    _titleController = TextEditingController(text: h?.title ?? 'Sabah Koşusu ve Egzersiz'); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
     _localCategories = List.from(widget.categories);
     _selectedCategoryId = h?.categoryId ?? (_localCategories.isNotEmpty ? _localCategories.first.id : 'sport');
     _selectedIconName = h != null ? _resolveIconKey(h.iconPath) : 'directions_run';
@@ -98,11 +98,11 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
     return 'directions_run';
   }
 
-  @override
-  void dispose() {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     _titleController.dispose();
     _customCategoryController.dispose();
-    super.dispose();
+    super.dispose(); // Üst sınıfın dispose metodunu çağırıp temizliği tamamlıyoruz
   }
 
   Future<void> _pickTime(bool isStart) async {
@@ -112,7 +112,7 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
       initialTime: initial,
       builder: (context, child) {
         return Theme(
-          data: Theme.of(context).copyWith(
+          data: Theme.of(context).copyWith( // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
             colorScheme: const ColorScheme.dark(
               primary: AppColors.primary,
               onPrimary: AppColors.onPrimary,
@@ -125,7 +125,7 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
       },
     );
     if (picked != null) {
-      setState(() {
+      setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
         if (isStart) {
           _startTime = picked;
         } else {
@@ -160,7 +160,7 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
     );
 
     widget.onSave(habit);
-    Navigator.of(context).pop();
+    Navigator.of(context).pop(); // Açık olan sayfayı veya diyaloğu kapatıp bir önceki ekrana dönüyoruz
   }
 
   void _handleAddNewCategory() {
@@ -175,7 +175,7 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
       isCustom: true,
     );
 
-    setState(() {
+    setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
       _localCategories.add(newCat);
       _selectedCategoryId = newCat.id;
       _isNewCategoryOpen = false;
@@ -200,42 +200,42 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     final startStr = '${_startTime.hour.toString().padLeft(2, '0')}:${_startTime.minute.toString().padLeft(2, '0')}';
     final endStr = '${_endTime.hour.toString().padLeft(2, '0')}:${_endTime.minute.toString().padLeft(2, '0')}';
 
-    return Container(
-      decoration: const BoxDecoration(
+    return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
+      decoration: const BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
         color: AppColors.surface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      child: SafeArea(
+      child: SafeArea( // Çentik ve sistem çubuklarıyla arayüzün çakışmasını önleyen güvenli alan
         child: Form(
           key: _formKey,
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             children: [
               // Top Action Bar
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                 children: [
-                  Row(
+                  Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                     children: [
-                      InkWell(
-                        onTap: () => Navigator.of(context).pop(),
-                        borderRadius: BorderRadius.circular(20),
-                        child: Container(
+                      InkWell( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
+                        onTap: () => Navigator.of(context).pop(), // Açık olan sayfayı veya diyaloğu kapatıp bir önceki ekrana dönüyoruz
+                        borderRadius: BorderRadius.circular(20), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
+                        child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                           width: 40,
                           height: 40,
-                          decoration: BoxDecoration(
+                          decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                             color: AppColors.surfaceContainer,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(20), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                           ),
                           child: const Icon(Icons.close, color: AppColors.onSurface, size: 20),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                       Text(
                         widget.existingHabit == null ? 'Yeni Alışkanlık' : 'Alışkanlığı Düzenle',
                         style: const TextStyle(
@@ -251,9 +251,9 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.onPrimary,
-                      elevation: 0,
+                      elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                     ),
                     onPressed: _saveHabit,
                     icon: const Icon(Icons.check_rounded, size: 18),
@@ -264,26 +264,26 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // Motivational Insight Hero Card
-              Container(
+              Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                 padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
+                decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                   color: AppColors.surfaceContainer,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                   border: Border.all(color: AppColors.outlineVariant),
                 ),
-                child: Row(
+                child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                      child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                        crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                         children: [
-                          Row(
+                          Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                             children: const [
                               Icon(Icons.bolt_rounded, color: AppColors.primary, size: 16),
-                              SizedBox(width: 4),
+                              SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                               Text(
                                 'KÜÇÜK ADIMLAR',
                                 style: TextStyle(
@@ -295,7 +295,7 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                           const Text(
                             'Rutinini inşa et, zinciri asla kırma.',
                             style: TextStyle(
@@ -304,7 +304,7 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                               color: AppColors.onSurface,
                             ),
                           ),
-                          const SizedBox(height: 2),
+                          const SizedBox(height: 2), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                           const Text(
                             'Günde 15 dakika bile 1 yılda devasa bir dönüşüm sağlar.',
                             style: TextStyle(
@@ -315,13 +315,13 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                         ],
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Container(
+                    const SizedBox(width: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                    Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                       width: 58,
                       height: 58,
-                      decoration: BoxDecoration(
+                      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                         color: AppColors.surfaceContainerHigh,
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(14), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                         border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
                         gradient: LinearGradient(
                           colors: [
@@ -341,10 +341,10 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // Section 1: Habit Name Input
-              Row(
+              Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                 children: const [
                   Text(
                     'Alışkanlık Adı',
@@ -354,18 +354,18 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                       color: AppColors.onSurfaceVariant,
                     ),
                   ),
-                  SizedBox(width: 4),
+                  SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                   Text('*', style: TextStyle(color: AppColors.primary, fontSize: 12)),
                 ],
               ),
-              const SizedBox(height: 6),
-              Container(
-                decoration: BoxDecoration(
+              const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+              Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
+                decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                   color: AppColors.surfaceContainer,
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(14), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                   border: Border.all(color: AppColors.outlineVariant),
                 ),
-                child: TextFormField(
+                child: TextFormField( // Kullanıcıdan metin girdisi almak için form alanı
                   controller: _titleController,
                   style: const TextStyle(fontSize: 14, color: AppColors.onSurface),
                   decoration: const InputDecoration(
@@ -384,11 +384,11 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                   },
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // Section 2: Icon Selection Library (10 Icons Grid)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                 children: [
                   const Text(
                     'İkon Seçimi',
@@ -398,10 +398,10 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                       color: AppColors.onSurfaceVariant,
                     ),
                   ),
-                  Row(
+                  Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                     children: const [
                       Icon(Icons.auto_awesome, color: AppColors.primary, size: 14),
-                      SizedBox(width: 4),
+                      SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                       Text(
                         '10 Öneri',
                         style: TextStyle(
@@ -414,50 +414,50 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              Container(
+              const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+              Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                 padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
+                decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                   color: AppColors.surfaceContainer,
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(14), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                   border: Border.all(color: AppColors.outlineVariant),
                 ),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
+                child: GridView.builder( // Elemanları ızgara (grid) düzeninde performanslı şekilde listelemek için kullanıyoruz
+                  shrinkWrap: true, // Listenin sadece elemanları kadar yer kaplamasını sağlıyoruz, taşmasın diye
+                  physics: const NeverScrollableScrollPhysics(), // Kendi içinde kaydırılmasını engelleyip dıştaki kaydırıcıya bırakıyoruz
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 5,
                     crossAxisSpacing: 8,
                     mainAxisSpacing: 8,
                     childAspectRatio: 0.95,
                   ),
-                  itemCount: _iconSuggestions.length,
-                  itemBuilder: (context, i) {
+                  itemCount: _iconSuggestions.length, // Listede kaç tane eleman gösterileceğini belirtiyoruz
+                  itemBuilder: (context, i) { // Listenin her bir satırını sırayla oluşturan builder fonksiyonumuz
                     final item = _iconSuggestions[i];
                     final isSelected = _selectedIconName == item['key'];
                     final iconColor = item['color'] as Color;
 
-                    return GestureDetector(
-                      onTap: () => setState(() => _selectedIconName = item['key'] as String),
-                      child: AnimatedContainer(
+                    return GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
+                      onTap: () => setState(() => _selectedIconName = item['key'] as String), // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
+                      child: AnimatedContainer( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                         duration: const Duration(milliseconds: 180),
-                        decoration: BoxDecoration(
+                        decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                           color: isSelected ? AppColors.primary : AppColors.surfaceContainerHigh,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                           border: Border.all(
                             color: isSelected ? AppColors.primary : Colors.transparent,
                             width: 1.5,
                           ),
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                          mainAxisAlignment: MainAxisAlignment.center, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                           children: [
                             Icon(
                               item['icon'] as IconData,
                               color: isSelected ? AppColors.onPrimary : iconColor,
                               size: 22,
                             ),
-                            const SizedBox(height: 4),
+                            const SizedBox(height: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                             Text(
                               item['name'] as String,
                               style: TextStyle(
@@ -473,11 +473,11 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                   },
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // Section 3: Categories & Custom Category Trigger
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                 children: [
                   const Text(
                     'Kategori',
@@ -487,12 +487,12 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                       color: AppColors.onSurfaceVariant,
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () => setState(() => _isNewCategoryOpen = !_isNewCategoryOpen),
-                    child: Row(
+                  GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
+                    onTap: () => setState(() => _isNewCategoryOpen = !_isNewCategoryOpen), // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
+                    child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                       children: const [
                         Icon(Icons.add_circle_outline, color: AppColors.primary, size: 16),
-                        SizedBox(width: 4),
+                        SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                         Text(
                           'Yeni Kategori',
                           style: TextStyle(
@@ -506,46 +506,46 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // Categories 2-Column Grid
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
+              GridView.builder( // Elemanları ızgara (grid) düzeninde performanslı şekilde listelemek için kullanıyoruz
+                shrinkWrap: true, // Listenin sadece elemanları kadar yer kaplamasını sağlıyoruz, taşmasın diye
+                physics: const NeverScrollableScrollPhysics(), // Kendi içinde kaydırılmasını engelleyip dıştaki kaydırıcıya bırakıyoruz
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 8,
                   childAspectRatio: 2.7,
                 ),
-                itemCount: _localCategories.length,
-                itemBuilder: (context, idx) {
+                itemCount: _localCategories.length, // Listede kaç tane eleman gösterileceğini belirtiyoruz
+                itemBuilder: (context, idx) { // Listenin her bir satırını sırayla oluşturan builder fonksiyonumuz
                   final cat = _localCategories[idx];
                   final isSelected = _selectedCategoryId == cat.id;
 
-                  return GestureDetector(
-                    onTap: () => setState(() => _selectedCategoryId = cat.id),
-                    child: AnimatedContainer(
+                  return GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
+                    onTap: () => setState(() => _selectedCategoryId = cat.id), // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
+                    child: AnimatedContainer( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                       duration: const Duration(milliseconds: 180),
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
+                      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                         color: isSelected ? AppColors.primary : AppColors.surfaceContainer,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                         border: Border.all(
                           color: isSelected ? AppColors.primary : AppColors.outlineVariant,
                         ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                         children: [
-                          Row(
+                          Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                             children: [
                               Icon(
                                 _getCategoryIcon(cat.id),
                                 size: 18,
                                 color: isSelected ? AppColors.onPrimary : Color(cat.colorHex),
                               ),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                               Text(
                                 cat.name,
                                 style: TextStyle(
@@ -570,19 +570,19 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
 
               // Expandable New Category Panel
               if (_isNewCategoryOpen) ...[
-                const SizedBox(height: 10),
-                Container(
+                const SizedBox(height: 10), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
+                  decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                     color: AppColors.surfaceContainerHigh,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(14), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                     border: Border.all(color: AppColors.outlineVariant),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                    crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                         children: [
                           const Text(
                             'Yeni Kategori Oluştur',
@@ -592,14 +592,14 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                               color: AppColors.onSurface,
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () => setState(() => _isNewCategoryOpen = false),
+                          GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
+                            onTap: () => setState(() => _isNewCategoryOpen = false), // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
                             child: const Icon(Icons.close, size: 18, color: AppColors.onSurfaceVariant),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
-                      TextField(
+                      const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                      TextField( // Kullanıcıdan metin girdisi almak için form alanı
                         controller: _customCategoryController,
                         style: const TextStyle(fontSize: 13, color: AppColors.onSurface),
                         decoration: InputDecoration(
@@ -607,28 +607,28 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                           fillColor: AppColors.surfaceContainer,
                           contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                             borderSide: BorderSide.none,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 10), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                       const Text(
                         'Renk Teması:',
                         style: TextStyle(fontSize: 11, color: AppColors.onSurfaceVariant),
                       ),
-                      const SizedBox(height: 6),
-                      Row(
+                      const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                      Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                         children: List.generate(_customColorPalette.length, (index) {
                           final colorVal = Color(_customColorPalette[index]);
                           final isChosen = _selectedColorIndex == index;
-                          return GestureDetector(
-                            onTap: () => setState(() => _selectedColorIndex = index),
-                            child: Container(
+                          return GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
+                            onTap: () => setState(() => _selectedColorIndex = index), // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
+                            child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                               margin: const EdgeInsets.only(right: 8),
                               width: 28,
                               height: 28,
-                              decoration: BoxDecoration(
+                              decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                                 color: colorVal,
                                 shape: BoxShape.circle,
                                 border: isChosen ? Border.all(color: Colors.white, width: 2) : null,
@@ -640,15 +640,15 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                           );
                         }),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 10), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                       SizedBox(
                         width: double.infinity,
-                        child: ElevatedButton(
+                        child: ElevatedButton( // Kullanıcının tıklayabileceği aksiyon butonu bileşenimiz
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
                             foregroundColor: AppColors.onPrimary,
                             padding: const EdgeInsets.symmetric(vertical: 10),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                           ),
                           onPressed: _handleAddNewCategory,
                           child: const Text('Kategoriyi Ekle', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -658,11 +658,11 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                   ),
                 ),
               ],
-              const SizedBox(height: 20),
+              const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // Section 4: Weekly Frequency Day Chips
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                 children: [
                   const Text(
                     'Tekrar Günleri',
@@ -672,15 +672,15 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                       color: AppColors.onSurfaceVariant,
                     ),
                   ),
-                  Row(
+                  Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                     children: [
-                      GestureDetector(
-                        onTap: () => setState(() => _selectedDays = [1, 2, 3, 4, 5]),
-                        child: Container(
+                      GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
+                        onTap: () => setState(() => _selectedDays = [1, 2, 3, 4, 5]), // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
+                        child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
+                          decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                             color: AppColors.surfaceContainer,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                             border: Border.all(color: AppColors.outlineVariant),
                           ),
                           child: const Text(
@@ -689,14 +689,14 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 6),
-                      GestureDetector(
-                        onTap: () => setState(() => _selectedDays = [1, 2, 3, 4, 5, 6, 7]),
-                        child: Container(
+                      const SizedBox(width: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                      GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
+                        onTap: () => setState(() => _selectedDays = [1, 2, 3, 4, 5, 6, 7]), // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
+                        child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
+                          decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                             color: AppColors.surfaceContainer,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                             border: Border.all(color: AppColors.outlineVariant),
                           ),
                           child: const Text(
@@ -709,11 +709,11 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // 7 Days Responsive Grid
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                 children: [
                   _buildDayChip(1, 'Pzt'),
                   _buildDayChip(2, 'Sal'),
@@ -724,7 +724,7 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                   _buildDayChip(7, 'Paz'),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // Section 5: Exact Time Interval Pickers
               const Text(
@@ -735,34 +735,34 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                   color: AppColors.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: 8),
-              Row(
+              const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+              Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                 children: [
-                  Expanded(
-                    child: GestureDetector(
+                  Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                    child: GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
                       onTap: () => _pickTime(true),
-                      child: Container(
+                      child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                         padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
+                        decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                           color: AppColors.surfaceContainer,
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(14), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                           border: Border.all(color: AppColors.outlineVariant),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                          crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                           children: [
                             const Text(
                               'Başlangıç Saati',
                               style: TextStyle(fontSize: 11, color: AppColors.onSurfaceVariant),
                             ),
-                            const SizedBox(height: 4),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            const SizedBox(height: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                            Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                               children: [
-                                Row(
+                                Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                                   children: [
                                     const Icon(Icons.schedule_rounded, color: AppColors.primary, size: 18),
-                                    const SizedBox(width: 6),
+                                    const SizedBox(width: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                                     Text(
                                       startStr,
                                       style: const TextStyle(
@@ -781,32 +781,32 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: GestureDetector(
+                  const SizedBox(width: 10), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                  Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                    child: GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
                       onTap: () => _pickTime(false),
-                      child: Container(
+                      child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                         padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
+                        decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                           color: AppColors.surfaceContainer,
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(14), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                           border: Border.all(color: AppColors.outlineVariant),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                          crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                           children: [
                             const Text(
                               'Bitiş Saati',
                               style: TextStyle(fontSize: 11, color: AppColors.onSurfaceVariant),
                             ),
-                            const SizedBox(height: 4),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            const SizedBox(height: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                            Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                               children: [
-                                Row(
+                                Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                                   children: [
                                     const Icon(Icons.update_rounded, color: AppColors.secondary, size: 18),
-                                    const SizedBox(width: 6),
+                                    const SizedBox(width: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                                     Text(
                                       endStr,
                                       style: const TextStyle(
@@ -827,24 +827,24 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // Section 6: Smart Notification Reminder Toggle
-              Container(
+              Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                 padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
+                decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                   color: AppColors.surfaceContainer,
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(14), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                   border: Border.all(color: AppColors.outlineVariant),
                 ),
-                child: Row(
+                child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                   children: [
-                    Container(
+                    Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                       width: 40,
                       height: 40,
-                      decoration: BoxDecoration(
+                      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                         color: AppColors.primary.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                       ),
                       child: const Icon(
                         Icons.notifications_active_rounded,
@@ -852,10 +852,10 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                         size: 20,
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    const SizedBox(width: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                    Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                      child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                        crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                         children: const [
                           Text(
                             'Hatırlatıcı Bildirim Gönder',
@@ -865,7 +865,7 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                               color: AppColors.onSurface,
                             ),
                           ),
-                          SizedBox(height: 2),
+                          SizedBox(height: 2), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                           Text(
                             'Aralık başlangıcında ve 15 dk önce uyar',
                             style: TextStyle(
@@ -877,24 +877,24 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                       ),
                     ),
                     // Custom switch widget
-                    GestureDetector(
-                      onTap: () => setState(() => _hasReminder = !_hasReminder),
-                      child: AnimatedContainer(
+                    GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
+                      onTap: () => setState(() => _hasReminder = !_hasReminder), // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
+                      child: AnimatedContainer( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                         duration: const Duration(milliseconds: 200),
                         width: 48,
                         height: 28,
                         padding: const EdgeInsets.all(2),
-                        decoration: BoxDecoration(
+                        decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                           color: _hasReminder ? AppColors.primary : AppColors.surfaceContainerHigh,
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(14), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                         ),
                         child: AnimatedAlign(
                           duration: const Duration(milliseconds: 200),
                           alignment: _hasReminder ? Alignment.centerRight : Alignment.centerLeft,
-                          child: Container(
+                          child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                             width: 24,
                             height: 24,
-                            decoration: BoxDecoration(
+                            decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                               color: _hasReminder ? AppColors.onPrimary : AppColors.onSurfaceVariant,
                               shape: BoxShape.circle,
                             ),
@@ -908,7 +908,7 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 24), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // Section 7: Form Submission & Bottom Actions
               ElevatedButton.icon(
@@ -916,7 +916,7 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                   backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.onPrimary,
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                 ),
                 onPressed: _saveHabit,
                 icon: const Icon(Icons.local_fire_department_rounded, size: 22),
@@ -927,13 +927,13 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
               ),
 
               if (widget.existingHabit != null && widget.onDelete != null) ...[
-                const SizedBox(height: 10),
+                const SizedBox(height: 10), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                 OutlinedButton.icon(
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.danger,
                     side: BorderSide(color: AppColors.danger.withValues(alpha: 0.5)),
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                   ),
                   onPressed: () async {
                     final confirmed = await ConfirmationDialog.show(
@@ -948,7 +948,7 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                     );
                     if (confirmed && context.mounted) {
                       widget.onDelete?.call();
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pop(); // Açık olan sayfayı veya diyaloğu kapatıp bir önceki ekrana dönüyoruz
                     }
                   },
                   icon: const Icon(Icons.delete_outline_rounded, size: 18),
@@ -958,7 +958,7 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                   ),
                 ),
               ],
-              const SizedBox(height: 16),
+              const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             ],
           ),
         ),
@@ -968,9 +968,9 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
 
   Widget _buildDayChip(int dayIndex, String label) {
     final isSelected = _selectedDays.contains(dayIndex);
-    return GestureDetector(
+    return GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
       onTap: () {
-        setState(() {
+        setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
           if (isSelected) {
             _selectedDays.remove(dayIndex);
           } else {
@@ -979,19 +979,19 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
           }
         });
       },
-      child: AnimatedContainer(
+      child: AnimatedContainer( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
         duration: const Duration(milliseconds: 180),
         width: 44,
         height: 48,
-        decoration: BoxDecoration(
+        decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
           color: isSelected ? AppColors.primary : AppColors.surfaceContainer,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           border: Border.all(
             color: isSelected ? AppColors.primary : AppColors.outlineVariant,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+          mainAxisAlignment: MainAxisAlignment.center, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
           children: [
             Text(
               label,
@@ -1001,14 +1001,14 @@ class _AddEditHabitModalState extends State<AddEditHabitModal> {
                 color: isSelected ? AppColors.onPrimary : AppColors.onSurfaceVariant,
               ),
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: 2), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             if (isSelected)
               const Icon(Icons.check_rounded, size: 12, color: AppColors.onPrimary)
             else
-              Container(
+              Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                 width: 4,
                 height: 4,
-                decoration: const BoxDecoration(
+                decoration: const BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                   color: AppColors.outlineVariant,
                   shape: BoxShape.circle,
                 ),

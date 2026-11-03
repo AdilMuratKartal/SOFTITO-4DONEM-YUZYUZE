@@ -1,28 +1,28 @@
-import 'package:flutter/material.dart';
-import '../controller/water_tracker_controller.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import '../controller/water_tracker_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
 
 /// Günlük Su İlerleme Kartı Bileşeni
-class WaterProgressCard extends StatelessWidget {
-  final WaterTrackerController controller;
+class WaterProgressCard extends StatelessWidget { // WaterProgressCard sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
+  final WaterTrackerController controller; // WaterTrackerController türünden controller adlı değişkenimiz
 
-  const WaterProgressCard({
+  const WaterProgressCard({ // Genel, sabit sınıf constructor'ı
     super.key,
-    required this.controller,
+    required this.controller, // controller parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final cardBg = theme.cardTheme.color ?? theme.colorScheme.surface;
     final borderColor = isDark ? const Color(0xFF30363D) : const Color(0xFFD0D7DE);
 
-    return Container(
+    return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
+      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
         color: cardBg,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(24), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
         border: Border.all(color: borderColor, width: 1),
       ),
       child: ValueListenableBuilder<int>(
@@ -34,13 +34,13 @@ class WaterProgressCard extends StatelessWidget {
               final progress = goal > 0 ? (totalWater / goal).clamp(0.0, 1.0) : 0.0;
               final percent = (progress * 100).toInt();
 
-              return Column(
+              return Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
                 children: [
                   _buildProgressHeader(theme, percent),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                   _buildProgressBar(theme, progress),
-                  const SizedBox(height: 14),
-                  _buildStatsRow(theme, totalWater, goal),
+                  const SizedBox(height: 14), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                  _buildStatsRow(theme, totalWater, goal), // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                 ],
               );
             },
@@ -51,16 +51,16 @@ class WaterProgressCard extends StatelessWidget {
   }
 
   Widget _buildProgressHeader(ThemeData theme, int percent) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
       children: [
-        Row(
+        Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
           children: [
-            Container(
+            Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
               padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
+              decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                 color: theme.colorScheme.primary.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
               ),
               child: Icon(
                 Icons.water_drop_rounded,
@@ -68,20 +68,20 @@ class WaterProgressCard extends StatelessWidget {
                 size: 24,
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             Text(
               'Günlük Hedef',
-              style: theme.textTheme.titleMedium?.copyWith(
+              style: theme.textTheme.titleMedium?.copyWith( // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
                 fontWeight: FontWeight.bold,
               ),
             ),
           ],
         ),
-        Container(
+        Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
+          decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
             color: theme.colorScheme.secondary.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           ),
           child: Text(
             '%$percent',
@@ -98,7 +98,7 @@ class WaterProgressCard extends StatelessWidget {
 
   Widget _buildProgressBar(ThemeData theme, double progress) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
       child: LinearProgressIndicator(
         value: progress,
         minHeight: 14,
@@ -108,13 +108,13 @@ class WaterProgressCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsRow(ThemeData theme, int total, int goal) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildStatsRow(ThemeData theme, int total, int goal) { // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+    return Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
       children: [
         Text(
           '$total ml içildi',
-          style: theme.textTheme.bodyMedium?.copyWith(
+          style: theme.textTheme.bodyMedium?.copyWith( // Mevcut nesnenin bazı alanlarını güncelleyip yeni bir kopyasını üreten copyWith metodu
             fontWeight: FontWeight.w600,
             color: theme.colorScheme.primary,
           ),

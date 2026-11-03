@@ -1,12 +1,12 @@
 // Flutter'ın temel Material bileşenlerini içeren kütüphaneyi içe aktarır
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 // Uygulamanın ana açılış sayfası olan canlı ürün listesi ekranını içe aktarır
-import 'screens/urun_listesi_ekrani.dart';
+import 'screens/urun_listesi_ekrani.dart'; // Sayfa ve ekran tasarım dosyalarımızı bu dosyaya import ediyoruz
 
 // Dart ve Flutter uygulamalarının çalışmaya başladığı ana giriş fonksiyonu
-void main() {
+void main() { // Dart ve Flutter uygulamasını başlatan ana giriş fonksiyonumuz
   // Widget ağacını başlatıp ekranın ilk çizimini yapan Flutter fonksiyonu
-  runApp(
+  runApp( // runApp ile uygulamanın kök widget'ını yükleyip çizim döngüsünü başlatıyoruz
     // Kök widget olarak MiniMagazaApiUygulamasi bileşenini bağlar
     const MiniMagazaApiUygulamasi(),
   // runApp fonksiyon çağrısının kapanışı
@@ -15,20 +15,20 @@ void main() {
 }
 
 // Uygulamanın genel tema, yönlendirme ve yapılandırma ayarlarını barındıran kök widget
-class MiniMagazaApiUygulamasi extends StatelessWidget {
+class MiniMagazaApiUygulamasi extends StatelessWidget { // MiniMagazaApiUygulamasi sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // MiniMagazaApiUygulamasi sınıfının değişmez (const) kurucu metodu
-  const MiniMagazaApiUygulamasi({
+  const MiniMagazaApiUygulamasi({ // Genel, sabit sınıf constructor'ı
     // Üst sınıfa anahtar parametresini iletir
     super.key,
   // Kurucu metodun kapanış parantezi
   });
 
   // Kök widget'ın görsel yapısını inşa eden build metodu
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   // BuildContext parametresini alan ve Widget döndüren build fonksiyonu
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     // Material Design tasarım standartlarını uygulayan kök MaterialApp bileşeni
-    return MaterialApp(
+    return MaterialApp( // Flutter'ın Material Design temellerini ve yönlendirmesini başlatan ana MaterialApp widget'ı
       // Cihazın görev yöneticisinde görünecek uygulama başlığı
       title: 'Mini Mağaza Canlı API',
       // Sağ üst köşedeki kırmızı 'DEBUG' etiket bandını gizler
@@ -42,9 +42,9 @@ class MiniMagazaApiUygulamasi extends StatelessWidget {
         // Uygulama genelindeki AppBar varsayılan stil ayarları
         appBarTheme: const AppBarTheme(
           // AppBar başlığının ortalanmasını sağlar
-          centerTitle: true,
+          centerTitle: true, // Başlığı ortalamak için true veriyoruz
           // AppBar gölge yüksekliği
-          elevation: 0,
+          elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
         // AppBarTheme kapanışı
         ),
       // ThemeData kapanışı

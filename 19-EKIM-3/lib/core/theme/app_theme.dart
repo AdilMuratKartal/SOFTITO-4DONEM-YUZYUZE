@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 import '../constants/app_colors.dart';
 
 /// Material 3 Tasarım Temaları (Dark Obsidian & Neon / Clean Fresh Cyan & Lime)
@@ -24,12 +24,12 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.darkSurface,
         foregroundColor: AppColors.darkTextPrimary,
-        elevation: 0,
-        centerTitle: true,
+        elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
+        centerTitle: true, // Başlığı ortalamak için true veriyoruz
       ),
       cardTheme: const CardThemeData(
         color: AppColors.darkCard,
-        elevation: 0,
+        elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20)),
           side: BorderSide(color: AppColors.darkBorder, width: 1),
@@ -39,10 +39,10 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.neonCyan,
           foregroundColor: AppColors.darkBackground,
-          elevation: 0,
+          elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           ),
           textStyle: const TextStyle(
             fontWeight: FontWeight.bold,
@@ -56,7 +56,7 @@ class AppTheme {
           side: const BorderSide(color: AppColors.neonCyan, width: 1.5),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           ),
           textStyle: const TextStyle(
             fontWeight: FontWeight.w600,
@@ -86,12 +86,12 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.lightSurface,
         foregroundColor: AppColors.lightTextPrimary,
-        elevation: 0,
-        centerTitle: true,
+        elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
+        centerTitle: true, // Başlığı ortalamak için true veriyoruz
       ),
       cardTheme: const CardThemeData(
         color: AppColors.lightCard,
-        elevation: 0,
+        elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20)),
           side: BorderSide(color: AppColors.lightBorder, width: 1),
@@ -101,10 +101,10 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.freshCyan,
           foregroundColor: Colors.white,
-          elevation: 0,
+          elevation: 0, // Kartın arkasına gölge veriyoruz (z koordinatı)
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           ),
           textStyle: const TextStyle(
             fontWeight: FontWeight.bold,
@@ -118,7 +118,7 @@ class AppTheme {
           side: const BorderSide(color: AppColors.freshCyan, width: 1.5),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           ),
           textStyle: const TextStyle(
             fontWeight: FontWeight.w600,

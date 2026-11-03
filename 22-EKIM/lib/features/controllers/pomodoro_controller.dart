@@ -1,8 +1,8 @@
-import 'dart:async';
-import 'package:flutter/material.dart';
-import '../../core/services/notification_service.dart';
+import 'dart:async'; // Asenkron işlemler, Timer ve Stream (veri akışı) yapıları için içeri aktarıyoruz
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import '../../core/services/notification_service.dart'; // Veri çekme ve API haberleşmesini yapan servis katmanımızı dahil ediyoruz
 
-enum PomodoroMode { focus, shortBreak, longBreak }
+enum PomodoroMode { focus, shortBreak, longBreak } // PomodoroMode enum yapısı, belirli sabit seçenekleri tip güvenli şekilde listelememizi sağlar
 
 class PomodoroController {
   final ValueNotifier<PomodoroMode> modeNotifier =
@@ -74,7 +74,7 @@ class PomodoroController {
     setMode(modeNotifier.value);
   }
 
-  void dispose() {
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     _timer?.cancel();
     modeNotifier.dispose();
     remainingSecondsNotifier.dispose();

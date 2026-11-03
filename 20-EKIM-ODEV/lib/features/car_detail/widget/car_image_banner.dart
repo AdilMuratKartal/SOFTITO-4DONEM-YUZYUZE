@@ -1,43 +1,43 @@
 // Flutter'ın temel materyal tasarım widget kütüphanesini içe aktarıyoruz
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 // Kırmızı çizgi sabit yükseklik (260.0 px) ve renk sabitlerini içe aktarıyoruz
 import '../../../core/constants/app_colors.dart';
 // BuildContext üzerinden tema renklerine pratik erişim sağlayan extension'ı içe aktarıyoruz
 import '../../../core/extensions/context_extensions.dart';
 // Detayları gösterilecek aracın veri modelini içe aktarıyoruz
-import '../../car_listing/models/car_model.dart';
+import '../../car_listing/models/car_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
 /// TakeGO Sabit Detay Görsel Banner'ı (CarImageBanner)
 ///
 /// Kırmızı Çizgi Kuralı: İlan detay sayfasında kapak görseli alanı
 /// daima sabit `height: 260.0` piksel ve `width: double.infinity` olarak
 /// konumlandırılır; kayma veya taşma (RenderFlex overflow) yaşanması engellenir.
-class CarImageBanner extends StatelessWidget {
+class CarImageBanner extends StatelessWidget { // CarImageBanner sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
   // ---------------------------------------------------------------------------
   // ÖZELLİKLER (Properties)
   // ---------------------------------------------------------------------------
 
   /// Banner üzerinde plaka, yıl, mesafe ve tip bilgileri gösterilecek araç modeli
-  final CarModel car;
+  final CarModel car; // CarModel türünden car adlı değişkenimiz
 
   // ---------------------------------------------------------------------------
   // KURUCU METOT (Constructor)
   // ---------------------------------------------------------------------------
 
   /// Sabit kurucu: Araç modelini zorunlu parametre olarak alır
-  const CarImageBanner({
+  const CarImageBanner({ // Genel, sabit sınıf constructor'ı
     // Performans için super.key parametresi
     super.key,
     // Gösterilecek araç nesnesi (Zorunlu alan)
-    required this.car,
+    required this.car, // car parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 
   // ---------------------------------------------------------------------------
   // ARAYÜZ OLUŞTURMA (Build)
   // ---------------------------------------------------------------------------
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     // 1. Değişken: Aktif tema renk paleti
     final colors = context.colors;
 
@@ -48,18 +48,18 @@ class CarImageBanner extends StatelessWidget {
       // Genişlik yatayda ekranı tamamen kaplar
       width: double.infinity,
       // İç katmanları üst üste bindirmek için Stack widget'ı
-      child: Stack(
+      child: Stack( // Elemanları üst üste bindirmek (katmanlı tasarım yapmak) için Stack kullanıyoruz
         // Çocuk widget'ları Stack alanını tamamen dolduracak şekilde esnetiyoruz
         fit: StackFit.expand,
         children: [
           // -------------------------------------------------------------------
           // KATMAN 1: Zemin Silüet Dolgusu (Temaya uyumlu kokpit grisi)
           // -------------------------------------------------------------------
-          Container(
+          Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
             // Yüzey arka plan dolgu rengi
             color: colors.surfaceContainerHighest,
             // İkonu merkeze yerleştiren Center
-            child: Center(
+            child: Center( // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
               // Elektrikli araç ise şarjlı araba ikonu, benzinli ise standart araba ikonu
               child: Icon(
                 // Şartlı ikon seçimi
@@ -77,7 +77,7 @@ class CarImageBanner extends StatelessWidget {
           // -------------------------------------------------------------------
           // KATMAN 2: Alt Gölgelendirme Gradyanı (Okunabilirlik artırıcı)
           // -------------------------------------------------------------------
-          Positioned(
+          Positioned( // Stack içindeki widget'ın konumunu (sol, sağ, üst, alt) piksel olarak ayarlamak için
             // Banner'ın en alt tabanına hizalama
             bottom: 0,
             // Sol kenara yaslama
@@ -89,7 +89,7 @@ class CarImageBanner extends StatelessWidget {
             // Gradyan boyamasını yapan DecoratedBox
             child: DecoratedBox(
               // Gradyan kutu dekorasyonu
-              decoration: BoxDecoration(
+              decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                 // Alttan yukarıya doğru koyudan şeffafa uzanan dikey gradyan
                 gradient: LinearGradient(
                   // Gradyan başlangıç noktası: alt merkez
@@ -111,21 +111,21 @@ class CarImageBanner extends StatelessWidget {
           // -------------------------------------------------------------------
           // KATMAN 3: Sol Alt Köşe: Plaka ve Model Yılı Rozeti
           // -------------------------------------------------------------------
-          Positioned(
+          Positioned( // Stack içindeki widget'ın konumunu (sol, sağ, üst, alt) piksel olarak ayarlamak için
             // Alt kenardan 16 piksel yukarıda
             bottom: 16,
             // Sol kenardan 16 piksel içeride
             left: 16,
             // Rozet kutusu
-            child: Container(
+            child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
               // Rozet içi dolgusu: yatayda 12px, dikeyde 6px
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               // Rozet dekorasyonu
-              decoration: BoxDecoration(
+              decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                 // Yarı saydam arka plan dolgusu
                 color: colors.surface.withValues(alpha: 0.9),
                 // 10px yuvarlak köşeler
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                 // İnce kenarlık çizgisi
                 border: Border.all(color: colors.outlineVariant),
               ),
@@ -144,26 +144,26 @@ class CarImageBanner extends StatelessWidget {
           // -------------------------------------------------------------------
           // KATMAN 4: Sağ Alt Köşe: Konum ve Mesafe Rozeti
           // -------------------------------------------------------------------
-          Positioned(
+          Positioned( // Stack içindeki widget'ın konumunu (sol, sağ, üst, alt) piksel olarak ayarlamak için
             // Alt kenardan 16 piksel yukarıda
             bottom: 16,
             // Sağ kenardan 16 piksel içeride
             right: 16,
             // Rozet kapsayıcısı
-            child: Container(
+            child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
               // Rozet içi dolgusu
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               // Rozet dekorasyonu
-              decoration: BoxDecoration(
+              decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                 // Yarı saydam arka plan rengi
                 color: colors.surface.withValues(alpha: 0.9),
                 // 10px yuvarlak köşeler
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                 // Kenarlık çizgisi
                 border: Border.all(color: colors.outlineVariant),
               ),
               // Konum ikonu ve mesafe metnini yan yana dizen satır
-              child: Row(
+              child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                 // İçerik kadar yer kaplamasını sağlayan min boyutu
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -174,7 +174,7 @@ class CarImageBanner extends StatelessWidget {
                     color: colors.primary,
                   ),
                   // İkon ile metin arasına 4px yatay boşluk
-                  const SizedBox(width: 4),
+                  const SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                   // Mesafe bilgisi metni (Örn: 2.4 km yakında)
                   Text(
                     '${car.distanceKm} km yakında',

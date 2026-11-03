@@ -1,20 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import 'package:provider/provider.dart'; // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
 import '../../core/theme/app_theme.dart';
-import '../../providers/auth_provider.dart';
-import '../../providers/appointment_provider.dart';
-import '../shared/offer_form_screen.dart';
-import '../shared/chat_screen.dart';
-import '../shared/widgets/status_badge.dart';
-import '../shared/widgets/location_badge.dart';
+import '../../providers/auth_provider.dart'; // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
+import '../../providers/appointment_provider.dart'; // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
+import '../shared/offer_form_screen.dart'; // Sayfa ve ekran tasarım dosyalarımızı bu dosyaya import ediyoruz
+import '../shared/chat_screen.dart'; // Sayfa ve ekran tasarım dosyalarımızı bu dosyaya import ediyoruz
+import '../shared/widgets/status_badge.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
+import '../shared/widgets/location_badge.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
 
-class CustomerAppointmentsScreen extends StatelessWidget {
-  final bool isTab;
+class CustomerAppointmentsScreen extends StatelessWidget { // CustomerAppointmentsScreen sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
+  final bool isTab; // bool türünden isTab adlı değişkenimiz
 
-  const CustomerAppointmentsScreen({super.key, this.isTab = false});
+  const CustomerAppointmentsScreen({super.key, this.isTab = false}); // Sabit constructor, üst sınıfa key parametresini gönderir
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     final authProvider = context.watch<AuthProvider>();
     final appointmentProvider = context.watch<AppointmentProvider>();
     final currentUser = authProvider.currentUser;
@@ -23,33 +23,33 @@ class CustomerAppointmentsScreen extends StatelessWidget {
         ? appointmentProvider.getByCustomer(currentUser.id)
         : [];
 
-    return Scaffold(
+    return Scaffold( // Sayfa iskeletini (appBar, body, floatingActionButton) oluşturan ana Scaffold widget'ımız
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Randevularım ve Tekliflerim'),
+      appBar: AppBar( // Sayfanın üst kısmındaki başlık ve aksiyon barı (AppBar)
+        title: const Text('Randevularım ve Tekliflerim'), // Sayfa başlığını ekrana yazdırıyoruz
         automaticallyImplyLeading: !isTab,
       ),
       body: customerAppointments.isEmpty
-          ? Center(
-              child: Padding(
+          ? Center( // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
+              child: Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
                 padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                  mainAxisAlignment: MainAxisAlignment.center, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                   children: [
-                    Container(
+                    Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                       padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
+                      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                         color: AppColors.primary.withAlpha(20),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.calendar_month_outlined, size: 48, color: AppColors.primary),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                     const Text(
                       'Aktif Randevunuz Bulunmuyor',
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                     const Text(
                       'İlanlar sekmesinden kuaför, tesisatçı veya öğretmen ilanlarını inceleyip teklif oluşturabilirsiniz.',
                       textAlign: TextAlign.center,
@@ -59,19 +59,19 @@ class CustomerAppointmentsScreen extends StatelessWidget {
                 ),
               ),
             )
-          : ListView.builder(
+          : ListView.builder( // Sadece ekranda görünen elemanları çizerek RAM tasarrufu sağlayan performanslı liste
               padding: const EdgeInsets.all(16),
-              itemCount: customerAppointments.length,
-              itemBuilder: (context, index) {
+              itemCount: customerAppointments.length, // Listede kaç tane eleman gösterileceğini belirtiyoruz
+              itemBuilder: (context, index) { // Listenin her bir satırını sırayla oluşturan builder fonksiyonumuz
                 final apt = customerAppointments[index];
 
-                return Card(
+                return Card( // Kartın arkasına gölge verip derinlik katıyoruz (elevation - z koordinatı)
                   child: ExpansionTile(
                     tilePadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                     childrenPadding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
-                    title: Row(
+                    title: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                       children: [
-                        Expanded(
+                        Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
                           child: Text(
                             apt.serviceTitle,
                             style: const TextStyle(
@@ -91,13 +91,13 @@ class CustomerAppointmentsScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    subtitle: Padding(
+                    subtitle: Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
                       padding: const EdgeInsets.only(top: 6),
-                      child: Row(
+                      child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                         children: [
-                          Expanded(
+                          Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
                             child: Text(
-                              '${apt.providerName} • ${apt.appointmentDate} ${apt.appointmentTime}',
+                              '${apt.providerName} • ${apt.appointmentDate} ${apt.appointmentTime}', // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
                               style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
                             ),
                           ),
@@ -106,20 +106,20 @@ class CustomerAppointmentsScreen extends StatelessWidget {
                       ),
                     ),
                     children: [
-                      const Divider(color: AppColors.border),
-                      const SizedBox(height: 6),
+                      const Divider(color: AppColors.border), // Bölümler arasına ince bir ayırıcı çizgi çekmek için
+                      const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                       // Ulaşım ve Açık Adres
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                        crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                         children: [
                           const Icon(Icons.location_on_outlined, size: 16, color: AppColors.primary),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          const SizedBox(width: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                          Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                            child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                              crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                               children: [
-                                Row(
+                                Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                                   children: [
                                     const Text(
                                       'Hizmet Yeri: ',
@@ -128,7 +128,7 @@ class CustomerAppointmentsScreen extends StatelessWidget {
                                     LocationBadge(locationType: apt.locationType),
                                   ],
                                 ),
-                                const SizedBox(height: 4),
+                                const SizedBox(height: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                                 Text(
                                   apt.address,
                                   style: const TextStyle(fontSize: 13, color: AppColors.textPrimary),
@@ -138,16 +138,16 @@ class CustomerAppointmentsScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                       // Açıklama / Not
                       if (apt.description.isNotEmpty) ...[
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                          crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                           children: [
                             const Icon(Icons.notes_outlined, size: 16, color: AppColors.textSecondary),
-                            const SizedBox(width: 6),
-                            Expanded(
+                            const SizedBox(width: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                            Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
                               child: Text(
                                 'Açıklama: ${apt.description}',
                                 style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
@@ -155,25 +155,25 @@ class CustomerAppointmentsScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                       ],
 
                       // Karşı Teklif Uyarısı
-                      if (apt.status == 'beklemede' && apt.lastOfferBy == 'provider') ...[
-                        Container(
+                      if (apt.status == 'beklemede' && apt.lastOfferBy == 'provider') ...[ // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
+                        Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                           width: double.infinity,
                           padding: const EdgeInsets.all(10),
                           margin: const EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
+                          decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                             color: AppColors.pendingBg,
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(8), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                             border: Border.all(color: AppColors.pendingText.withAlpha(60)),
                           ),
-                          child: Row(
+                          child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                             children: [
                               const Icon(Icons.info_outline, color: AppColors.pendingText, size: 18),
-                              const SizedBox(width: 8),
-                              Expanded(
+                              const SizedBox(width: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                              Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
                                 child: Text(
                                   'Hizmet veren yeni bir fiyat/saat karşı teklifi sundu! (${apt.offeredPrice.toStringAsFixed(0)} ₺)',
                                   style: const TextStyle(
@@ -188,18 +188,18 @@ class CustomerAppointmentsScreen extends StatelessWidget {
                         ),
                       ],
 
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 10), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
                       // Taşmaları Önleyen Wrap Aksiyon Butonları
-                      Wrap(
+                      Wrap( // Ekrana sığmayan butonlar ve etiketler alt satıra geçsin, taşma yapmasın diye Wrap kullanıyoruz
                         spacing: 8,
                         runSpacing: 8,
                         children: [
-                          if (apt.status == 'beklemede' && apt.lastOfferBy == 'provider') ...[
-                            ElevatedButton(
+                          if (apt.status == 'beklemede' && apt.lastOfferBy == 'provider') ...[ // Provider durum yönetimi kütüphanesini projeye dahil ediyoruz
+                            ElevatedButton( // Kullanıcının tıklayabileceği aksiyon butonu bileşenimiz
                               onPressed: () {
                                 appointmentProvider.updateStatus(apt.id, 'onaylandi');
-                                ScaffoldMessenger.of(context).showSnackBar(
+                                ScaffoldMessenger.of(context).showSnackBar( // Ekranın altında kullanıcıya bilgi veren kısa SnackBar mesajı gösteriyoruz
                                   const SnackBar(
                                     content: Text('Karşı teklifi onayladınız! Randevu kesinleşti.'),
                                     backgroundColor: AppColors.approvedText,
@@ -214,9 +214,9 @@ class CustomerAppointmentsScreen extends StatelessWidget {
                             ),
                           ],
                           if (apt.status == 'beklemede') ...[
-                            OutlinedButton(
+                            OutlinedButton( // Kullanıcının tıklayabileceği aksiyon butonu bileşenimiz
                               onPressed: () {
-                                Navigator.of(context).push(
+                                Navigator.of(context).push( // Yeni bir sayfaya geçiş yapıp sayfa yığınına (stack) ekliyoruz
                                   MaterialPageRoute(
                                     builder: (_) => OfferFormScreen(
                                       existingAppointment: apt,
@@ -235,7 +235,7 @@ class CustomerAppointmentsScreen extends StatelessWidget {
                           ],
                           ElevatedButton.icon(
                             onPressed: () {
-                              Navigator.of(context).push(
+                              Navigator.of(context).push( // Yeni bir sayfaya geçiş yapıp sayfa yığınına (stack) ekliyoruz
                                 MaterialPageRoute(
                                   builder: (_) => ChatScreen(appointment: apt),
                                 ),

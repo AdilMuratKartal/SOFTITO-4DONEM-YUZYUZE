@@ -1,37 +1,37 @@
 // Flutter Material tasarım bileşenlerini içe aktarır
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 // Ürün veri modelini içe aktarır
-import '../models/urun.dart';
+import '../models/urun.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 // Kategori enum ve extension yapısını içe aktarır
-import '../models/kategori.dart';
+import '../models/kategori.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 // Ürün servisi soyut sözleşmesini (interface) içe aktarır
-import '../services/i_urun_servisi.dart';
+import '../services/i_urun_servisi.dart'; // Veri çekme ve API haberleşmesini yapan servis katmanımızı dahil ediyoruz
 // Gerçek REST API ile haberleşen somut servis sınıfını içe aktarır
-import '../services/api_urun_servisi.dart';
+import '../services/api_urun_servisi.dart'; // Veri çekme ve API haberleşmesini yapan servis katmanımızı dahil ediyoruz
 // Liste elemanları için hazırlanan ürün kartı bileşenini içe aktarır
-import '../widgets/urun_karti.dart';
+import '../widgets/urun_karti.dart'; // Sayfada tekrar tekrar kullanacağımız özel widget bileşenlerimizi içeri aktarıyoruz
 // Kart tıklandığında açılacak detay ekranını içe aktarır
 import 'urun_detay_ekrani.dart';
 
 // Canlı API'den ürünleri çeken, filtreleyen ve 4 durumu yöneten durumlu (Stateful) ana ekran widget'ı
-class UrunListesiEkrani extends StatefulWidget {
+class UrunListesiEkrani extends StatefulWidget { // UrunListesiEkrani sınıfı, zamanla durumu (state) değişebilen dinamik ekranımız için StatefulWidget yapısıdır
   // Widget ağacı için kurucu metot
-  const UrunListesiEkrani({super.key});
+  const UrunListesiEkrani({super.key}); // Sabit constructor, üst sınıfa key parametresini gönderir
 
   // Ekranın durum (state) yöneticisini oluşturan metot
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   // UrunListesiEkraniState durum nesnesini bağlar
   State<UrunListesiEkrani> createState() => _UrunListesiEkraniState();
 // UrunListesiEkrani sınıfının kapanış parantezi
 }
 
 // Ekranın durum değişkenlerini, API çağrılarını ve UI mantığını barındıran State sınıfı
-class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
+class _UrunListesiEkraniState extends State<UrunListesiEkrani> { // Ekranın durumunu (state), mantığını ve değişkenlerini tuttuğumuz State sınıfımız
   // Polimorfizm prensibi ile soyut arayüze bağlanan API servis referansı
   final IUrunServisi _servis = ApiUrunServisi();
 
   // Arama metin kutusunu kontrol eden ve temizleme işlemlerini yürüten kontrolcü
-  final TextEditingController _aramaKontrolcusu = TextEditingController();
+  final TextEditingController _aramaKontrolcusu = TextEditingController(); // Metin kutusundaki (TextField) yazıyı okumak ve yönetmek için controller oluşturuyoruz
 
   // API'den gelen orijinal ve eksiksiz ürün havuzu
   List<Urun> _tumUrunler = [];
@@ -39,38 +39,38 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
   List<Urun> _filtrelenmisUrunler = [];
 
   // Asenkron veri çekme işleminin devam edip etmediğini tutan bayrak
-  bool _yukleniyor = true;
+  bool _yukleniyor = true; // Durum kontrolü için tuttuğumuz bool bayrağımız (_yukleniyor)
   // Ağ veya sunucu hatası oluştuğunda hata metnini tutan değişken (hata yoksa null'dır)
   String? _hataMesaji;
   // Kullanıcının o anda seçili tuttuğu kategori filtresi (varsayılan: hepsi)
   Kategori _seciliKategori = Kategori.hepsi;
 
   // Widget ilk kez belleğe yüklendiğinde bir kez çalışan yaşam döngüsü metodu
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   // initState metodunun gövdesi
-  void initState() {
+  void initState() { // State ağaca ilk eklendiğinde çalışan metod, sayfa açılırkenki ilk hazırlıklar burda yapılır
     // Üst sınıfın initState metodunu çağırır
-    super.initState();
+    super.initState(); // Üst sınıfın initState metodunu tetikleyip başlatıyoruz
     // Sayfa açılır açılmaz ürünleri API'den çekmeye başlar
     _urunleriYukle();
   // initState metodunun kapanış parantezi
   }
 
   // Widget ağaçtan kaldırıldığında bellek sızıntısını önleyen yaşam döngüsü metodu
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   // dispose metodunun gövdesi
-  void dispose() {
+  void dispose() { // Ekran bellekten atılırken controller ve dinleyicileri kapatıp RAM sızıntısını önlüyoruz
     // Arama kontrolcüsünü bellekten serbest bırakır
     _aramaKontrolcusu.dispose();
     // Üst sınıfın dispose metodunu çağırır
-    super.dispose();
+    super.dispose(); // Üst sınıfın dispose metodunu çağırıp temizliği tamamlıyoruz
   // dispose metodunun kapanış parantezi
   }
 
   // FakeStore REST API'den ürünleri asenkron olarak çeken ana fonksiyon
   Future<void> _urunleriYukle() async {
     // Ekranı 'Yükleniyor' moduna sokmak ve eski hataları temizlemek için setState çağrılır
-    setState(() {
+    setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
       // Yüklenme animasyonunu başlatır
       _yukleniyor = true;
       // Varsa önceki hata mesajını sıfırlar
@@ -79,14 +79,14 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
     });
 
     // Olası ağ kopmaları, zaman aşımı ve format hataları için try bloğu
-    try {
+    try { // Hata oluşabilecek kod bloğumuzu güvenle deniyoruz
       // Servis üzerinden HTTP GET isteğini atar ve ürün listesini bekler
       final urunler = await _servis.urunleriGetir();
       // Widget ağaçta hâlâ aktif mi kontrol eder (kullanıcı sayfa yüklenirken geri çıktıysa hata almamak için)
       if (!mounted) return;
 
       // Veriler başarıyla geldiyse durumu günceller
-      setState(() {
+      setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
         // Ham ürün listesini kaydeder
         _tumUrunler = urunler;
         // Başlangıçta tüm ürünleri filtreli listeye de aktarır
@@ -98,11 +98,11 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
       // Varsa mevcut filtreleri yeni listeye uygular
       _filtreleriUygula();
     // Ağ, zaman aşımı veya sunucu kaynaklı bir hata yakalandığında
-    } catch (hata) {
+    } catch (hata) { // Hata oluşursa yakalayıp uygulamanın patlamasını (çökmesini) engelliyoruz
       // Widget ağaçta hâlâ aktif mi kontrol eder
       if (!mounted) return;
       // Ekranı 'Hata' durumuna geçirmek için setState çağrılır
-      setState(() {
+      setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
         // Kullanıcıya gösterilecek anlaşılır hata metnini oluşturur
         _hataMesaji = 'Ürünler yüklenirken bir sorun oluştu.\nİnternet bağlantınızı kontrol edin.';
         // Yüklenme durumunu kapatır
@@ -120,7 +120,7 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
     final aramaMetni = _aramaKontrolcusu.text.toLowerCase().trim();
 
     // Filtrelenmiş listeyi güncelleyip UI'ı tetikler
-    setState(() {
+    setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
       // Tüm ürün havuzunu filtreleme işleminden geçirir
       _filtrelenmisUrunler = _tumUrunler.where((urun) {
         // Kategori şartını inceler (hepsi seçiliyse veya ürünün kategorisi seçilenle aynıysa true)
@@ -139,7 +139,7 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
   // Kullanıcı yatay bardaki bir kategori çipine tıkladığında çalışan metot
   void _kategoriDegistir(Kategori yeniKategori) {
     // Seçili kategoriyi günceller
-    setState(() {
+    setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
       // Yeni kategoriyi kaydeder
       _seciliKategori = yeniKategori;
     // setState kapanışı
@@ -150,21 +150,21 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
   }
 
   // Ekranın görsel ağacını kuran ana build fonksiyonu
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   // BuildContext parametresini alan build fonksiyonu
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     // Temel sayfa iskeletini sağlayan Scaffold
-    return Scaffold(
+    return Scaffold( // Sayfa iskeletini (appBar, body, floatingActionButton) oluşturan ana Scaffold widget'ımız
       // Sayfanın üst başlık çubuğu
-      appBar: AppBar(
+      appBar: AppBar( // Sayfanın üst kısmındaki başlık ve aksiyon barı (AppBar)
         // Başlık metni
-        title: const Text('Mini Mağaza (Canlı API)'),
+        title: const Text('Mini Mağaza (Canlı API)'), // Sayfa başlığını ekrana yazdırıyoruz
         // Başlığı ortalar
-        centerTitle: true,
+        centerTitle: true, // Başlığı ortalamak için true veriyoruz
         // AppBar sağ üst köşesindeki hızlı işlem butonları
         actions: [
           // Elle yenileme yapmayı sağlayan yenile butonu
-          IconButton(
+          IconButton( // Sadece simgeden oluşan tıklanabilir ikon butonu
             // Yenile simgesi
             icon: const Icon(Icons.refresh),
             // Tıklanınca ürünleri sıfırdan çeker
@@ -178,15 +178,15 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
       // AppBar kapanışı
       ),
       // Sayfanın ana gövdesini oluşturan dikey sütun (Column)
-      body: Column(
+      body: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
         // Sütun içi alt bileşenler listesi
         children: [
           // Canlı arama kutusunun dış kenar boşluklarını belirleyen Padding
-          Padding(
+          Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
             // Yatayda 16, dikeyde 8 piksel boşluk
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             // Kullanıcının metin girdiği TextField bileşeni
-            child: TextField(
+            child: TextField( // Kullanıcıdan metin girdisi almak için form alanı
               // Metin kontrolcüsünü bağlar
               controller: _aramaKontrolcusu,
               // Kullanıcı her harf yazdığında veya sildiğinde filtreyi anlık tetikler
@@ -200,7 +200,7 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
                 // Kullanıcı yazı yazdığında beliren çarpı (temizle) butonu
                 suffixIcon: _aramaKontrolcusu.text.isNotEmpty
                     // Metin varsa temizleme ikon butonu gösterir
-                    ? IconButton(
+                    ? IconButton( // Sadece simgeden oluşan tıklanabilir ikon butonu
                         // Çarpı ikonu
                         icon: const Icon(Icons.clear),
                         // Tıklandığında metin kutusunu temizler ve listeyi tazeler
@@ -222,7 +222,7 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
                 // Kutunun köşelerini yuvarlatan kenarlık tanımı
                 border: OutlineInputBorder(
                   // 12 piksellik ovallik
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                   // Varsayılan sınır çizgisini kaldırır
                   borderSide: BorderSide.none,
                 // OutlineInputBorder kapanışı
@@ -244,11 +244,11 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
               // Çubuğun sağ ve solundaki iç boşluklar
               padding: const EdgeInsets.symmetric(horizontal: 16),
               // Toplam kategori sayısı kadar eleman üretir
-              itemCount: Kategori.values.length,
+              itemCount: Kategori.values.length, // Listede kaç tane eleman gösterileceğini belirtiyoruz
               // Çipler arasına 8 piksel yatay boşluk koyar
-              separatorBuilder: (context, index) => const SizedBox(width: 8),
+              separatorBuilder: (context, index) => const SizedBox(width: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
               // Her bir kategori için ChoiceChip üreten builder
-              itemBuilder: (context, index) {
+              itemBuilder: (context, index) { // Listenin her bir satırını sırayla oluşturan builder fonksiyonumuz
                 // Sıradaki kategori nesnesini alır
                 final kategori = Kategori.values[index];
                 // Bu kategorinin seçili olup olmadığını belirler
@@ -285,9 +285,9 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
           // SizedBox kapanışı
           ),
           // 4 piksel dikey boşluk
-          const SizedBox(height: 4),
+          const SizedBox(height: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
           // Kalan ekran alanını kaplayan ve 4 asenkron durumu yöneten Expanded bileşeni
-          Expanded(
+          Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
             // 4 UI durumunu koşullu olarak ekrana basan ana gövde inşa edicisi
             child: _durumaGoreGovdeyiOlustur(),
           // Expanded kapanışı
@@ -306,17 +306,17 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
     // DURUM 1: Veriler internetten çekilirken ekranda loading gösterir
     if (_yukleniyor) {
       // Ortalanmış yüklenme alanı
-      return const Center(
+      return const Center( // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
         // İlerlemeyi gösteren dikey sütun
-        child: Column(
+        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
           // Dikeyde ortalar
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
           // Elemanlar
           children: [
             // Dairesel ilerleme indikatörü
-            CircularProgressIndicator(),
+            CircularProgressIndicator(), // Veri yüklenirken kullanıcıya işlemin sürdüğünü gösteren yuvarlak animasyon
             // 16 piksel boşluk
-            SizedBox(height: 16),
+            SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             // Kullanıcıya bilgi veren açıklama metni
             Text('FakeStore API\'den ürünler yükleniyor...'),
           // Column çocukları kapanışı
@@ -331,21 +331,21 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
     // DURUM 2: Ağ kesintisi veya sunucu hatası oluştuğunda hata ekranı ve Tekrar Dene butonu gösterir
     if (_hataMesaji != null) {
       // Ortalanmış hata alanı
-      return Center(
+      return Center( // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
         // Kenar boşlukları
-        child: Padding(
+        child: Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
           // 24 piksellik iç boşluk
           padding: const EdgeInsets.all(24),
           // Elemanları dikeyde dizen Column
-          child: Column(
+          child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
             // Dikeyde ortalar
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
             // Elemanlar
             children: [
               // Kırmızı renkli ünlem hata simgesi
               const Icon(Icons.cloud_off, size: 64, color: Colors.redAccent),
               // 16 piksel boşluk
-              const SizedBox(height: 16),
+              const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
               // Hata açıklama metni
               Text(
                 // Hata metni içeriği
@@ -357,7 +357,7 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
               // Text kapanışı
               ),
               // 20 piksel boşluk
-              const SizedBox(height: 20),
+              const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
               // Kullanıcının işlemi tekrar başlatmasını sağlayan buton
               ElevatedButton.icon(
                 // Tıklanınca yükleme fonksiyonunu yeniden çağırır
@@ -390,17 +390,17 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
     // DURUM 3: Arama veya kategori filtresi sonucunda hiç ürün kalmadıysa boş durum (empty state) gösterir
     if (_filtrelenmisUrunler.isEmpty) {
       // Ortalanmış boşluk ekranı
-      return Center(
+      return Center( // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
         // Elemanları dikeyde ortalar
-        child: Column(
+        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
           // Dikeyde ortalar
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
           // Elemanlar
           children: [
             // Arama sonucu bulunamadı simgesi
             Icon(Icons.search_off, size: 64, color: Colors.grey.shade400),
             // 16 piksel boşluk
-            const SizedBox(height: 16),
+            const SizedBox(height: 16), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             // Uyarı metni
             Text(
               // Kullanıcıya rehberlik eden mesaj
@@ -424,13 +424,13 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
       // Çekip bırakıldığında çalışan asenkron yenileme fonksiyonu
       onRefresh: _urunleriYukle,
       // Ürün kartlarını verimli şekilde listeleyen ListView.builder
-      child: ListView.builder(
+      child: ListView.builder( // Sadece ekranda görünen elemanları çizerek RAM tasarrufu sağlayan performanslı liste
         // Listenin alt ve üstüne iç boşluk verir
         padding: const EdgeInsets.only(top: 8, bottom: 24),
         // Filtrelenmiş ürün adedi kadar satır çizer
-        itemCount: _filtrelenmisUrunler.length,
+        itemCount: _filtrelenmisUrunler.length, // Listede kaç tane eleman gösterileceğini belirtiyoruz
         // Her bir indeks için ürün kartı inşa eden fonksiyon
-        itemBuilder: (context, index) {
+        itemBuilder: (context, index) { // Listenin her bir satırını sırayla oluşturan builder fonksiyonumuz
           // Sıradaki ürün nesnesini çeker
           final urun = _filtrelenmisUrunler[index];
           // Her ürün için UrunKarti bileşenini üretir
@@ -440,7 +440,7 @@ class _UrunListesiEkraniState extends State<UrunListesiEkrani> {
             // Karta tıklandığında detay ekranına geçiş yapan fonksiyon
             onTap: () {
               // Navigator ile yeni rotaya geçiş yapar
-              Navigator.push(
+              Navigator.push( // Yeni bir sayfaya geçiş yapıp sayfa yığınına (stack) ekliyoruz
                 // Mevcut sayfa bağlamı (context)
                 context,
                 // Sayfalar arası geçiş animasyonunu sağlayan MaterialPageRoute

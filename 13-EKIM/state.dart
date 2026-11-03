@@ -1,10 +1,10 @@
 FLUTTER YASAM DONGUSU
 
-1.createstate()
+1.createstate() //state oluşturmak için kullanılan state. StatefulWidget ekrana çizileceği zaman çalışan ilk metoddur.
 
-2.mounted = true
+2.mounted = true //widget 'in ağaçta olup olmadığını sotgulanan bool değer. createState'ten hemen sonra bu true olur.
 
-3.initState()
+3.initState() //state ağaca eklenmeye başladığı sıradır state'lerin başlatılmasını sağlayan metod
 
 4.didChangeDependencies()(widget degisimlerinde tetiklenir (Thema.of.(context) bu adimda guvenli olarak calistirilir.)) //asenkron burda
 

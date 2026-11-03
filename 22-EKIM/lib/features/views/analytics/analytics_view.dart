@@ -1,56 +1,56 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
+import 'package:flutter/services.dart'; // Veri çekme ve API haberleşmesini yapan servis katmanımızı dahil ediyoruz
 import 'package:fl_chart/fl_chart.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../controllers/habit_controller.dart';
-import '../../models/habit_model.dart';
-import '../../models/category_model.dart';
-import '../../models/mood_model.dart';
+import '../../controllers/habit_controller.dart'; // Ekranın iş mantığını ve durumlarını yöneten controller/cubit sınıfımızı ekliyoruz
+import '../../models/habit_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../../models/category_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
+import '../../models/mood_model.dart'; // Verilerimizin şablonu olan model sınıflarını bu sayfada kullanmak için dahil ediyoruz
 
 class DayHabitStatus {
-  final String title;
-  final String categoryName;
-  final Color categoryColor;
-  final String iconPath;
-  final String timeRange;
-  final bool isCompleted;
+  final String title; // String türünden title adlı değişkenimiz
+  final String categoryName; // String türünden categoryName adlı değişkenimiz
+  final Color categoryColor; // Color türünden categoryColor adlı değişkenimiz
+  final String iconPath; // String türünden iconPath adlı değişkenimiz
+  final String timeRange; // String türünden timeRange adlı değişkenimiz
+  final bool isCompleted; // bool türünden isCompleted adlı değişkenimiz
 
   DayHabitStatus({
-    required this.title,
-    required this.categoryName,
-    required this.categoryColor,
-    required this.iconPath,
-    required this.timeRange,
-    required this.isCompleted,
+    required this.title, // title parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.categoryName, // categoryName parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.categoryColor, // categoryColor parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.iconPath, // iconPath parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.timeRange, // timeRange parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.isCompleted, // isCompleted parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 }
 
 class DayActivityDetail {
-  final DateTime date;
-  final int completedCount;
-  final int totalCount;
-  final String? moodKey;
-  final List<DayHabitStatus> habits;
+  final DateTime date; // DateTime türünden date adlı değişkenimiz
+  final int completedCount; // int türünden completedCount adlı değişkenimiz
+  final int totalCount; // int türünden totalCount adlı değişkenimiz
+  final String? moodKey; // String? türünden moodKey adlı değişkenimiz
+  final List<DayHabitStatus> habits; // List<DayHabitStatus> türünden habits adlı değişkenimiz
 
   DayActivityDetail({
-    required this.date,
-    required this.completedCount,
-    required this.totalCount,
-    this.moodKey,
-    required this.habits,
+    required this.date, // date parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.completedCount, // completedCount parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    required this.totalCount, // totalCount parametresinin verilmesinin zorunlu olduğunu söylüyoruz
+    this.moodKey, // moodKey alanına değer aktarıyoruz
+    required this.habits, // habits parametresinin verilmesinin zorunlu olduğunu söylüyoruz
   });
 }
 
-class AnalyticsView extends StatefulWidget {
-  final HabitController? habitController;
+class AnalyticsView extends StatefulWidget { // AnalyticsView sınıfı, zamanla durumu (state) değişebilen dinamik ekranımız için StatefulWidget yapısıdır
+  final HabitController? habitController; // HabitController? türünden habitController adlı değişkenimiz
 
-  const AnalyticsView({super.key, this.habitController});
+  const AnalyticsView({super.key, this.habitController}); // Sabit constructor, üst sınıfa key parametresini gönderir
 
-  @override
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
   State<AnalyticsView> createState() => _AnalyticsViewState();
 }
 
-class _AnalyticsViewState extends State<AnalyticsView> {
+class _AnalyticsViewState extends State<AnalyticsView> { // Ekranın durumunu (state), mantığını ve değişkenlerini tuttuğumuz State sınıfımız
   DateTime? _hoveredDate;
 
   IconData _getIconData(String iconPath) {
@@ -140,7 +140,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
 
     // Geçmiş günler için gerçekçi simülasyon ve alışkanlık eşleştirmesi
     final habitStatuses = <DayHabitStatus>[];
-    int completedCount = 0;
+    int completedCount = 0; // int türünden completedCount değişkenimiz
 
     for (int i = 0; i < effectiveHabits.length; i++) {
       final h = effectiveHabits[i];
@@ -194,17 +194,17 @@ class _AnalyticsViewState extends State<AnalyticsView> {
           orElse: () => null,
         );
 
-    showModalBottomSheet(
+    showModalBottomSheet( // Ekranın altından yukarı doğru açılan modal form penceresi
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (ctx) => SafeArea(
-        child: Container(
+      builder: (ctx) => SafeArea( // Çentik ve sistem çubuklarıyla arayüzün çakışmasını önleyen güvenli alan
+        child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
           padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
           constraints: BoxConstraints(
             maxHeight: MediaQuery.of(context).size.height * 0.75,
           ),
-          decoration: BoxDecoration(
+          decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
             color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(AppSizes.radiusModal)),
             border: Border.all(
@@ -212,35 +212,35 @@ class _AnalyticsViewState extends State<AnalyticsView> {
               width: 1,
             ),
           ),
-          child: Column(
+          child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
             children: [
               // Tutma Çubuğu (Drag Handle)
-              Center(
-                child: Container(
+              Center( // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
+                child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                   width: 36,
                   height: 4,
-                  decoration: BoxDecoration(
+                  decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                     color: isDark ? AppColors.outlineVariant : AppColors.borderLight,
-                    borderRadius: BorderRadius.circular(2),
+                    borderRadius: BorderRadius.circular(2), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                   ),
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 14), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
               // Tarih ve Tamamlama Özeti Başlığı
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
+              Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
+                crossAxisAlignment: CrossAxisAlignment.center, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                    child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                      crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                       children: [
-                        Row(
+                        Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                           children: [
                             const Icon(Icons.calendar_month_rounded, size: 20, color: AppColors.primary),
-                            const SizedBox(width: 6),
+                            const SizedBox(width: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                             Text(
                               '${detail.date.day} $monthName ${detail.date.year}',
                               style: TextStyle(
@@ -251,8 +251,8 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 2),
-                        Padding(
+                        const SizedBox(height: 2), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                        Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
                           padding: const EdgeInsets.only(left: 26.0),
                           child: Text(
                             dayName,
@@ -265,11 +265,11 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                       ],
                     ),
                   ),
-                  Container(
+                  Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
+                    decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                       color: AppColors.primary.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(AppSizes.radiusPill),
+                      borderRadius: BorderRadius.circular(AppSizes.radiusPill), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                       border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
                     ),
                     child: Text(
@@ -283,21 +283,21 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
               // O günün mood durumu
               if (moodItem != null)
-                Container(
+                Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
+                  decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                     color: moodItem.activeColor.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                    borderRadius: BorderRadius.circular(AppSizes.radiusMd), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                     border: Border.all(color: moodItem.activeColor.withValues(alpha: 0.25)),
                   ),
-                  child: Row(
+                  child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                     children: [
                       Text(moodItem.emoji, style: const TextStyle(fontSize: 20)),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                       Text(
                         'Günün Modu: ${moodItem.label}',
                         style: TextStyle(
@@ -317,47 +317,47 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                   color: isDark ? AppColors.onSurface : AppColors.textLight,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
               // Alışkanlıklar Listesi
               Flexible(
                 child: ListView.separated(
-                  shrinkWrap: true,
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: detail.habits.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 8),
-                  itemBuilder: (context, idx) {
+                  shrinkWrap: true, // Listenin sadece elemanları kadar yer kaplamasını sağlıyoruz, taşmasın diye
+                  physics: const BouncingScrollPhysics(), // iOS tarzı yaylanma kaydırma efekti veriyoruz
+                  itemCount: detail.habits.length, // Listede kaç tane eleman gösterileceğini belirtiyoruz
+                  separatorBuilder: (_, _) => const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                  itemBuilder: (context, idx) { // Listenin her bir satırını sırayla oluşturan builder fonksiyonumuz
                     final habit = detail.habits[idx];
-                    return Container(
+                    return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      decoration: BoxDecoration(
+                      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                         color: isDark ? AppColors.surfaceContainerHigh : AppColors.surfaceVariantLight,
-                        borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                        borderRadius: BorderRadius.circular(AppSizes.radiusMd), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                         border: Border.all(
                           color: habit.isCompleted
                               ? AppColors.primary.withValues(alpha: 0.4)
                               : (isDark ? AppColors.outlineVariant : AppColors.borderLight),
                         ),
                       ),
-                      child: Row(
+                      child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                         children: [
-                          Container(
+                          Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                             width: 32,
                             height: 32,
-                            decoration: BoxDecoration(
+                            decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                               color: habit.categoryColor.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(8), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                             ),
                             child: Icon(_getIconData(habit.iconPath), color: habit.categoryColor, size: 18),
                           ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          const SizedBox(width: 10), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                          Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                            child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                              crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                               children: [
                                 Text(
                                   habit.title,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1, // Metnin en fazla kaç satır olacağını sınırlıyoruz, taşmasın diye
+                                  overflow: TextOverflow.ellipsis, // Metin sığmazsa taşmasın, sonuna üç nokta (...) koysun diye
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w600,
@@ -365,8 +365,8 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                                     color: isDark ? AppColors.onSurface : AppColors.textLight,
                                   ),
                                 ),
-                                const SizedBox(height: 2),
-                                Row(
+                                const SizedBox(height: 2), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                                Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                                   children: [
                                     Text(
                                       habit.categoryName,
@@ -376,7 +376,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    const SizedBox(width: 6),
+                                    const SizedBox(width: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                                     Text(
                                       '•  ${habit.timeRange}',
                                       style: TextStyle(
@@ -389,15 +389,15 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                               ],
                             ),
                           ),
-                          Container(
+                          Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                            decoration: BoxDecoration(
+                            decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                               color: habit.isCompleted
                                   ? AppColors.primary.withValues(alpha: 0.15)
                                   : (isDark ? AppColors.surfaceContainerHighest : Colors.grey.shade200),
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                             ),
-                            child: Row(
+                            child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(
@@ -405,7 +405,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                                   size: 14,
                                   color: habit.isCompleted ? AppColors.primary : AppColors.outline,
                                 ),
-                                const SizedBox(width: 4),
+                                const SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                                 Text(
                                   habit.isCompleted ? 'Tamamlandı' : 'Yapılmadı',
                                   style: TextStyle(
@@ -423,16 +423,16 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                   },
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
+                child: ElevatedButton( // Kullanıcının tıklayabileceği aksiyon butonu bileşenimiz
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.onPrimary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                   ),
-                  onPressed: () => Navigator.pop(ctx),
+                  onPressed: () => Navigator.pop(ctx), // Açık olan sayfayı veya diyaloğu kapatıp bir önceki ekrana dönüyoruz
                   child: const Text('Kapat', style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
               ),
@@ -443,8 +443,8 @@ class _AnalyticsViewState extends State<AnalyticsView> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+  Widget build(BuildContext context) { // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final now = DateTime.now();
     final daysInMonth = DateUtils.getDaysInMonth(now.year, now.month);
@@ -456,29 +456,29 @@ class _AnalyticsViewState extends State<AnalyticsView> {
 
     final hoveredDetail = _hoveredDate != null ? _calculateDayDetail(_hoveredDate!) : null;
 
-    return Scaffold(
+    return Scaffold( // Sayfa iskeletini (appBar, body, floatingActionButton) oluşturan ana Scaffold widget'ımız
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('İstatistik & Analiz'),
+      appBar: AppBar( // Sayfanın üst kısmındaki başlık ve aksiyon barı (AppBar)
+        title: const Text('İstatistik & Analiz'), // Sayfa başlığını ekrana yazdırıyoruz
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
+      body: SafeArea( // Çentik ve sistem çubuklarıyla arayüzün çakışmasını önleyen güvenli alan
+        child: SingleChildScrollView( // Küçük ekranlarda taşma (overflow) hatası vermesin, ekran rahatça kaydırılsın diye sarmalıyoruz
+          physics: const BouncingScrollPhysics(), // iOS tarzı yaylanma kaydırma efekti veriyoruz
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+            crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
             children: [
               // Metrik Özet Kartları
-              Row(
+              Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                 children: [
-                  _buildMetricCard(context, '%82', 'Haftalık Başarı', Icons.track_changes, AppColors.primary, isDark),
-                  const SizedBox(width: 10),
-                  _buildMetricCard(context, '18 Gün', 'En Uzun Seri', Icons.local_fire_department, AppColors.secondary, isDark),
-                  const SizedBox(width: 10),
-                  _buildMetricCard(context, '6.5 Sa', 'Odaklanma', Icons.timer, AppColors.tertiary, isDark),
+                  _buildMetricCard(context, '%82', 'Haftalık Başarı', Icons.track_changes, AppColors.primary, isDark), // Kartın arkasına gölge verip derinlik katıyoruz (elevation - z koordinatı)
+                  const SizedBox(width: 10), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                  _buildMetricCard(context, '18 Gün', 'En Uzun Seri', Icons.local_fire_department, AppColors.secondary, isDark), // Kartın arkasına gölge verip derinlik katıyoruz (elevation - z koordinatı)
+                  const SizedBox(width: 10), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                  _buildMetricCard(context, '6.5 Sa', 'Odaklanma', Icons.timer, AppColors.tertiary, isDark), // Kartın arkasına gölge verip derinlik katıyoruz (elevation - z koordinatı)
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // Haftalık Tamamlama Bar Grafiği
               Text(
@@ -489,13 +489,13 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                   color: isDark ? AppColors.onSurface : AppColors.textLight,
                 ),
               ),
-              const SizedBox(height: 12),
-              Container(
+              const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+              Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                 height: 180,
                 padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
+                decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                   color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                   border: Border.all(color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
                 ),
                 child: BarChart(
@@ -512,7 +512,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                             const days = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
                             final idx = val.toInt();
                             if (idx >= 0 && idx < days.length) {
-                              return Padding(
+                              return Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
                                 padding: const EdgeInsets.only(top: 4),
                                 child: Text(
                                   days[idx],
@@ -545,7 +545,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // Kategori Dağılımı Donut Grafiği
               Text(
@@ -556,15 +556,15 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                   color: isDark ? AppColors.onSurface : AppColors.textLight,
                 ),
               ),
-              const SizedBox(height: 12),
-              Container(
+              const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+              Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                 padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
+                decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                   color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                   border: Border.all(color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
                 ),
-                child: Row(
+                child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                   children: [
                     SizedBox(
                       width: 120,
@@ -583,31 +583,31 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    const SizedBox(width: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                    Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                      child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                        crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                         children: [
-                          _buildLegendRow('Spor (%35)', AppColors.categorySport, isDark),
-                          const SizedBox(height: 6),
-                          _buildLegendRow('Sağlık (%25)', AppColors.categoryHealth, isDark),
-                          const SizedBox(height: 6),
-                          _buildLegendRow('Zihin (%20)', AppColors.categoryMind, isDark),
-                          const SizedBox(height: 6),
-                          _buildLegendRow('Müzik (%12)', AppColors.categoryMusic, isDark),
-                          const SizedBox(height: 6),
-                          _buildLegendRow('Diğer (%8)', AppColors.secondary, isDark),
+                          _buildLegendRow('Spor (%35)', AppColors.categorySport, isDark), // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                          const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                          _buildLegendRow('Sağlık (%25)', AppColors.categoryHealth, isDark), // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                          const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                          _buildLegendRow('Zihin (%20)', AppColors.categoryMind, isDark), // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                          const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                          _buildLegendRow('Müzik (%12)', AppColors.categoryMusic, isDark), // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                          const SizedBox(height: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                          _buildLegendRow('Diğer (%8)', AppColors.secondary, isDark), // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                         ],
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
 
               // Aylık Aktivite Izgarası (Heatmap)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                 children: [
                   Text(
                     'Aylık Aktivite Izgarası ($currentMonthName ${now.year})',
@@ -623,48 +623,48 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
-              Container(
+              const SizedBox(height: 10), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+              Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                 padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
+                decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                   color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                   border: Border.all(color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+                  crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
                   children: [
                     // Canlı Hover / Önizleme Bilgi Çubuğu
-                    AnimatedContainer(
+                    AnimatedContainer( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                       duration: const Duration(milliseconds: 150),
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
                       margin: const EdgeInsets.only(bottom: 12),
-                      decoration: BoxDecoration(
+                      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                         color: hoveredDetail != null
                             ? AppColors.primary.withValues(alpha: 0.12)
                             : (isDark ? AppColors.surfaceContainerHigh : AppColors.surfaceVariantLight),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(10), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                         border: Border.all(
                           color: hoveredDetail != null
                               ? AppColors.primary.withValues(alpha: 0.3)
                               : Colors.transparent,
                         ),
                       ),
-                      child: Row(
+                      child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                         children: [
                           Icon(
                             hoveredDetail != null ? Icons.touch_app_rounded : Icons.info_outline,
                             size: 16,
                             color: hoveredDetail != null ? AppColors.primary : AppColors.outline,
                           ),
-                          const SizedBox(width: 8),
-                          Expanded(
+                          const SizedBox(width: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
+                          Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
                             child: Text(
                               hoveredDetail != null
                                   ? '${hoveredDetail.date.day} $currentMonthName: ${hoveredDetail.completedCount} alışkanlık tamamlandı (Detaylar için tıkla)'
                                   : 'Günün üzerine gelerek veya tıklayarak detayları görüntüleyin',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1, // Metnin en fazla kaç satır olacağını sınırlıyoruz, taşmasın diye
+                              overflow: TextOverflow.ellipsis, // Metin sığmazsa taşmasın, sonuna üç nokta (...) koysun diye
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: hoveredDetail != null ? FontWeight.bold : FontWeight.w500,
@@ -678,13 +678,13 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                       ),
                     ),
                     // Gün İsimleri Başlığı (Pzt, Sal, Çar, Per, Cum, Cmt, Paz)
-                    Padding(
+                    Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
                       padding: const EdgeInsets.only(bottom: 6.0),
-                      child: Row(
+                      child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
                         children: const [
                           'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'
-                        ].map((d) => Expanded(
-                          child: Center(
+                        ].map((d) => Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                          child: Center( // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
                             child: Text(
                               d,
                               style: TextStyle(
@@ -699,26 +699,26 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                     ),
                     // 7 Kolonlu Aylık Izgara
                     _buildMonthCalendarGrid(context, now, daysInMonth, isDark, currentMonthName),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 12), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                     // Renk Yoğunluğu Skalası (Legend)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                    Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+                      mainAxisAlignment: MainAxisAlignment.end, // Çocukların ana eksendeki hizalamasını ayarlıyoruz
                       children: [
                         Text(
                           'Daha Az',
                           style: TextStyle(fontSize: 10, color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary),
                         ),
-                        const SizedBox(width: 6),
+                        const SizedBox(width: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                         _buildLegendBox(isDark ? AppColors.surfaceContainerHigh : AppColors.borderLight),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                         _buildLegendBox(AppColors.primary.withValues(alpha: 0.25)),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                         _buildLegendBox(AppColors.primary.withValues(alpha: 0.50)),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                         _buildLegendBox(AppColors.primary.withValues(alpha: 0.75)),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 4), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                         _buildLegendBox(AppColors.primary),
-                        const SizedBox(width: 6),
+                        const SizedBox(width: 6), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
                         Text(
                           'Daha Çok',
                           style: TextStyle(fontSize: 10, color: isDark ? AppColors.onSurfaceVariant : AppColors.textSecondary),
@@ -728,7 +728,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 24), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             ],
           ),
         ),
@@ -749,17 +749,17 @@ class _AnalyticsViewState extends State<AnalyticsView> {
     final totalCells = leadingEmptyDays + daysInMonth;
     final rowCount = (totalCells / 7).ceil();
 
-    return Column(
+    return Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
       children: List.generate(rowCount, (rowIndex) {
-        return Padding(
+        return Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
           padding: const EdgeInsets.symmetric(vertical: 3.0),
-          child: Row(
+          child: Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
             children: List.generate(7, (colIndex) {
               final cellIndex = rowIndex * 7 + colIndex;
               final dayNumber = cellIndex - leadingEmptyDays + 1;
 
               if (dayNumber < 1 || dayNumber > daysInMonth) {
-                return const Expanded(child: SizedBox(height: 36));
+                return const Expanded(child: SizedBox(height: 36)); // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
               }
 
               final cellDate = DateTime(now.year, now.month, dayNumber);
@@ -790,32 +790,32 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                   ? '$dayNumber $currentMonthName: Gelecek Gün'
                   : '$dayNumber $currentMonthName: ${detail.completedCount} alışkanlık yapıldı\nDetaylar için dokunun';
 
-              return Expanded(
-                child: Padding(
+              return Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+                child: Padding( // Widget'ın kenarlarından içeriye doğru nefes alma boşluğu vermek için Padding
                   padding: const EdgeInsets.symmetric(horizontal: 2.0),
                   child: Tooltip(
                     message: tooltipMessage,
                     waitDuration: const Duration(milliseconds: 100),
                     child: MouseRegion(
                       onEnter: (_) {
-                        setState(() {
+                        setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
                           _hoveredDate = cellDate;
                         });
                       },
                       onExit: (_) {
-                        setState(() {
+                        setState(() { // setState ile durumu güncelliyoruz ki Flutter build metodunu yeniden tetiklesin
                           if (_hoveredDate == cellDate) _hoveredDate = null;
                         });
                       },
                       cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
+                      child: GestureDetector( // Tıklama efekti (ripple) vermek ve kullanıcının dokunuşunu yakalamak için sarmalıyoruz
                         onTap: () => _showDayDetailsModal(context, detail, isDark),
-                        child: AnimatedContainer(
+                        child: AnimatedContainer( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
                           duration: const Duration(milliseconds: 150),
                           height: 36,
-                          decoration: BoxDecoration(
+                          decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
                             color: cellColor,
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(8), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
                             border: Border.all(
                               color: isToday
                                   ? AppColors.secondary
@@ -823,7 +823,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                               width: isToday ? 2.0 : 1.2,
                             ),
                           ),
-                          child: Center(
+                          child: Center( // İçindeki widget'ı yatayda ve dikeyde tam ortaya hizalamak için
                             child: Text(
                               '$dayNumber',
                               style: TextStyle(
@@ -847,30 +847,30 @@ class _AnalyticsViewState extends State<AnalyticsView> {
   }
 
   Widget _buildLegendBox(Color color) {
-    return Container(
+    return Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
       width: 14,
       height: 14,
-      decoration: BoxDecoration(
+      decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
         color: color,
-        borderRadius: BorderRadius.circular(3),
+        borderRadius: BorderRadius.circular(3), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
       ),
     );
   }
 
-  Widget _buildMetricCard(BuildContext context, String value, String label, IconData icon, Color color, bool isDark) {
-    return Expanded(
-      child: Container(
+  Widget _buildMetricCard(BuildContext context, String value, String label, IconData icon, Color color, bool isDark) { // Kartın arkasına gölge verip derinlik katıyoruz (elevation - z koordinatı)
+    return Expanded( // Row veya Column içinde kalan boşluğun tamamını kaplasın ve taşma patlaması olmasın diye Expanded veriyoruz
+      child: Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
         padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
+        decoration: BoxDecoration( // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
           color: isDark ? AppColors.surfaceContainer : AppColors.surfaceLight,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           border: Border.all(color: isDark ? AppColors.outlineVariant : AppColors.borderLight),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column( // Çocuk widget'ları dikeyde alt alta dizmek için Column kullanıyoruz
+          crossAxisAlignment: CrossAxisAlignment.start, // Çocukların çapraz eksendeki hizalamasını belirliyoruz
           children: [
             Icon(icon, color: color, size: 20),
-            const SizedBox(height: 8),
+            const SizedBox(height: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             Text(
               value,
               style: TextStyle(
@@ -879,7 +879,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                 color: isDark ? AppColors.onSurface : AppColors.textLight,
               ),
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: 2), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
             Text(
               label,
               style: TextStyle(
@@ -901,7 +901,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
           toY: y,
           color: y == 100 ? AppColors.secondary : AppColors.primary,
           width: 14,
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(4), // Köşeleri yuvarlatıp modern bir görünüm veriyoruz
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
             toY: 100,
@@ -912,15 +912,15 @@ class _AnalyticsViewState extends State<AnalyticsView> {
     );
   }
 
-  Widget _buildLegendRow(String title, Color color, bool isDark) {
-    return Row(
+  Widget _buildLegendRow(String title, Color color, bool isDark) { // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
+    return Row( // Çocuk widget'ları yatayda yan yana dizmek için Row açıyoruz
       children: [
-        Container(
+        Container( // Boyut, kenarlık veya arka plan dekorasyonu vermek için Container kutusu kullanıyoruz
           width: 10,
           height: 10,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle), // Kutuya arka plan rengi, yuvarlak kenarlar veya gölge gibi süslemeler vermek için
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 8), // Widget'lar arasına yatayda veya dikeyde boşluk bırakmak için SizedBox kullanıyoruz
         Text(
           title,
           style: TextStyle(

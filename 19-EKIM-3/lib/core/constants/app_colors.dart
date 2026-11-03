@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 
 /// Uygulama Renk Paleti
 /// Dark Obsidian & Neon Gece Paleti ve Clean Fresh Cyan & Lime Gündüz Paleti

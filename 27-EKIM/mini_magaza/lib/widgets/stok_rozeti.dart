@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Flutter'ın hazır Material Design widget'larını ve arayüz paketini içeri aktarıyoruz
 
-class StokRozeti extends StatelessWidget{
-    final int stok;
+class StokRozeti extends StatelessWidget{ // StokRozeti sınıfı, durumu değişmeyen sabit bir arayüz sunduğumuz StatelessWidget yapımızdır
+    final int stok; // int türünden stok adlı değişkenimiz
 
-    const StokRozeti({super.key, required this.stok});
+    const StokRozeti({super.key, required this.stok}); // Sabit constructor, üst sınıfa key parametresini gönderir
 
-    @override
-    Widget build(BuildContext context){
+    @override // Üst sınıftaki metodu ezerek kendi ihtiyacımıza göre yeniden yazıyoruz
+    Widget build(BuildContext context){ // Arayüzün ekrana çizildiği ana build metodumuz, context ağaçtaki yerini belirtir
         final tukendiMi = stok == 0;
         
         return Container(//sorulacak sınavda
