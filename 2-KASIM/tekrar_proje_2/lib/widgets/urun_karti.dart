@@ -14,6 +14,9 @@ class UrunKarti extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
+        onTap: () {////EĞER ONTAP VERİRSEN INKWWELL SU DALGASI VE TIKLANILABİLİR EFEKTLERİNİ VERİYOR. VARSAYILAN YOK
+          print("${urun.baslik} Kart Tıklanıldı");
+        },
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Row(
