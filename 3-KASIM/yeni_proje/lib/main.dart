@@ -8,6 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart'; // Paket import edildi bağ
 void main() async {
   //uygulama başlamadan önce firebase başlatılır. Yoksa hata alıyoruz bir motor kullanıyor diğer platformlardada çalışmasını sağlıyoruz.
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
 
   await Firebase.initializeApp(
     options: FirebaseOptions(
