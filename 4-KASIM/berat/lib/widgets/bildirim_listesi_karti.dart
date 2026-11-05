@@ -121,7 +121,36 @@ class BildirimListesiKarti extends StatelessWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: bildirimler.length,
                     separatorBuilder: (_, _) => const Divider(height: 1),
-                    itemBuilder: (BuildContext context, int index) {},
+                    itemBuilder: (BuildContext context, int index) {
+                      final b = bildirimler[index];
+                      return ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const CircleAvatar(
+                          backgroundColor: Color.fromARGB(0, 123, 238, 238),
+                          child: Icon(
+                            Icons.mark_email_unread_outlined,
+                            color: Color.fromARGB(0, 113, 25, 25),
+                            size: 20,
+                          ),
+                        ),
+                        title: Text(
+                          b.baslik,
+                          style: const TextStyle(
+                            //const vermezsek hata verir yeni değişiken olarak görür syntax hatası verir.
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        subtitle: Text(b.icerik),
+                        trailing: Text(
+                          '${b.tarih.hour.toString().padLeft(2, '0')}:${b.tarih.minute.toString().padLeft(2, '0')}', //burda saat 10 dan küçükse mesela 9 ise 09 değil 9 geliyor bizde padLeft ile saat'in text uzunluğu 2 den az ise sola(başa) 0 ekle diyoruz.
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.grey.shade500,
+                          ), //burda neden const yok. material kütüphanesinde shade500 yok, kütüphanede bu değişkenler sabit olmadığı için, 2. tarih.hour Datetime çalıştırma zamanında hesaplandığı için.
+                        ),
+                      );
+                    },
                   ), //builder'dan farkı her bir eleman arasına boşluk veriyor gap gibi
           ],
         ),

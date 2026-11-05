@@ -11,11 +11,13 @@ class FcmBildirimServisi {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _localPlugin =
       FlutterLocalNotificationsPlugin();
+  late String? apnsToken;
 
   Future<void> baslat({
     required Function(RemoteMessage message) onMesajGeldi,
   }) async {
     await _fcm.requestPermission(alert: true, badge: true, sound: true);
+    apnsToken = await _fcm.getAPNSToken();
 
     const androidSetting = AndroidInitializationSettings('@mipmap/ic_launcher');
     const iosSetting = DarwinInitializationSettings();
@@ -30,6 +32,14 @@ class FcmBildirimServisi {
       onMesajGeldi(message);
     });
     FirebaseMessaging.onBackgroundMessage(fcmBackgroundHandler);
+  }
+
+  Future<String?> tokenAl() async {
+    try {
+      return await _fcm.getToken();
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<void> konuyaAboneOl(String konu) async {

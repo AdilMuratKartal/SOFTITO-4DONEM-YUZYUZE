@@ -66,5 +66,19 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+
+	<!-- Permissions -->
+    <!-- Kamera İzni -->
+    <key>NSCameraUsageDescription</key>
+    <string>Profil fotoğrafı çekebilmeniz için kameranıza erişmemiz gerekiyor.</string>
+
+    <!-- Galeriye Erişim İzni (Fotoğraf Seçme) -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Galerinizden fotoğraf seçip yükleyebilmeniz için galerinize erişmemiz gerekiyor.</string>
+
+    <!-- Galeriye Fotoğraf Kaydetme İzni (Gerekirse) -->
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Çektiğiniz fotoğrafları galerinize kaydedebilmeniz için izin vermeniz gerekiyor.</string>
+
 </dict>
 </plist>

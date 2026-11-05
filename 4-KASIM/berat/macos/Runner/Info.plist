@@ -2,6 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<!-- Kullanıcının galeriden/dosya sisteminden resim seçebilmesi için -->
+	<key>com.apple.security.assets.movies.read-only</key>
+	<true/>
+	<key>com.apple.security.assets.music.read-only</key>
+	<true/>
+	<key>com.apple.security.assets.pictures.read-only</key>
+	<true/>
+
+	<!-- Uygulama içinden doğrudan kamera açılacaksa -->
+	<key>com.apple.security.device.camera</key>
+	<true/>
+
+	<!-- Kullanıcıya dosya seçme penceresi (aç/kaydet) açabilmek için -->
+	<key>com.apple.security.files.user-selected.read-write</key>
+	<true/>
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

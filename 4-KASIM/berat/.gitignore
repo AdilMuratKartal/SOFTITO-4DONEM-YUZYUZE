@@ -46,3 +46,29 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Firebase ios files
+/ios/GoogleService-Info.plist
+
+# Firebase android files
+/android/app/google-services.json
+
+# Firebase debug.keystore
+/android/app/debug.keystore
+
+# Firebase release.keystore
+/android/app/release.keystore
+
+# Firebase
+firebase_options.dart
+
+# Dart
+.env
+
+# macOS
+.DS_Store
+.Trashes
+.Trashes/
+
+# firebase json
+firebase.json

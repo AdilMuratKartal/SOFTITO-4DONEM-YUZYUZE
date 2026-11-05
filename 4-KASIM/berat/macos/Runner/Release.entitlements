@@ -4,5 +4,26 @@
 <dict>
 	<key>com.apple.security.app-sandbox</key>
 	<true/>
+	    <!-- Uygulamanın dış dünyaya (Firebase sunucularına) bağlanabilmesi için -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+
+    <!-- Fotoğraf/Video seçimi için kullanıcının dosya sistemine erişim izinleri -->
+    <key>com.apple.security.assets.movies.read-only</key>
+    <true/>
+    <key>com.apple.security.assets.music.read-only</key>
+    <true/>
+    <key>com.apple.security.assets.pictures.read-only</key>
+    <true/>
+    
+    <!-- Kullanıcıya dosya açma/kapatma diyalog penceresi sunabilmek için -->
+    <key>com.apple.security.files.user-selected.read-write</key>
+    <true/>
+
+    <!-- Donanım İzinleri -->
+    <key>com.apple.security.device.camera</key>
+    <true/>
+    <key>com.apple.security.device.microphone</key>
+    <true/>
 </dict>
 </plist>
