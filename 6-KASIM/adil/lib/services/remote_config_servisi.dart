@@ -1,0 +1,41 @@
+import 'package:firebase_remote_config/firebase_remote_config.dart';
+
+class RemoteConfigServisi {
+  final FirebaseRemoteConfig _firebaseRemoteConfig =
+      FirebaseRemoteConfig.instance;
+
+  Future<void> baslat() async {
+    await _firebaseRemoteConfig.setConfigSettings(
+      RemoteConfigSettings(
+        fetchTimeout: const Duration(seconds: 10),
+        minimumFetchInterval: Duration.zero,
+      ),
+    );
+
+    //internet olmazsa burdan alsın
+    await _firebaseRemoteConfig.setDefaults(const {
+      'kampanya_aktif': true,
+      'kampanya_metni': 'Mobil Mezuniyet indirmi',
+      'kampanya_indirim_orani': 30,
+      'zorunlu_guncelleme': false,
+      'en_dusuk_surum': '1.0.0',
+    });
+
+    try {
+      await _firebaseRemoteConfig.fetchAndActivate();
+    } catch (_) {}
+  }
+
+  bool get kampanyaAktifmi => _firebaseRemoteConfig.getBool('kampanya_aktif');
+  String get kampanyaMetni => _firebaseRemoteConfig.getString('kampanya_metni');
+  int get indirimOrani =>
+      _firebaseRemoteConfig.getInt('kampanya_indirim_orani');
+  bool get zorunluGuncellemeMi =>
+      _firebaseRemoteConfig.getBool('zorunlu_guncelleme');
+  String get enDusukSurum => _firebaseRemoteConfig.getString('en_dusuk_surum');
+}
+
+// remote config default ayarlarında bir value değerini object yapmak için jsonEncode({}) değerleri almak için // 1. String olarak Remote Config'den çekin
+//String kampanyaJson = _firebaseRemoteConfig.getString('kampanya_ayarlari');
+// 2. JSON string'i Map (Object) yapısına dönüştürün
+//Map<String, dynamic> kampanyaAyarlari = jsonDecode(kampanyaJson);
