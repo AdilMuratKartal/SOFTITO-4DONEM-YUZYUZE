@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yumurta Maskot 3D Studio & Flutter Hazırlayıcı</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-cream: #FDF7F2;
+      --bg-panel: rgba(255, 255, 255, 0.85);
+      --primary: #FF7B54;
+      --primary-hover: #E8663F;
+      --accent-yellow: #FFB830;
+      --dark: #2B211E;
+      --text-muted: #877874;
+      --border: rgba(230, 215, 205, 0.8);
+      --shadow: 0 12px 36px rgba(180, 140, 120, 0.15);
+      --card-radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #F7E5DB;
+      color: var(--dark);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+    }
+
+    #viewport-container {
+      flex: 1;
+      height: 100%;
+      position: relative;
+      background: radial-gradient(circle at 50% 45%, #FFFFFF 0%, #F8E8DF 55%, #EDD5C7 100%);
+    }
+
+    #threejs-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+    }
+
+    #threejs-canvas:active {
+      cursor: grabbing;
+    }
+
+    /* Top Navigation bar */
+    .top-bar {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      right: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .brand-pill {
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      padding: 10px 20px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      pointer-events: auto;
+    }
+
+    .brand-icon {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #FFB830, #FF7B54);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+    }
+
+    .brand-text h1 {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-text p {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      pointer-events: auto;
+    }
+
+    .btn {
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      color: var(--dark);
+      padding: 10px 18px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+      font-family: inherit;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      background: #FFFFFF;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #FF7B54, #FA5838);
+      color: white;
+      border: none;
+      box-shadow: 0 6px 20px rgba(250, 88, 56, 0.35);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #FA5838, #E04325);
+      box-shadow: 0 8px 26px rgba(250, 88, 56, 0.5);
+      color: white;
+    }
+
+    /* Floating View Controls */
+    .view-controls {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      padding: 8px;
+      border-radius: 16px;
+      display: flex;
+      gap: 6px;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: var(--shadow);
+      z-index: 10;
+    }
+
+    .icon-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .icon-btn.active, .icon-btn:hover {
+      background: #FFFFFF;
+      color: var(--dark);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    /* Sidebar controls */
+    .sidebar {
+      width: 400px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(24px);
+      border-left: 1px solid var(--border);
+      padding: 24px;
+      overflow-y: auto;
+      box-shadow: -10px 0 35px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      z-index: 20;
+    }
+
+    .sidebar-header {
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(230, 215, 205, 0.5);
+    }
+
+    .sidebar-header h2 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--dark);
+      letter-spacing: -0.4px;
+    }
+
+    .sidebar-header p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Emotion Cards Grid (matches original phone screenshot) */
+    .mood-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .mood-card {
+      background: rgba(255, 248, 244, 0.9);
+      border: 2px solid transparent;
+      border-radius: 16px;
+      padding: 12px 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mood-card:hover {
+      transform: translateY(-2px);
+      background: #FFFFFF;
+      box-shadow: 0 6px 18px rgba(255, 123, 84, 0.12);
+    }
+
+    .mood-card.active {
+      background: #FFFFFF;
+      border-color: var(--primary);
+      box-shadow: 0 8px 24px rgba(255, 123, 84, 0.22);
+      transform: scale(1.03);
+    }
+
+    .mood-emoji {
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .mood-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .mood-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* Animation controls */
+    .anim-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .anim-btn {
+      flex: 1 1 calc(50% - 4px);
+      background: rgba(255, 248, 244, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dark);
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .anim-btn:hover {
+      background: #FFFFFF;
+      border-color: #E2CCC2;
+    }
+
+    .anim-btn.active {
+      background: var(--dark);
+      color: #FFFFFF;
+      border-color: var(--dark);
+    }
+
+    /* Flutter info card */
+    .flutter-box {
+      background: linear-gradient(135deg, rgba(74, 144, 226, 0.08), rgba(2, 86, 155, 0.05));
+      border: 1px solid rgba(74, 144, 226, 0.25);
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .flutter-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #02569B;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .flutter-desc {
+      font-size: 11px;
+      color: #4A5568;
+      line-height: 1.4;
+    }
+
+    .flutter-code-btn {
+      background: #02569B;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .flutter-code-btn:hover {
+      background: #01437A;
+    }
+
+    /* Modal for Flutter code */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #FFFFFF;
+      width: 90%;
+      max-width: 680px;
+      max-height: 85vh;
+      border-radius: 24px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid #EFEAE6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    .modal-body {
+      padding: 20px 24px;
+      overflow-y: auto;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .code-block {
+      background: #1E1E24;
+      color: #E2E8F0;
+      padding: 14px;
+      border-radius: 12px;
+      font-family: 'SF Mono', Monaco, Consolas, monospace;
+      font-size: 11px;
+      overflow-x: auto;
+      margin: 8px 0 16px 0;
+      white-space: pre;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #2B211E;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 0;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+
+  <!-- Three.js + OrbitControls + GLTFExporter via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js"></script>
+</head>
+<body>
+
+  <!-- 3D Viewport -->
+  <div id="viewport-container">
+    <div class="top-bar">
+      <div class="brand-pill">
+        <div class="brand-icon">🥚</div>
+        <div class="brand-text">
+          <h1>Yumurta Maskot 3D</h1>
+          <p>Flutter Ready • iOS / Android / macOS / Windows</p>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="btn" id="btn-reset-cam">🎥 Kamerayı Sıfırla</button>
+        <button class="btn btn-primary" id="btn-export-glb">
+          <span>📦</span> .GLB Olarak İndir
+        </button>
+      </div>
+    </div>
+
+    <canvas id="threejs-canvas"></canvas>
+
+    <!-- Camera view presets -->
+    <div class="view-controls">
+      <button class="icon-btn active" data-view="front">Ön</button>
+      <button class="icon-btn" data-view="side">Yan</button>
+      <button class="icon-btn" data-view="back">Arka</button>
+      <button class="icon-btn" data-view="iso">3/4 Açılı</button>
+    </div>
+
+    <div class="toast" id="toast">GLB dosyası hazırlanıyor...</div>
+  </div>
+
+  <!-- Right Control Panel -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>Maskot Kontrol Paneli</h2>
+      <p>Duygu durumunu ve hareket animasyonunu seçin</p>
+    </div>
+
+    <!-- Mood / Emotion Section -->
+    <div>
+      <div class="section-title">
+        <span>✨</span> Bugün Nasıl Hissediyorsun?
+      </div>
+      <div class="mood-grid">
+        <div class="mood-card active" data-mood="mutlu">
+          <div class="mood-emoji">❤️</div>
+          <div class="mood-name">Mutlu</div>
+          <div class="mood-sub">Kalp Gözler</div>
+        </div>
+
+        <div class="mood-card" data-mood="uzgun">
+          <div class="mood-emoji">💧</div>
+          <div class="mood-name">Üzgün</div>
+          <div class="mood-sub">Gözyaşı</div>
+        </div>
+
+        <div class="mood-card" data-mood="kizgin">
+          <div class="mood-emoji">😡</div>
+          <div class="mood-name">Kızgın</div>
+          <div class="mood-sub">Kızarık</div>
+        </div>
+
+        <div class="mood-card" data-mood="canisikilmis">
+          <div class="mood-emoji">😑</div>
+          <div class="mood-name">Canı Sıkılmış</div>
+          <div class="mood-sub">Yorgun</div>
+        </div>
+
+        <div class="mood-card" data-mood="depresif">
+          <div class="mood-emoji">🌧️</div>
+          <div class="mood-name">Depresif</div>
+          <div class="mood-sub">Bulutlu</div>
+        </div>
+
+        <div class="mood-card" data-mood="yaratici">
+          <div class="mood-emoji">💡</div>
+          <div class="mood-name">Yaratıcı</div>
+          <div class="mood-sub">Fikir Ampulü</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Animation Section -->
+    <div>
+      <div class="section-title">
+        <span>🏃</span> Hareket & Animasyon
+      </div>
+      <div class="anim-buttons">
+        <button class="anim-btn active" data-anim="idle">
+          <span>🍃</span> Boşta (Nefes Alma)
+        </button>
+        <button class="anim-btn" data-anim="run">
+          <span>🏃‍♂️</span> Koşma / Yürüme
+        </button>
+        <button class="anim-btn" data-anim="jump">
+          <span>🦘</span> Sevinç Zıplaması
+        </button>
+        <button class="anim-btn" data-anim="dance">
+          <span>💃</span> Neşeli Dans
+        </button>
+      </div>
+    </div>
+
+    <!-- Flutter Compatibility Section -->
+    <div class="flutter-box">
+      <div class="flutter-title">
+        <span>📱</span> Flutter Cross-Platform Desteği
+      </div>
+      <p class="flutter-desc">
+        Bu model saf glTF 2.0 (<b>.glb</b>) standardında üretilmiştir. iOS, Android, macOS, Windows ve Web üzerinde <code>model_viewer_plus</code> veya <code>o3d</code> paketleriyle doğrudan çalışır.
+      </p>
+      <button class="flutter-code-btn" id="btn-open-flutter-guide">
+        <span>📄</span> Flutter Entegrasyon Kodunu Gör
+      </button>
+    </div>
+  </div>
+
+  <!-- Flutter Guide Modal -->
+  <div class="modal-overlay" id="flutter-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Flutter (iOS, Android, macOS, Windows) Entegrasyonu</h3>
+        <button class="modal-close" id="btn-close-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p><b>1. pubspec.yaml dosyanıza paketi ekleyin:</b></p>
+        <div class="code-block">dependencies:
+  flutter:
+    sdk: flutter
+  model_viewer_plus: ^1.7.0  # iOS, Android, macOS, Windows, Web uyumlu
+
+flutter:
+  assets:
+    - assets/models/yumurta_maskot.glb</div>
+
+        <p><b>2. Flutter Widget Kullanımı:</b></p>
+        <div class="code-block">import 'package:flutter/material.dart';
+import 'package:model_viewer_plus/model_viewer_plus.dart';
+
+class YumurtaMaskotWidget extends StatelessWidget {
+  final String emotion; // 'mutlu', 'uzgun', 'kizgin', 'depresif' vb.
+
+  const YumurtaMaskotWidget({Key? key, this.emotion = 'mutlu'}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 380,
+      width: double.infinity,
+      child: ModelViewer(
+        backgroundColor: const Color(0xFFF7E5DB),
+        src: 'assets/models/yumurta_maskot.glb',
+        alt: 'Yumurta Maskot 3D',
+        autoRotate: true,
+        autoRotateDelay: 1000,
+        cameraControls: true,
+        shadowIntensity: 0.6,
+        exposure: 1.0,
+      ),
+    );
+  }
+}</div>
+        <p><b>İpucu:</b> <code>.glb</code> dosyasını üstteki <b>".GLB Olarak İndir"</b> düğmesine basarak bilgisayarınıza kaydedebilir ve Flutter projenizin <code>assets/models/</code> klasörüne ekleyebilirsiniz.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3D Mascot Logic -->
+  <script>
+    // --- 1. Three.js Scene Setup ---
+    const container = document.getElementById('viewport-container');
+    const canvas = document.getElementById('threejs-canvas');
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xF7E5DB); // Warm peach pastel background
+
+    const camera = new THREE.PerspectiveCamera(38, container.clientWidth / container.clientHeight, 0.1, 100);
+    camera.position.set(0, 0.4, 4.6);
+
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.target.set(0, 0.25, 0);
+    controls.maxDistance = 8;
+    controls.minDistance = 2;
+    controls.maxPolarAngle = Math.PI / 2 + 0.05; // Prevent dipping beneath floor
+
+    // --- 2. Lighting (Soft Studio Look) ---
+    const ambientLight = new THREE.AmbientLight(0xFFF4EC, 0.9);
+    scene.add(ambientLight);
+
+    const mainLight = new THREE.DirectionalLight(0xFFFFFF, 1.1);
+    mainLight.position.set(3, 5, 4);
+    mainLight.castShadow = true;
+    mainLight.shadow.mapSize.width = 2048;
+    mainLight.shadow.mapSize.height = 2048;
+    mainLight.shadow.bias = -0.0005;
+    scene.add(mainLight);
+
+    const fillLight = new THREE.DirectionalLight(0xFFE2D1, 0.5);
+    fillLight.position.set(-3, 2, 2);
+    scene.add(fillLight);
+
+    const rimLight = new THREE.DirectionalLight(0xFFFFFF, 0.8);
+    rimLight.position.set(0, 4, -4);
+    scene.add(rimLight);
+
+    // Soft Contact Floor Shadow
+    const floorGeo = new THREE.PlaneGeometry(12, 12);
+    const floorMat = new THREE.ShadowMaterial({ opacity: 0.16 });
+    const floor = new THREE.Mesh(floorGeo, floorMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = -0.92;
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    // --- 3. Dynamic Face Texture Generator (Canvas) ---
+    const faceCanvas = document.createElement('canvas');
+    faceCanvas.width = 1024;
+    faceCanvas.height = 1024;
+    const ctx = faceCanvas.getContext('2d');
+    const faceTexture = new THREE.CanvasTexture(faceCanvas);
+    faceTexture.encoding = THREE.sRGBEncoding;
+
+    let currentMood = 'mutlu';
+    let currentAnim = 'idle';
+
+    function drawFace(mood) {
+      ctx.clearRect(0, 0, 1024, 1024);
+
+      // Warm Yellow Yolk Base
+      const grad = ctx.createRadialGradient(512, 512, 100, 512, 512, 512);
+      grad.addColorStop(0, '#FED456');
+      grad.addColorStop(0.75, '#FFBD2E');
+      grad.addColorStop(1, '#F3A917');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 1024, 1024);
+
+      // Rosy Blushing Cheeks
+      function drawBlush(x, y, r, alpha = 0.55, color = '#FF637D') {
+        const blushGrad = ctx.createRadialGradient(x, y, 0, x, y, r);
+        blushGrad.addColorStop(0, color);
+        blushGrad.addColorStop(0.6, color);
+        blushGrad.addColorStop(1, 'rgba(255, 180, 50, 0)');
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = blushGrad;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Heart Eye Helper
+      function drawHeart(cx, cy, size, color = '#2E1915') {
+        ctx.save();
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        const topY = cy - size * 0.4;
+        ctx.moveTo(cx, cy + size * 0.5);
+        ctx.bezierCurveTo(cx - size, cy, cx - size, topY, cx, topY + size * 0.2);
+        ctx.bezierCurveTo(cx + size, topY, cx + size, cy, cx, cy + size * 0.5);
+        ctx.fill();
+
+        // Little white twinkle highlight
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.beginPath();
+        ctx.arc(cx - size * 0.25, cy - size * 0.1, size * 0.12, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      ctx.fillStyle = '#2E1915';
+      ctx.strokeStyle = '#2E1915';
+      ctx.lineWidth = 14;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      if (mood === 'mutlu') {
+        // Blushes
+        drawBlush(270, 560, 110, 0.65);
+        drawBlush(754, 560, 110, 0.65);
+
+        // Heart eyes
+        drawHeart(350, 480, 55);
+        drawHeart(674, 480, 55);
+
+        // Sweet smiling mouth
+        ctx.beginPath();
+        ctx.arc(512, 500, 45, 0.15 * Math.PI, 0.85 * Math.PI);
+        ctx.stroke();
+
+      } else if (mood === 'uzgun') {
+        // Pale blush
+        drawBlush(270, 580, 90, 0.35, '#E57373');
+        drawBlush(754, 580, 90, 0.35, '#E57373');
+
+        // Sad droopy eyes
+        ctx.beginPath();
+        ctx.ellipse(350, 485, 26, 36, -0.15, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(674, 485, 26, 36, 0.15, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Sad puppy eyebrows
+        ctx.beginPath();
+        ctx.moveTo(310, 420);
+        ctx.lineTo(390, 440);
+        ctx.moveTo(714, 420);
+        ctx.lineTo(634, 440);
+        ctx.stroke();
+
+        // Downturned trembling mouth
+        ctx.beginPath();
+        ctx.arc(512, 565, 38, 1.2 * Math.PI, 1.8 * Math.PI);
+        ctx.stroke();
+
+        // Big tear drop
+        ctx.fillStyle = '#64B5F6';
+        ctx.beginPath();
+        ctx.moveTo(380, 530);
+        ctx.bezierCurveTo(395, 560, 395, 580, 380, 595);
+        ctx.bezierCurveTo(365, 580, 365, 560, 380, 530);
+        ctx.fill();
+
+      } else if (mood === 'kizgin') {
+        // Red angry cheeks
+        drawBlush(270, 560, 120, 0.75, '#FF3D3D');
+        drawBlush(754, 560, 120, 0.75, '#FF3D3D');
+
+        // Angry sharp eyes
+        ctx.beginPath();
+        ctx.arc(360, 500, 30, 0, Math.PI * 2);
+        ctx.arc(664, 500, 30, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Sharp downward eyebrows
+        ctx.lineWidth = 20;
+        ctx.beginPath();
+        ctx.moveTo(290, 440);
+        ctx.lineTo(410, 475);
+        ctx.moveTo(734, 440);
+        ctx.lineTo(614, 475);
+        ctx.stroke();
+
+        // Grumpy mouth
+        ctx.lineWidth = 14;
+        ctx.beginPath();
+        ctx.arc(512, 570, 36, 1.15 * Math.PI, 1.85 * Math.PI);
+        ctx.stroke();
+
+        // Angry forehead vein mark
+        ctx.strokeStyle = '#D32F2F';
+        ctx.lineWidth = 10;
+        ctx.beginPath();
+        ctx.arc(710, 380, 24, 0.5, 2.5);
+        ctx.moveTo(710, 356);
+        ctx.lineTo(710, 404);
+        ctx.stroke();
+
+      } else if (mood === 'canisikilmis') {
+        drawBlush(270, 560, 80, 0.35);
+        drawBlush(754, 560, 80, 0.35);
+
+        // Bored flat eyes (- _ -)
+        ctx.lineWidth = 18;
+        ctx.beginPath();
+        ctx.moveTo(310, 490);
+        ctx.lineTo(395, 490);
+        ctx.moveTo(629, 490);
+        ctx.lineTo(714, 490);
+        ctx.stroke();
+
+        // Straight neutral mouth
+        ctx.lineWidth = 12;
+        ctx.beginPath();
+        ctx.moveTo(470, 545);
+        ctx.lineTo(554, 545);
+        ctx.stroke();
+
+      } else if (mood === 'depresif') {
+        drawBlush(270, 570, 70, 0.25, '#9FA8DA');
+        drawBlush(754, 570, 70, 0.25, '#9FA8DA');
+
+        // Sleeping / depressed flat curved eyes (u u)
+        ctx.lineWidth = 14;
+        ctx.beginPath();
+        ctx.arc(350, 485, 30, 0.1 * Math.PI, 0.9 * Math.PI);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(674, 485, 30, 0.1 * Math.PI, 0.9 * Math.PI);
+        ctx.stroke();
+
+        // Tiny sad mouth
+        ctx.beginPath();
+        ctx.arc(512, 560, 22, 1.15 * Math.PI, 1.85 * Math.PI);
+        ctx.stroke();
+
+      } else if (mood === 'yaratici') {
+        drawBlush(270, 550, 110, 0.7, '#FF8A65');
+        drawBlush(754, 550, 110, 0.7, '#FF8A65');
+
+        // Sparkling enthusiastic star eyes
+        function drawSparkleEye(cx, cy, r) {
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, 0, Math.PI * 2);
+          ctx.fill();
+          // White star gleams
+          ctx.fillStyle = '#FFFFFF';
+          ctx.beginPath();
+          ctx.arc(cx - 10, cy - 10, 12, 0, Math.PI * 2);
+          ctx.arc(cx + 12, cy + 10, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#2E1915';
+        }
+        drawSparkleEye(350, 475, 42);
+        drawSparkleEye(674, 475, 42);
+
+        // Excited raised eyebrows
+        ctx.beginPath();
+        ctx.arc(350, 410, 45, 1.25 * Math.PI, 1.75 * Math.PI);
+        ctx.arc(674, 410, 45, 1.25 * Math.PI, 1.75 * Math.PI);
+        ctx.stroke();
+
+        // Big happy open mouth (:D)
+        ctx.beginPath();
+        ctx.arc(512, 505, 52, 0.1 * Math.PI, 0.9 * Math.PI);
+        ctx.lineTo(558, 520);
+        ctx.closePath();
+        ctx.fill();
+
+        // Cute pink tongue
+        ctx.fillStyle = '#FF5252';
+        ctx.beginPath();
+        ctx.arc(512, 545, 26, 0, Math.PI);
+        ctx.fill();
+      }
+
+      faceTexture.needsUpdate = true;
+    }
+
+    drawFace(currentMood);
+
+    // --- 4. 3D Model Construction (Egg Character) ---
+    const mascotRoot = new THREE.Group();
+    mascotRoot.name = "YumurtaMaskot";
+    scene.add(mascotRoot);
+
+    // High quality soft vinyl / clay materials
+    const whiteBodyMat = new THREE.MeshStandardMaterial({
+      color: 0xFCFAF7,
+      roughness: 0.42,
+      metalness: 0.04,
+    });
+
+    const yolkMat = new THREE.MeshStandardMaterial({
+      map: faceTexture,
+      roughness: 0.38,
+      metalness: 0.02,
+    });
+
+    // Body hierarchy: main torso group
+    const bodyGroup = new THREE.Group();
+    bodyGroup.name = "BodyGroup";
+    mascotRoot.add(bodyGroup);
+
+    // (A) EGG BODY MESH (Procedural Egg super-ellipse)
+    const eggGeo = new THREE.SphereGeometry(0.72, 64, 48);
+    const pos = eggGeo.attributes.position;
+    for (let i = 0; i < pos.count; i++) {
+      let x = pos.getX(i);
+      let y = pos.getY(i);
+      let z = pos.getZ(i);
+
+      // Egg shape profile: wider at bottom, tapered at top
+      const normalizedY = y / 0.72; // -1 to 1
+      const taper = 1.0 - 0.22 * normalizedY;
+      x *= taper * 1.02;
+      z *= taper * 0.96;
+      y *= 1.22; // Stretch height
+
+      // Soft face cavity opening in the front
+      if (z > 0.15 && y > -0.15 && y < 0.65) {
+        const distFromCenter = Math.sqrt(x * x + (y - 0.25) * (y - 0.25));
+        if (distFromCenter < 0.45) {
+          z *= 0.68; // create a recessed cavity for the yolk face
+        }
+      }
+
+      pos.setXYZ(i, x, y, z);
+    }
+    eggGeo.computeVertexNormals();
+
+    const eggMesh = new THREE.Mesh(eggGeo, whiteBodyMat);
+    eggMesh.castShadow = true;
+    eggMesh.receiveShadow = true;
+    eggMesh.position.y = 0.28;
+    bodyGroup.add(eggMesh);
+
+    // (B) YOLK FACE DOME (The yellow face inside the egg)
+    const yolkGeo = new THREE.SphereGeometry(0.42, 48, 36);
+    yolkGeo.scale(0.96, 0.98, 0.62);
+    const yolkMesh = new THREE.Mesh(yolkGeo, yolkMat);
+    yolkMesh.position.set(0, 0.38, 0.32);
+    yolkMesh.rotation.y = -Math.PI / 2; // Map texture right-side forward
+    yolkMesh.castShadow = false;
+    bodyGroup.add(yolkMesh);
+
+    // (C) CUTE HORNS (Pair on crown)
+    function createHorn(isLeft) {
+      const hornGroup = new THREE.Group();
+      // Curved conic tube
+      const curve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(isLeft ? -0.06 : 0.06, 0.12, -0.02),
+        new THREE.Vector3(isLeft ? -0.11 : 0.11, 0.24, -0.05),
+        new THREE.Vector3(isLeft ? -0.14 : 0.14, 0.33, -0.07)
+      ]);
+      const tubeGeo = new THREE.TubeGeometry(curve, 32, 0.075, 16, false);
+
+      // Taper the horn towards the tip
+      const p = tubeGeo.attributes.position;
+      for (let i = 0; i < p.count; i++) {
+        const py = p.getY(i);
+        const factor = Math.max(0.12, 1.0 - (py / 0.33) * 0.88);
+        p.setX(i, p.getX(i) * factor);
+        p.setZ(i, p.getZ(i) * factor);
+      }
+      tubeGeo.computeVertexNormals();
+
+      const hornMesh = new THREE.Mesh(tubeGeo, whiteBodyMat);
+      hornMesh.castShadow = true;
+      hornGroup.add(hornMesh);
+
+      // Rounded tip
+      const tipGeo = new THREE.SphereGeometry(0.024, 16, 16);
+      const tipMesh = new THREE.Mesh(tipGeo, whiteBodyMat);
+      tipMesh.position.set(isLeft ? -0.14 : 0.14, 0.33, -0.07);
+      hornGroup.add(tipMesh);
+
+      return hornGroup;
+    }
+
+    const leftHorn = createHorn(true);
+    leftHorn.position.set(-0.25, 0.98, 0.03);
+    leftHorn.rotation.z = -0.08;
+    bodyGroup.add(leftHorn);
+
+    const rightHorn = createHorn(false);
+    rightHorn.position.set(0.25, 0.98, 0.03);
+    rightHorn.rotation.z = 0.08;
+    bodyGroup.add(rightHorn);
+
+    // (D) LIMBS: ARMS (Joint-pivot hierarchical groups)
+    function createArm(isLeft) {
+      const armPivot = new THREE.Group();
+      armPivot.name = isLeft ? "LeftArmPivot" : "RightArmPivot";
+      armPivot.position.set(isLeft ? -0.54 : 0.54, 0.28, 0.05);
+
+      const armMeshGroup = new THREE.Group();
+
+      // Rounded marshmallow arm shape
+      const armGeo = new THREE.CylinderGeometry(0.115, 0.13, 0.42, 24);
+      armGeo.translate(0, -0.21, 0);
+      const armMesh = new THREE.Mesh(armGeo, whiteBodyMat);
+      armMesh.castShadow = true;
+      armMeshGroup.add(armMesh);
+
+      // Shoulder cap
+      const shoulderCap = new THREE.Mesh(new THREE.SphereGeometry(0.12, 24, 24), whiteBodyMat);
+      armMeshGroup.add(shoulderCap);
+
+      // Hand rounded cap
+      const handCap = new THREE.Mesh(new THREE.SphereGeometry(0.13, 24, 24), whiteBodyMat);
+      handCap.position.y = -0.42;
+      handCap.castShadow = true;
+      armMeshGroup.add(handCap);
+
+      armPivot.add(armMeshGroup);
+      return { pivot: armPivot, mesh: armMeshGroup };
+    }
+
+    const leftArm = createArm(true);
+    const rightArm = createArm(false);
+    bodyGroup.add(leftArm.pivot);
+    bodyGroup.add(rightArm.pivot);
+
+    // Default resting arm angles (matching front reference image)
+    leftArm.pivot.rotation.z = 0.25;
+    leftArm.pivot.rotation.x = 0.1;
+    rightArm.pivot.rotation.z = -0.25;
+    rightArm.pivot.rotation.x = 0.1;
+
+    // (E) LIMBS: LEGS
+    function createLeg(isLeft) {
+      const legPivot = new THREE.Group();
+      legPivot.name = isLeft ? "LeftLegPivot" : "RightLegPivot";
+      legPivot.position.set(isLeft ? -0.22 : 0.22, -0.48, 0.0);
+
+      // Stubby cylindrical legs
+      const legGeo = new THREE.CylinderGeometry(0.155, 0.165, 0.42, 28);
+      legGeo.translate(0, -0.21, 0);
+      const legMesh = new THREE.Mesh(legGeo, whiteBodyMat);
+      legMesh.castShadow = true;
+      legPivot.add(legMesh);
+
+      // Rounded bottom foot
+      const footCap = new THREE.Mesh(new THREE.SphereGeometry(0.165, 28, 20), whiteBodyMat);
+      footCap.scale.set(1.0, 0.6, 1.15);
+      footCap.position.set(0, -0.42, 0.02);
+      footCap.castShadow = true;
+      legPivot.add(footCap);
+
+      return { pivot: legPivot, mesh: legMesh };
+    }
+
+    const leftLeg = createLeg(true);
+    const rightLeg = createLeg(false);
+    mascotRoot.add(leftLeg.pivot);
+    mascotRoot.add(rightLeg.pivot);
+
+    // --- 5. Dynamic Accessories (Heart, Rain Cloud, Lightbulb) ---
+    // (A) 3D Floating Heart (for Mutlu)
+    const heartShape = new THREE.Shape();
+    const x = 0, y = 0;
+    heartShape.moveTo(x + 0.25, y + 0.25);
+    heartShape.bezierCurveTo(x + 0.25, y + 0.25, x + 0.2, y, x, y);
+    heartShape.bezierCurveTo(x - 0.3, y, x - 0.3, y + 0.35, x - 0.3, y + 0.35);
+    heartShape.bezierCurveTo(x - 0.3, y + 0.55, x - 0.1, y + 0.77, x + 0.25, y + 0.95);
+    heartShape.bezierCurveTo(x + 0.6, y + 0.77, x + 0.8, y + 0.55, x + 0.8, y + 0.35);
+    heartShape.bezierCurveTo(x + 0.8, y + 0.35, x + 0.8, y, x + 0.5, y);
+    heartShape.bezierCurveTo(x + 0.35, y, x + 0.25, y + 0.25, x + 0.25, y + 0.25);
+
+    const heartExtrude = new THREE.ExtrudeGeometry(heartShape, {
+      depth: 0.15,
+      bevelEnabled: true,
+      bevelSegments: 8,
+      steps: 2,
+      bevelSize: 0.08,
+      bevelThickness: 0.08
+    });
+    heartExtrude.center();
+
+    const heartMat = new THREE.MeshStandardMaterial({
+      color: 0xFF2A55,
+      roughness: 0.22,
+      metalness: 0.1,
+    });
+    const floatingHeart = new THREE.Mesh(heartExtrude, heartMat);
+    floatingHeart.scale.set(0.42, 0.42, 0.42);
+    floatingHeart.rotation.z = Math.PI; // Invert to upright heart
+    floatingHeart.position.set(0, 1.48, 0);
+    floatingHeart.castShadow = true;
+    bodyGroup.add(floatingHeart);
+
+    // (B) 3D Storm Cloud + Rain (for Depresif)
+    const cloudGroup = new THREE.Group();
+    const cloudMat = new THREE.MeshStandardMaterial({ color: 0x546E7A, roughness: 0.7 });
+    const cloudSpheres = [
+      { x: 0, y: 0, z: 0, r: 0.22 },
+      { x: -0.2, y: -0.05, z: 0, r: 0.17 },
+      { x: 0.2, y: -0.05, z: 0, r: 0.17 },
+      { x: -0.1, y: 0.12, z: 0.05, r: 0.16 },
+      { x: 0.1, y: 0.1, z: -0.05, r: 0.15 }
+    ];
+    cloudSpheres.forEach(s => {
+      const m = new THREE.Mesh(new THREE.SphereGeometry(s.r, 20, 20), cloudMat);
+      m.position.set(s.x, s.y, s.z);
+      cloudGroup.add(m);
+    });
+
+    // Raindrop particles
+    const rainDrops = [];
+    const rainMat = new THREE.MeshBasicMaterial({ color: 0x81D4FA, transparent: true, opacity: 0.75 });
+    for (let i = 0; i < 8; i++) {
+      const drop = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.12, 8), rainMat);
+      drop.position.set((Math.random() - 0.5) * 0.4, -0.2 - Math.random() * 0.4, (Math.random() - 0.5) * 0.15);
+      cloudGroup.add(drop);
+      rainDrops.push(drop);
+    }
+    cloudGroup.position.set(0, 1.55, 0.1);
+    cloudGroup.visible = false;
+    bodyGroup.add(cloudGroup);
+
+    // (C) 3D Glowing Lightbulb (for Yaratıcı)
+    const bulbGroup = new THREE.Group();
+    const bulbGlassMat = new THREE.MeshStandardMaterial({
+      color: 0xFFEB3B,
+      emissive: 0xFFB300,
+      emissiveIntensity: 0.7,
+      roughness: 0.15
+    });
+    const bulbGeo = new THREE.SphereGeometry(0.24, 24, 24);
+    bulbGeo.scale(1.0, 1.25, 1.0);
+    const bulbMesh = new THREE.Mesh(bulbGeo, bulbGlassMat);
+    bulbGroup.add(bulbMesh);
+
+    // Screw base
+    const baseMat = new THREE.MeshStandardMaterial({ color: 0x9E9E9E, metalness: 0.8, roughness: 0.3 });
+    const baseMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.16, 16), baseMat);
+    baseMesh.position.y = -0.32;
+    bulbGroup.add(baseMesh);
+
+    // Starburst ray accents
+    const raysGroup = new THREE.Group();
+    const rayMat = new THREE.MeshBasicMaterial({ color: 0xFFD54F });
+    for (let i = 0; i < 6; i++) {
+      const angle = (i / 6) * Math.PI * 2;
+      const ray = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.16, 0.02), rayMat);
+      ray.position.set(Math.cos(angle) * 0.42, Math.sin(angle) * 0.42, 0);
+      ray.rotation.z = angle - Math.PI / 2;
+      raysGroup.add(ray);
+    }
+    bulbGroup.add(raysGroup);
+    bulbGroup.position.set(0, 1.6, 0);
+    bulbGroup.visible = false;
+    bodyGroup.add(bulbGroup);
+
+    // --- 6. Animation State & Loop ---
+    let clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const elapsedTime = clock.getElapsedTime();
+      const delta = clock.getDelta();
+
+      // Controls update
+      controls.update();
+
+      // (A) ACCESSORY ANIMATIONS
+      if (floatingHeart.visible) {
+        floatingHeart.position.y = 1.48 + Math.sin(elapsedTime * 3.5) * 0.06;
+        const scalePulse = 0.42 + Math.sin(elapsedTime * 7) * 0.025;
+        floatingHeart.scale.set(scalePulse, scalePulse, scalePulse);
+        floatingHeart.rotation.y = Math.sin(elapsedTime * 2) * 0.2;
+      }
+
+      if (cloudGroup.visible) {
+        cloudGroup.position.y = 1.55 + Math.sin(elapsedTime * 2) * 0.03;
+        rainDrops.forEach((d, idx) => {
+          d.position.y -= 0.02;
+          if (d.position.y < -0.6) {
+            d.position.y = -0.15;
+          }
+        });
+      }
+
+      if (bulbGroup.visible) {
+        bulbGroup.position.y = 1.6 + Math.sin(elapsedTime * 3) * 0.04;
+        raysGroup.rotation.z = elapsedTime * 0.8;
+      }
+
+      // (B) BODY POSING & LOCOMOTION
+      if (currentAnim === 'idle') {
+        // Natural soft breathing
+        const breathe = Math.sin(elapsedTime * 2.2);
+        mascotRoot.position.y = breathe * 0.025;
+        bodyGroup.scale.set(1.0 - breathe * 0.015, 1.0 + breathe * 0.02, 1.0 - breathe * 0.015);
+
+        // Reset positions
+        mascotRoot.rotation.x = 0;
+        mascotRoot.rotation.z = 0;
+        leftLeg.pivot.rotation.x = 0;
+        rightLeg.pivot.rotation.x = 0;
+
+        // Mood-specific idle arm / body nuances
+        if (currentMood === 'mutlu') {
+          // Clasped hands over chest (matching reference image)
+          leftArm.pivot.rotation.set(-0.7, 0.4, 0.65);
+          rightArm.pivot.rotation.set(-0.7, -0.4, -0.65);
+        } else if (currentMood === 'uzgun') {
+          // One hand to cheek wiping tear, head tilted down
+          leftArm.pivot.rotation.set(-0.85, 0.3, 0.7);
+          rightArm.pivot.rotation.set(0.1, 0, -0.2);
+          bodyGroup.rotation.x = 0.12;
+          bodyGroup.rotation.z = 0.06;
+        } else if (currentMood === 'kizgin') {
+          // Puffed chest, clenched arms by side, angry stomping jitter
+          const shake = Math.sin(elapsedTime * 24) * 0.015;
+          leftArm.pivot.rotation.set(0.2, 0, 0.45);
+          rightArm.pivot.rotation.set(0.2, 0, -0.45);
+          bodyGroup.rotation.x = -0.1 + shake;
+          bodyGroup.position.x = shake;
+        } else if (currentMood === 'canisikilmis') {
+          // Leaning sideways
+          bodyGroup.rotation.z = -0.12;
+          bodyGroup.position.x = 0.05;
+          leftArm.pivot.rotation.set(-0.6, 0.2, 0.5);
+          rightArm.pivot.rotation.set(0.1, 0, -0.2);
+        } else if (currentMood === 'depresif') {
+          // Lying flat on ground matching the card illustration in the mobile app!
+          mascotRoot.position.y = -0.68;
+          bodyGroup.rotation.x = -Math.PI / 2 + 0.1;
+          bodyGroup.position.z = 0.15;
+          leftArm.pivot.rotation.set(0, 0, 0.8);
+          rightArm.pivot.rotation.set(0, 0, -0.8);
+          leftLeg.pivot.rotation.x = 0;
+          rightLeg.pivot.rotation.x = 0;
+        } else if (currentMood === 'yaratici') {
+          // Eureka pose! Right arm pointing up
+          leftArm.pivot.rotation.set(0.2, 0, 0.35);
+          rightArm.pivot.rotation.set(-1.4, 0, -0.2);
+          bodyGroup.rotation.x = -0.05;
+        }
+
+      } else if (currentAnim === 'run') {
+        // Dynamic Run / Walk Cycle (matching Gemini_Generated_Image_9jtozq9jtozq9jto.jpeg)
+        const runSpeed = elapsedTime * 7.5;
+        const stride = Math.sin(runSpeed);
+
+        // Reset base rotation
+        bodyGroup.rotation.set(0.15, 0, 0); // Lean forward slightly while running
+        bodyGroup.position.set(0, 0, 0);
+
+        // Legs alternate swing
+        leftLeg.pivot.rotation.x = stride * 0.75;
+        rightLeg.pivot.rotation.x = -stride * 0.75;
+
+        // Arms alternate counter-swing
+        leftArm.pivot.rotation.set(-stride * 0.65, 0, 0.3);
+        rightArm.pivot.rotation.set(stride * 0.65, 0, -0.3);
+
+        // Torso bounces at double frequency
+        mascotRoot.position.y = Math.abs(Math.sin(runSpeed)) * 0.12;
+        mascotRoot.rotation.z = Math.sin(runSpeed * 0.5) * 0.05;
+
+      } else if (currentAnim === 'jump') {
+        // Joyful jump cycle (matching Gemini_Generated_Image_j3zn87j3zn87j3zn.jpeg)
+        const jumpPhase = (elapsedTime * 2.8) % (Math.PI * 2);
+        const jumpHeight = Math.max(0, Math.sin(jumpPhase));
+
+        mascotRoot.position.y = jumpHeight * 0.55;
+
+        if (jumpHeight > 0.1) {
+          // Airborne: arms stretched up and out in pure joy!
+          leftArm.pivot.rotation.set(-0.8, 0, 1.2);
+          rightArm.pivot.rotation.set(-0.8, 0, -1.2);
+          leftLeg.pivot.rotation.x = 0.2;
+          rightLeg.pivot.rotation.x = -0.2;
+          bodyGroup.scale.set(0.95, 1.1, 0.95);
+        } else {
+          // Landing crouch
+          leftArm.pivot.rotation.set(0.2, 0, 0.4);
+          rightArm.pivot.rotation.set(0.2, 0, -0.4);
+          leftLeg.pivot.rotation.x = 0;
+          rightLeg.pivot.rotation.x = 0;
+          bodyGroup.scale.set(1.08, 0.88, 1.08);
+        }
+
+      } else if (currentAnim === 'dance') {
+        const danceSpeed = elapsedTime * 5;
+        mascotRoot.position.y = Math.abs(Math.sin(danceSpeed * 2)) * 0.08;
+        mascotRoot.rotation.y = Math.sin(danceSpeed) * 0.35;
+        mascotRoot.rotation.z = Math.cos(danceSpeed) * 0.12;
+
+        leftArm.pivot.rotation.set(-1.0 + Math.sin(danceSpeed * 2) * 0.4, 0, 0.8);
+        rightArm.pivot.rotation.set(-1.0 - Math.sin(danceSpeed * 2) * 0.4, 0, -0.8);
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // --- 7. Emotion & Animation UI Handlers ---
+    function setMood(mood) {
+      currentMood = mood;
+      drawFace(mood);
+
+      // Toggle 3D accessories
+      floatingHeart.visible = (mood === 'mutlu');
+      cloudGroup.visible = (mood === 'depresif');
+      bulbGroup.visible = (mood === 'yaratici');
+
+      // Update UI active state
+      document.querySelectorAll('.mood-card').forEach(card => {
+        card.classList.toggle('active', card.dataset.mood === mood);
+      });
+    }
+
+    document.querySelectorAll('.mood-card').forEach(card => {
+      card.addEventListener('click', () => {
+        setMood(card.dataset.mood);
+      });
+    });
+
+    document.querySelectorAll('.anim-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentAnim = btn.dataset.anim;
+        document.querySelectorAll('.anim-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Camera preset buttons
+    document.querySelectorAll('.icon-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.icon-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const view = btn.dataset.view;
+        if (view === 'front') {
+          gsapOrTweenCamera(0, 0.35, 4.2);
+        } else if (view === 'side') {
+          gsapOrTweenCamera(4.2, 0.35, 0);
+        } else if (view === 'back') {
+          gsapOrTweenCamera(0, 0.35, -4.2);
+        } else if (view === 'iso') {
+          gsapOrTweenCamera(2.8, 1.8, 3.2);
+        }
+      });
+    });
+
+    function gsapOrTweenCamera(x, y, z) {
+      camera.position.set(x, y, z);
+      controls.target.set(0, 0.25, 0);
+      controls.update();
+    }
+
+    document.getElementById('btn-reset-cam').addEventListener('click', () => {
+      gsapOrTweenCamera(0, 0.4, 4.6);
+    });
+
+    // --- 8. GLTF / GLB Exporter for Flutter ---
+    const toast = document.getElementById('toast');
+    function showToast(msg, duration = 3000) {
+      toast.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), duration);
+    }
+
+    document.getElementById('btn-export-glb').addEventListener('click', () => {
+      showToast('📦 GLB 3D Dosyası Oluşturuluyor...');
+
+      // Temporary reset pose for standard neutral T/A pose export
+      const prevMood = currentMood;
+      const prevAnim = currentAnim;
+      currentAnim = 'idle';
+
+      // Export using Three.js GLTFExporter
+      const exporter = new THREE.GLTFExporter();
+      const options = {
+        binary: true,          // Export as single self-contained .glb file
+        embedImages: true,     // Embed face canvas texture
+        onlyVisible: true,
+        includeCustomExtensions: true
+      };
+
+      exporter.parse(
+        mascotRoot,
+        function (result) {
+          if (result instanceof ArrayBuffer) {
+            const blob = new Blob([result], { type: 'model/gltf-binary' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `yumurta_maskot_${currentMood}.glb`;
+            link.click();
+            showToast(`✅ "${link.download}" başarıyla indirildi!`);
+          } else {
+            const output = JSON.stringify(result, null, 2);
+            const blob = new Blob([output], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `yumurta_maskot_${currentMood}.gltf`;
+            link.click();
+            showToast('✅ GLTF başarıyla indirildi!');
+          }
+        },
+        function (error) {
+          console.error('Export hatası:', error);
+          showToast('❌ Dışa aktarma sırasında hata oluştu.');
+        },
+        options
+      );
+    });
+
+    // Modal Handlers
+    const modal = document.getElementById('flutter-modal');
+    document.getElementById('btn-open-flutter-guide').addEventListener('click', () => {
+      modal.classList.add('active');
+    });
+    document.getElementById('btn-close-modal').addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('active');
+    });
+
+    // Window resize handler
+    window.addEventListener('resize', () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+  </script>
+</body>
+</html>
+
